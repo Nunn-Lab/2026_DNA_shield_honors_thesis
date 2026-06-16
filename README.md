@@ -4,6 +4,7 @@ This project explored extraction efficiencies and peptide abundances when sample
 
 The following files will allow you to recreate the figures from this project. 
 Word Shortcuts / Abbreviations Phytoplankton = Thalassiosira pseudonana (T. pseudonana) Bacteria: Colwellia psychrerythraea (Cp34H) Limelight Files: Cp34H
+*See the GitHub Repository File Key for further descriptions of files present in this github folder*
 
 
 
