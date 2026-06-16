@@ -1,0 +1,389 @@
+---
+title: "DNA Shield Proteomics — Protein-Level Venn Diagrams (Missingness)"
+subtitle: "Colwellia psychrerythraea 34H & Thalassiosira pseudonana"
+author: "Evelyn Bartlett — Brook Lab"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE,
+                      fig.width = 8, fig.height = 6, dpi = 300)
+```
+
+## Overview
+
+This document generates protein-level Venn diagrams comparing which proteins
+are detected across control and DNA Shield dilution groups for:
+
+- **Bacteria**: CP34H (*Colwellia psychrerythraea* 34H)
+  - BC = Control (no DNA Shield)
+  - E  = DNA Shield 1:1.5
+  - F  = DNA Shield 1:1.75
+  - G  = DNA Shield 1:2
+
+- **Phytoplankton**: T. pseudonana (*Thalassiosira pseudonana*)
+  - PEC = Control (no DNA Shield)
+  - PED 1:1.5 = DNA Shield 1:1.5
+  - PED 1:2   = DNA Shield 1:2
+
+Contaminants are removed before any analysis using keyword matching on protein
+descriptions (keratins, trypsin, albumin, human/bovine sequences, cRAP tags).
+A protein is considered **detected** in a group if it has ≥ 1 PSM in at least
+2 of 3 replicates.
+
+---
+
+## Load Packages
+
+```{r packages}
+if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+pkgs <- c("tidyverse", "ggVennDiagram", "ggplot2", "scales", "patchwork")
+for (p in pkgs) {
+  if (!requireNamespace(p, quietly = TRUE)) install.packages(p)
+}
+library(tidyverse)
+library(ggVennDiagram)
+library(ggplot2)
+library(scales)
+library(patchwork)
+```
+
+---
+
+## Contaminant-Filtering Function
+
+```{r contam_fn}
+contaminant_patterns <- c(
+  "(?i)keratin",
+  "(?i)trypsin",
+  "(?i)albumin|serum albumin",
+  "(?i)\\bhomo sapiens\\b",
+  "(?i)\\bbos taurus\\b",
+  "(?i)\\bmus musculus\\b|\\brat\\b",
+  "(?i)^cRAP|CON__",
+  "(?i)\\(CONTAMINANT\\)"
+)
+
+flag_contaminants <- function(df, desc_col = "Protein Description(s)") {
+  descs <- df[[desc_col]]
+  is_contam <- rep(FALSE, nrow(df))
+  for (pat in contaminant_patterns) {
+    is_contam <- is_contam | grepl(pat, descs, perl = TRUE)
+  }
+  df$contaminant <- is_contam
+  df
+}
+```
+
+---
+
+## Helper: Detected Proteins Per Group
+
+A protein is **detected** in a group if PSM > 0 in **≥ 2 of 3 replicates**.
+
+```{r detect_fn}
+detected_in_group <- function(df, cols) {
+  # cols = character vector of 3 PSM column names
+  mat <- df[, cols, drop = FALSE]
+  rowSums(mat > 0) >= 2
+}
+```
+
+---
+
+## Bacteria: CP34H (*Colwellia psychrerythraea* 34H)
+
+### Load & Filter
+
+```{r bact_load}
+bact_raw <- read_csv(
+  "Bacteria/proteins_clean.csv",
+  show_col_types = FALSE
+)
+
+cat("Raw protein groups:", nrow(bact_raw), "\n")
+
+bact_raw <- flag_contaminants(bact_raw)
+bact_clean <- filter(bact_raw, !contaminant)
+
+cat("After contaminant removal:", nrow(bact_clean), "\n")
+cat("Contaminants removed:", sum(bact_raw$contaminant), "\n")
+```
+
+### Define Groups
+
+```{r bact_groups}
+bact_groups <- list(
+  BC  = c("PSMs (HR_BC1)", "PSMs (HR_BC2)", "PSMs (HR_BC3)"),
+  E   = c("PSMs (HR-E1)",  "PSMs (HR_E2)",  "PSMs (HR_E3)"),
+  F   = c("PSMs (HR_F1)",  "PSMs (HR-F2)",  "PSMs (HR_F3)"),
+  G   = c("PSMs (HR_G1)",  "PSMs (HR_G2)",  "PSMs (HR_G3)")
+)
+
+group_labels_bact <- c(
+  BC = "Control",
+  E  = "DNA Shield 1:1.5",
+  F  = "DNA Shield 1:1.75",
+  G  = "DNA Shield 1:2"
+)
+
+# Protein IDs (use first accession in each group string)
+prot_ids <- bact_clean$`Protein(s)`
+
+bact_sets <- lapply(names(bact_groups), function(g) {
+  detected <- detected_in_group(bact_clean, bact_groups[[g]])
+  prot_ids[detected]
+})
+names(bact_sets) <- group_labels_bact
+
+# Summary
+bact_counts <- sapply(bact_sets, length)
+print(bact_counts)
+```
+
+### Venn Diagram — All Four Groups
+
+```{r bact_venn_4, fig.width=9, fig.height=8}
+# Bacteria colour palette (blue family, per poster colour scheme)
+bact_colours <- c("#2166AC", "#4393C3", "#92C5DE", "#D1E5F0")
+
+p_bact_4 <- ggVennDiagram(
+  bact_sets,
+  label       = "count",
+  label_alpha = 0,
+  set_color   = bact_colours
+) +
+  scale_fill_gradient(low = "#EFF5FB", high = "#2166AC") +
+  scale_color_manual(values = bact_colours) +
+  labs(
+    title    = expression(italic("Colwellia psychrerythraea")~"34H — Protein Detection"),
+    subtitle = "Proteins detected (≥ 1 PSM in ≥ 2/3 replicates); contaminants removed",
+    fill     = "Proteins (n)"
+  ) +
+  theme(
+    plot.title    = element_text(face = "bold", size = 13),
+    plot.subtitle = element_text(size = 10, color = "grey40"),
+    legend.position = "right"
+  )
+
+print(p_bact_4)
+
+dir.create("figures/venn_diagrams", recursive = TRUE, showWarnings = FALSE)
+ggsave("figures/venn_diagrams/Bact_protein_venn_4group.png",
+       p_bact_4, width = 9, height = 8, dpi = 300)
+ggsave("figures/venn_diagrams/Bact_protein_venn_4group.pdf",
+       p_bact_4, width = 9, height = 8)
+cat("Saved: figures/venn_diagrams/Bact_protein_venn_4group.png\n")
+```
+
+### Venn Diagram — Control vs. Best Dilution (1:1.5)
+
+```{r bact_venn_2, fig.width=7, fig.height=6}
+bact_sets_2 <- bact_sets[c("Control", "DNA Shield 1:1.5")]
+
+p_bact_2 <- ggVennDiagram(
+  bact_sets_2,
+  label       = "count",
+  label_alpha = 0,
+  set_color   = bact_colours[1:2]
+) +
+  scale_fill_gradient(low = "#EFF5FB", high = "#2166AC") +
+  scale_color_manual(values = bact_colours[1:2]) +
+  labs(
+    title    = expression(italic("Colwellia")~"34H — Control vs. DNA Shield 1:1.5"),
+    subtitle = "Proteins detected (≥ 1 PSM in ≥ 2/3 replicates); contaminants removed",
+    fill     = "Proteins (n)"
+  ) +
+  theme(
+    plot.title    = element_text(face = "bold", size = 13),
+    plot.subtitle = element_text(size = 10, color = "grey40")
+  )
+
+print(p_bact_2)
+
+ggsave("figures/venn_diagrams/Bact_protein_venn_ctrl_vs_1.5.png",
+       p_bact_2, width = 7, height = 6, dpi = 300)
+ggsave("figures/venn_diagrams/Bact_protein_venn_ctrl_vs_1.5.pdf",
+       p_bact_2, width = 7, height = 6)
+cat("Saved: figures/venn_diagrams/Bact_protein_venn_ctrl_vs_1.5.png\n")
+```
+
+### Dilution Trend — Proteins Unique to Control
+
+```{r bact_unique_trend}
+# How many control-only proteins are recovered as dilution increases?
+ctrl_only <- setdiff(bact_sets[["Control"]],
+                     Reduce(union, bact_sets[c("DNA Shield 1:1.5",
+                                               "DNA Shield 1:1.75",
+                                               "DNA Shield 1:2")]))
+
+trend_df <- tibble(
+  Group     = names(bact_sets)[-1],
+  Dilution  = c("1:1.5", "1:1.75", "1:2"),
+  N_detected = sapply(bact_sets[-1], length),
+  N_shared_with_ctrl = sapply(bact_sets[-1], function(s) length(intersect(s, bact_sets[["Control"]]))),
+  N_ctrl_only = sapply(bact_sets[-1], function(s) length(setdiff(bact_sets[["Control"]], s)))
+)
+
+print(trend_df)
+write_csv(trend_df, "figures/venn_diagrams/Bact_dilution_trend.csv")
+```
+
+---
+
+## Phytoplankton: T. pseudonana (*Thalassiosira pseudonana*)
+
+### Load & Filter
+
+```{r phyto_load}
+phyto_raw <- read_csv(
+  "Phytoplankton/proteins_clean.csv",
+  show_col_types = FALSE
+)
+
+cat("Raw protein groups:", nrow(phyto_raw), "\n")
+
+phyto_raw <- flag_contaminants(phyto_raw)
+phyto_clean <- filter(phyto_raw, !contaminant)
+
+cat("After contaminant removal:", nrow(phyto_clean), "\n")
+cat("Contaminants removed:", sum(phyto_raw$contaminant), "\n")
+```
+
+### Define Groups
+
+```{r phyto_groups}
+phyto_groups <- list(
+  PEC     = c("PSMs (PEC1)",       "PSMs (PEC2)",       "PSMs (PEC3)"),
+  PED_1.5 = c("PSMs (PED1 1.5)",   "PSMs (PED2 1.5)",   "PSMs (PED3 1.5)"),
+  PED_2   = c("PSMs (PED4 1:2)",   "PSMs (PED5 1:2)",   "PSMs (PED6 1:2)")
+)
+
+group_labels_phyto <- c(
+  PEC     = "Control",
+  PED_1.5 = "DNA Shield 1:1.5",
+  PED_2   = "DNA Shield 1:2"
+)
+
+phyto_ids <- phyto_clean$`Protein(s)`
+
+phyto_sets <- lapply(names(phyto_groups), function(g) {
+  detected <- detected_in_group(phyto_clean, phyto_groups[[g]])
+  phyto_ids[detected]
+})
+names(phyto_sets) <- group_labels_phyto
+
+phyto_counts <- sapply(phyto_sets, length)
+print(phyto_counts)
+```
+
+### Venn Diagram — All Three Groups
+
+```{r phyto_venn_3, fig.width=8, fig.height=7}
+# Phytoplankton colour palette (green family, per poster colour scheme)
+phyto_colours <- c("#1A7E3B", "#52B788", "#B7E4C7")
+
+p_phyto_3 <- ggVennDiagram(
+  phyto_sets,
+  label       = "count",
+  label_alpha = 0,
+  set_color   = phyto_colours
+) +
+  scale_fill_gradient(low = "#F0FAF3", high = "#1A7E3B") +
+  scale_color_manual(values = phyto_colours) +
+  labs(
+    title    = expression(italic("Thalassiosira pseudonana")~"— Protein Detection"),
+    subtitle = "Proteins detected (≥ 1 PSM in ≥ 2/3 replicates); contaminants removed",
+    fill     = "Proteins (n)"
+  ) +
+  theme(
+    plot.title    = element_text(face = "bold", size = 13),
+    plot.subtitle = element_text(size = 10, color = "grey40"),
+    legend.position = "right"
+  )
+
+print(p_phyto_3)
+
+ggsave("figures/venn_diagrams/Phyto_protein_venn_3group.png",
+       p_phyto_3, width = 8, height = 7, dpi = 300)
+ggsave("figures/venn_diagrams/Phyto_protein_venn_3group.pdf",
+       p_phyto_3, width = 8, height = 7)
+cat("Saved: figures/venn_diagrams/Phyto_protein_venn_3group.png\n")
+```
+
+### Venn Diagram — Control vs. Each Dilution
+
+```{r phyto_venn_2, fig.width=12, fig.height=5}
+p_phyto_2a <- ggVennDiagram(
+  phyto_sets[c("Control", "DNA Shield 1:1.5")],
+  label = "count", label_alpha = 0,
+  set_color = phyto_colours[1:2]
+) +
+  scale_fill_gradient(low = "#F0FAF3", high = "#1A7E3B") +
+  scale_color_manual(values = phyto_colours[1:2]) +
+  labs(title = "Control vs. 1:1.5", fill = "n") +
+  theme(plot.title = element_text(face = "bold", size = 11))
+
+p_phyto_2b <- ggVennDiagram(
+  phyto_sets[c("Control", "DNA Shield 1:2")],
+  label = "count", label_alpha = 0,
+  set_color = phyto_colours[c(1,3)]
+) +
+  scale_fill_gradient(low = "#F0FAF3", high = "#1A7E3B") +
+  scale_color_manual(values = phyto_colours[c(1,3)]) +
+  labs(title = "Control vs. 1:2", fill = "n") +
+  theme(plot.title = element_text(face = "bold", size = 11))
+
+p_phyto_combined <- p_phyto_2a + p_phyto_2b +
+  plot_annotation(
+    title    = expression(italic("Thalassiosira pseudonana")~"— Control vs. Each Dilution"),
+    subtitle = "Proteins detected (≥ 1 PSM in ≥ 2/3 replicates); contaminants removed",
+    theme    = theme(
+      plot.title    = element_text(face = "bold", size = 13),
+      plot.subtitle = element_text(size = 10, color = "grey40")
+    )
+  )
+
+print(p_phyto_combined)
+
+ggsave("figures/venn_diagrams/Phyto_protein_venn_ctrl_vs_dilutions.png",
+       p_phyto_combined, width = 12, height = 5, dpi = 300)
+ggsave("figures/venn_diagrams/Phyto_protein_venn_ctrl_vs_dilutions.pdf",
+       p_phyto_combined, width = 12, height = 5)
+cat("Saved: figures/venn_diagrams/Phyto_protein_venn_ctrl_vs_dilutions.png\n")
+```
+
+---
+
+## Summary Table
+
+```{r summary_table}
+summary_df <- bind_rows(
+  tibble(
+    Organism  = "Colwellia 34H",
+    Group     = names(bact_sets),
+    N_proteins = sapply(bact_sets, length)
+  ),
+  tibble(
+    Organism  = "T. pseudonana",
+    Group     = names(phyto_sets),
+    N_proteins = sapply(phyto_sets, length)
+  )
+)
+
+knitr::kable(summary_df, caption = "Protein counts per group after contaminant removal")
+```
+
+---
+
+## Session Info
+
+```{r session}
+sessionInfo()
+```

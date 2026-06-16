@@ -1,0 +1,147 @@
+---
+title: "DNA Shield Proteomics — Peptide Filtering"
+author: "Evelyn Bartlett"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(tidyverse)
+```
+
+## Overview
+
+This document describes the peptide filtering pipeline applied to two Limelight/Comet-derived peptide lists from the DNA Shield proteomics experiment:
+
+- **Bacteria** (*Colwellia* 34H) — `peptides (7).txt`
+- **Phytoplankton** (*Thalassiosira pseudonana*) — `peptides (8).txt`
+
+Two filtering steps were applied:
+
+1. **Contaminant removal** — peptides mapping exclusively to common laboratory contaminants (cRAP database: trypsin, keratins, albumin, etc.)
+2. **Cross-contamination removal** — peptides whose bare sequence (modifications stripped) appeared in both datasets
+
+---
+
+## Load Filtered Data
+
+```{r load}
+bacteria   <- read_csv("bacteria_peptides_filtered.csv")
+phyto      <- read_csv("phytoplankton_peptides_filtered.csv")
+
+cat("Bacteria peptides:      ", nrow(bacteria), "\n")
+cat("Phytoplankton peptides: ", nrow(phyto), "\n")
+```
+
+---
+
+## Filtering Summary
+
+| Step | Bacteria removed | Phytoplankton removed |
+|------|-----------------|----------------------|
+| Raw input | — (33,221) | — (32,835) |
+| Contaminant removal | 139 | 79 |
+| Cross-contamination removal | 2,117 | 2,117 |
+| **Final** | **30,711** | **30,121** |
+
+### Contaminant patterns targeted
+
+Common cRAP contaminants flagged for removal:
+
+```{r contam_list, echo=FALSE}
+contaminants <- c(
+  "TRYP_PIG / P00761 (Porcine trypsin)",
+  "KRT* / K2C* / K1C* (Keratins)",
+  "ALBU_ / P02769 (Serum albumin)",
+  "CTRA_ / CTRB_ (Chymotrypsin)",
+  "LYSC_ (Lysozyme)",
+  "RNAS1_ (RNase A)",
+  "TRFE_ (Transferrin)",
+  "CON__ (MaxQuant contaminant prefix)"
+)
+knitr::kable(data.frame(Contaminant = contaminants), col.names = "Contaminant patterns removed")
+```
+
+---
+
+## PSM Count Distributions
+
+```{r psm_bact, fig.cap="CP34H: distribution of total PSM counts per peptide"}
+bact_psm_cols <- grep("PSM Count", names(bacteria), value = TRUE)
+
+bacteria %>%
+  mutate(total_PSM = rowSums(across(all_of(bact_psm_cols)), na.rm = TRUE)) %>%
+  ggplot(aes(x = total_PSM)) +
+  geom_histogram(bins = 80, fill = "#2166ac", color = "white", alpha = 0.85) +
+  scale_x_log10() +
+  labs(
+    title = "CP34H (Colwellia 34H) — Total PSM per Peptide",
+    x = "Total PSM (log10 scale)",
+    y = "Number of peptides"
+  ) +
+  theme_minimal(base_size = 13)
+```
+
+```{r psm_phyto, fig.cap="Phytoplankton: distribution of total PSM counts per peptide"}
+phyto_psm_cols <- grep("PSM Count", names(phyto), value = TRUE)
+
+phyto %>%
+  mutate(total_PSM = rowSums(across(all_of(phyto_psm_cols)), na.rm = TRUE)) %>%
+  ggplot(aes(x = total_PSM)) +
+  geom_histogram(bins = 80, fill = "#1b7837", color = "white", alpha = 0.85) +
+  scale_x_log10() +
+  labs(
+    title = "Phytoplankton (T. pseudonana) — Total PSM per Peptide",
+    x = "Total PSM (log10 scale)",
+    y = "Number of peptides"
+  ) +
+  theme_minimal(base_size = 13)
+```
+
+---
+
+## Unique vs. Non-Unique Peptides
+
+```{r unique}
+bact_unique  <- bacteria %>% count(Unique) %>% mutate(organism = "Bacteria")
+phyto_unique <- phyto    %>% count(Unique) %>% mutate(organism = "Phytoplankton")
+
+bind_rows(bact_unique, phyto_unique) %>%
+  mutate(Unique = ifelse(Unique == "*", "Unique", "Non-unique")) %>%
+  ggplot(aes(x = organism, y = n, fill = Unique)) +
+  geom_col(position = "dodge", alpha = 0.9) +
+  scale_fill_manual(values = c("Unique" = "#4d9de0", "Non-unique" = "#aab4be")) +
+  labs(
+    title = "Unique vs. Non-unique Peptides After Filtering",
+    x = NULL, y = "Number of peptides", fill = NULL
+  ) +
+  theme_minimal(base_size = 13)
+```
+
+---
+
+## Discussion
+
+Peptide lists were exported from Limelight following Comet database searches with PSM- and peptide-level FDR ≤ 0.01. No protein-level FDR filter was applied upstream.
+
+**Contaminant removal** targeted 139 bacteria-assigned and 79 phytoplankton-assigned peptide entries matching cRAP database identifiers. The dominant contaminants were porcine trypsin (TRYP_PIG) and human/bovine keratins, consistent with typical bottom-up proteomics sample preparation.
+
+**Cross-contamination removal** identified 2,117 peptide sequences (bare, modification-agnostic) present in both datasets. Given that these experiments co-culture *Colwellia* 34H with *T. pseudonana*, shared peptides could reflect true biological sequence conservation or genuine cross-species carry-over. To be conservative, all shared sequences were excluded from both lists to ensure organism-specific downstream analyses.
+
+The final filtered lists (30,711 bacteria; 30,121 phytoplankton) are saved as:
+
+- `bacteria_peptides_filtered.csv`
+- `phytoplankton_peptides_filtered.csv`
+
+---
+
+## Session Info
+
+```{r session}
+sessionInfo()
+```

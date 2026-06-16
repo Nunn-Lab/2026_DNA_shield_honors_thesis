@@ -1,0 +1,464 @@
+---
+title: "DNA Shield — CP34H (*Colwellia psychrerythraea* 34H) Differential Protein Abundance"
+subtitle: "DDA Proteomics | log2(NSAF) + Median Centering + limma eBayes"
+author: "Evelyn Bartlett — Brook Lab"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    theme: flatly
+    highlight: tango
+    df_print: paged
+    code_folding: show
+  pdf_document:
+    toc: true
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo    = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width  = 8,
+  fig.height = 6,
+  dpi     = 300
+)
+```
+
+# Overview
+
+This document performs differential protein abundance analysis for the DNA Shield
+project bacterial arm (CP34H (*Colwellia psychrerythraea* 34H)). Samples are divided into:
+
+- **Control:** BC1, BC2, BC3
+- **Experimental:** E1, E2, E3
+
+**Pipeline:** filter → log2(NSAF) → median centering → limma moderated t-test
+(Smyth 2004) → Benjamini-Hochberg FDR correction.
+
+---
+
+# 1 · Load packages
+
+```{r packages}
+# Install any missing packages before running:
+# install.packages(c("tidyverse", "limma", "pheatmap", "ggrepel",
+#                    "RColorBrewer", "viridis", "scales", "openxlsx"))
+# BiocManager::install("limma")
+
+library(tidyverse)
+library(limma)
+library(pheatmap)
+library(ggrepel)
+library(RColorBrewer)
+library(viridis)
+library(scales)
+library(openxlsx)
+```
+
+---
+
+# 2 · Load data
+
+```{r load-data}
+# ── Update this path to match your local file location ──────────────────────
+DATA_PATH <- "Bactera_Comet_all_samples_proteins.txt"
+
+raw <- read.delim(DATA_PATH, stringsAsFactors = FALSE, check.names = FALSE)
+cat("Raw protein rows:", nrow(raw), "\n")
+```
+
+---
+
+# 3 · Define sample groups
+
+```{r sample-cols}
+# PSM (spectral count) columns
+psm_ctrl <- c("PSMs (HR_BC1)", "PSMs (HR_BC2)", "PSMs (HR_BC3)")
+psm_exp  <- c("PSMs (HR-E1)",  "PSMs (HR_E2)",  "PSMs (HR_E3)")
+
+# NSAF columns
+nsaf_ctrl <- c("NSAF (HR_BC1)", "NSAF (HR_BC2)", "NSAF (HR_BC3)")
+nsaf_exp  <- c("NSAF (HR-E1)",  "NSAF (HR_E2)",  "NSAF (HR_E3)")
+
+all_psm  <- c(psm_ctrl,  psm_exp)
+all_nsaf <- c(nsaf_ctrl, nsaf_exp)
+
+# Clean commas from numeric fields (Limelight/Comet export format)
+raw[all_psm]  <- lapply(raw[all_psm],  function(x) as.numeric(gsub(",", "", x)))
+raw[all_nsaf] <- lapply(raw[all_nsaf], function(x) as.numeric(gsub(",", "", x)))
+```
+
+---
+
+# 4 · Filter proteins
+
+## 4.1 Remove contaminants
+
+```{r filter-contaminants}
+contam_mask <- grepl("\\(CONTAMINANT\\)", raw[["Protein Description(s)"]], ignore.case = TRUE)
+cat("Contaminant rows removed:", sum(contam_mask), "\n")
+dat <- raw[!contam_mask, ]
+```
+
+## 4.2 Remove *Thalassiosira pseudonana* proteins
+
+```{r filter-thalassiosira}
+thala_mask <- grepl("Thalassiosira", dat[["Protein Description(s)"]], ignore.case = TRUE) |
+              grepl("Thalassiosira", dat[["Protein(s)"]],             ignore.case = TRUE)
+cat("Thalassiosira pseudonana rows removed:", sum(thala_mask), "\n")
+dat <- dat[!thala_mask, ]
+cat("Rows after organism filters:", nrow(dat), "\n")
+```
+
+## 4.3 Spectral count quality filter
+
+Retain proteins with **≥ 2 spectral counts in ≥ 2 of 3 replicates** in at
+least one condition.
+
+```{r filter-spc}
+passes_spc <- function(df, cols) {
+  rowSums(df[cols] >= 2) >= 2
+}
+
+ctrl_pass <- passes_spc(dat, psm_ctrl)
+exp_pass  <- passes_spc(dat, psm_exp)
+dat <- dat[ctrl_pass | exp_pass, ]
+dat <- dat[!duplicated(dat[["Protein Group Number"]]), ]  # one row per group
+dat <- dat %>% mutate(protein_id = paste0("pg", `Protein Group Number`))
+rownames(dat) <- dat$protein_id
+
+cat("Proteins after SpC filter:", nrow(dat), "\n")
+```
+
+---
+
+# 5 · Normalisation
+
+## 5.1 log2(NSAF + pseudocount)
+
+```{r log2-transform}
+PSEUDO <- 1e-8
+nsaf_mat <- as.matrix(dat[, all_nsaf])
+log2_mat <- log2(nsaf_mat + PSEUDO)
+colnames(log2_mat) <- c("BC1", "BC2", "BC3", "E1", "E2", "E3")
+rownames(log2_mat) <- dat$protein_id
+```
+
+## 5.2 Median centering
+
+```{r median-center}
+col_medians <- apply(log2_mat, 2, median)
+log2_norm   <- sweep(log2_mat, 2, col_medians, "-")
+
+cat("Sample medians subtracted:\n")
+print(round(col_medians, 4))
+```
+
+## 5.3 QC: NSAF distribution before and after normalisation
+
+```{r qc-boxplot-raw, fig.cap="Fig 1a. log2(NSAF) distribution before median centering."}
+# Project colour palette — bacteria arm uses blue family
+sample_cols <- c(BC1 = "#2166ac", BC2 = "#4393c3", BC3 = "#92c5de",
+                 E1  = "#d6604d", E2  = "#f4a582", E3  = "#fddbc7")
+
+df_raw <- as.data.frame(log2_mat) %>%
+  rownames_to_column("protein") %>%
+  pivot_longer(-protein, names_to = "sample", values_to = "log2NSAF")
+
+ggplot(df_raw, aes(x = sample, y = log2NSAF, fill = sample)) +
+  geom_boxplot(outlier.size = 0.5, alpha = 0.85) +
+  scale_fill_manual(values = sample_cols) +
+  labs(title = "log2(NSAF) — before median centering",
+       x = NULL, y = "log2(NSAF)") +
+  theme_bw(base_size = 13) +
+  theme(legend.position = "none")
+```
+
+```{r qc-boxplot-norm, fig.cap="Fig 1b. log2(NSAF) distribution after median centering."}
+df_norm <- as.data.frame(log2_norm) %>%
+  rownames_to_column("protein") %>%
+  pivot_longer(-protein, names_to = "sample", values_to = "log2NSAF")
+
+ggplot(df_norm, aes(x = sample, y = log2NSAF, fill = sample)) +
+  geom_boxplot(outlier.size = 0.5, alpha = 0.85) +
+  scale_fill_manual(values = sample_cols) +
+  labs(title = "log2(NSAF) — after median centering",
+       x = NULL, y = "log2(NSAF)") +
+  theme_bw(base_size = 13) +
+  theme(legend.position = "none")
+```
+
+---
+
+# 6 · limma moderated t-test
+
+```{r limma}
+# Design matrix: intercept = Control, coef 2 = Experimental effect
+group       <- factor(c("Ctrl","Ctrl","Ctrl","Exp","Exp","Exp"),
+                      levels = c("Ctrl","Exp"))
+design      <- model.matrix(~group)
+colnames(design) <- c("Intercept", "Exp_vs_Ctrl")
+
+fit         <- lmFit(log2_norm, design)
+fit_eb      <- eBayes(fit)
+
+results_tbl <- topTable(fit_eb,
+                         coef     = "Exp_vs_Ctrl",
+                         number   = Inf,
+                         sort.by  = "p",
+                         adjust.method = "BH") %>%
+  as_tibble(rownames = "protein_id") %>%
+  left_join(dat %>% select(protein_id,
+                            `Protein(s)`,
+                            `Protein Description(s)`),
+            by = "protein_id") %>%
+  rename(logFC        = logFC,
+         mean_expr    = AveExpr,
+         mod_t        = t,
+         p_value      = P.Value,
+         adj_p_BH     = adj.P.Val,
+         B_statistic  = B)
+
+cat(sprintf("Prior df (d0):        %.2f\n", fit_eb$df.prior))
+cat(sprintf("Prior variance (s0²): %.6f\n", fit_eb$s2.prior))
+cat(sprintf("Posterior df:         %.2f\n", fit_eb$df.prior + fit_eb$df.residual[1]))
+cat(sprintf("\nProteins tested:         %d\n", nrow(results_tbl)))
+cat(sprintf("Significant FDR < 0.05:  %d (up: %d, down: %d)\n",
+    sum(results_tbl$adj_p_BH < 0.05),
+    sum(results_tbl$adj_p_BH < 0.05 & results_tbl$logFC > 0),
+    sum(results_tbl$adj_p_BH < 0.05 & results_tbl$logFC < 0)))
+cat(sprintf("Significant FDR < 0.01:  %d\n",
+    sum(results_tbl$adj_p_BH < 0.01)))
+```
+
+---
+
+# 7 · Figures
+
+## 7.1 PCA — sample clustering
+
+```{r pca, fig.cap="Fig 2. PCA of all 6 samples on median-centred log2(NSAF)."}
+pca_res  <- prcomp(t(log2_norm), scale. = FALSE)
+pca_df   <- as.data.frame(pca_res$x[, 1:2]) %>%
+  rownames_to_column("sample") %>%
+  mutate(condition = ifelse(grepl("^BC", sample), "Control", "Experimental"))
+
+pct_var  <- round(100 * pca_res$sdev^2 / sum(pca_res$sdev^2), 1)
+
+ggplot(pca_df, aes(x = PC1, y = PC2, colour = condition, label = sample)) +
+  geom_point(size = 5, alpha = 0.9) +
+  geom_text_repel(size = 4, fontface = "bold") +
+  scale_colour_manual(values = c(Control = "#2166ac", Experimental = "#d6604d")) +
+  labs(title = "PCA — Colwellia 34H proteome",
+       x = paste0("PC1 (", pct_var[1], "%)"),
+       y = paste0("PC2 (", pct_var[2], "%)"),
+       colour = NULL) +
+  theme_bw(base_size = 13) +
+  theme(legend.position = "top")
+```
+
+## 7.2 Sample–sample correlation heatmap
+
+```{r cor-heatmap, fig.cap="Fig 3. Pearson correlation of median-centred log2(NSAF) between all samples."}
+cor_mat <- cor(log2_norm, method = "pearson")
+
+ann_col <- data.frame(
+  Condition = ifelse(grepl("^BC", colnames(cor_mat)), "Control", "Experimental"),
+  row.names = colnames(cor_mat)
+)
+ann_colors <- list(Condition = c(Control = "#2166ac", Experimental = "#d6604d"))
+
+pheatmap(cor_mat,
+         annotation_col  = ann_col,
+         annotation_colors = ann_colors,
+         color           = colorRampPalette(c("#f7fbff","#2171b5"))(100),
+         display_numbers = TRUE,
+         number_format   = "%.3f",
+         fontsize_number = 9,
+         main            = "Sample–sample Pearson correlation",
+         border_color    = NA)
+```
+
+## 7.3 Volcano plot
+
+```{r volcano, fig.height=7, fig.cap="Fig 4. Volcano plot. Red = FDR < 0.05, grey = not significant. Top 15 hits labelled."}
+sig_cutoff <- 0.05
+
+vol_df <- results_tbl %>%
+  mutate(
+    sig       = adj_p_BH < sig_cutoff,
+    direction = case_when(
+      sig & logFC  > 0 ~ "Up in Exp",
+      sig & logFC  < 0 ~ "Down in Exp",
+      TRUE             ~ "NS"
+    ),
+    # Short label: first description before comma or bracket
+    short_desc = str_extract(`Protein Description(s)`, "^[^,\\[]+") %>%
+                 str_trunc(45)
+  )
+
+top_labels <- vol_df %>%
+  filter(sig) %>%
+  slice_min(adj_p_BH, n = 15)
+
+ggplot(vol_df, aes(x = logFC, y = -log10(p_value), colour = direction)) +
+  geom_point(alpha = 0.6, size = 1.8) +
+  geom_text_repel(data = top_labels,
+                  aes(label = short_desc),
+                  size = 2.8, max.overlaps = 20,
+                  segment.colour = "grey60") +
+  geom_hline(yintercept = -log10(max(results_tbl$p_value[results_tbl$adj_p_BH < sig_cutoff])),
+             linetype = "dashed", colour = "grey40", linewidth = 0.5) +
+  geom_vline(xintercept = 0, linetype = "solid", colour = "grey70", linewidth = 0.4) +
+  scale_colour_manual(values = c("Up in Exp"   = "#d6604d",
+                                 "Down in Exp" = "#2166ac",
+                                 "NS"          = "grey75")) +
+  labs(title  = "Volcano plot — Exp vs Ctrl",
+       x      = "log2 Fold Change (Exp − Ctrl)",
+       y      = "−log10(p-value)",
+       colour = NULL) +
+  theme_bw(base_size = 13) +
+  theme(legend.position = "top")
+```
+
+## 7.4 MA plot
+
+```{r ma-plot, fig.cap="Fig 5. MA plot — mean log2(NSAF) vs fold change. Red = FDR < 0.05."}
+ggplot(results_tbl, aes(x = mean_expr, y = logFC,
+                         colour = adj_p_BH < sig_cutoff)) +
+  geom_point(alpha = 0.5, size = 1.5) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey40") +
+  scale_colour_manual(values = c("FALSE" = "grey70", "TRUE" = "#d6604d"),
+                      labels = c("NS", "FDR < 0.05")) +
+  labs(title  = "MA plot",
+       x      = "Mean log2(NSAF)",
+       y      = "log2 Fold Change (Exp − Ctrl)",
+       colour = NULL) +
+  theme_bw(base_size = 13) +
+  theme(legend.position = "top")
+```
+
+## 7.5 Heatmap of significant proteins
+
+```{r heatmap-sig, fig.height=10, fig.cap="Fig 6. Heatmap of FDR < 0.05 proteins. Z-scored across samples."}
+sig_ids <- results_tbl %>%
+  filter(adj_p_BH < sig_cutoff) %>%
+  pull(protein_id)
+
+heat_mat <- log2_norm[sig_ids, ]
+
+# Z-score each row for visualisation
+heat_z <- t(scale(t(heat_mat)))
+
+# Short row labels
+row_labels <- results_tbl %>%
+  filter(protein_id %in% sig_ids) %>%
+  mutate(lbl = str_extract(`Protein Description(s)`, "^[^,\\[]+") %>%
+               str_trunc(50)) %>%
+  pull(lbl)
+names(row_labels) <- sig_ids
+
+ann_col2 <- data.frame(
+  Condition = c("Control","Control","Control","Experimental","Experimental","Experimental"),
+  row.names = colnames(heat_z)
+)
+
+pheatmap(heat_z,
+         annotation_col   = ann_col2,
+         annotation_colors = ann_colors,
+         show_rownames    = TRUE,
+         labels_row       = row_labels[rownames(heat_z)],
+         fontsize_row     = 6,
+         fontsize_col     = 10,
+         color            = colorRampPalette(rev(brewer.pal(11, "RdBu")))(100),
+         clustering_distance_rows = "euclidean",
+         clustering_distance_cols = "euclidean",
+         clustering_method = "complete",
+         main             = paste0("Significant proteins (FDR < 0.05, n = ",
+                                   length(sig_ids), ") — Z-score"),
+         border_color     = NA)
+```
+
+## 7.6 Top hits barplot
+
+```{r barplot-tophits, fig.height=7, fig.cap="Fig 7. Top 20 most significant proteins by adjusted p-value, coloured by direction."}
+top20 <- results_tbl %>%
+  slice_min(adj_p_BH, n = 20) %>%
+  mutate(
+    short_desc = str_extract(`Protein Description(s)`, "^[^,\\[]+") %>%
+                 str_trunc(55),
+    short_desc = fct_reorder(short_desc, logFC)
+  )
+
+ggplot(top20, aes(x = logFC, y = short_desc,
+                   fill = logFC > 0)) +
+  geom_col(alpha = 0.85) +
+  geom_vline(xintercept = 0, colour = "grey40") +
+  scale_fill_manual(values = c("TRUE" = "#d6604d", "FALSE" = "#2166ac"),
+                    labels = c("Down in Exp", "Up in Exp")) +
+  labs(title  = "Top 20 differentially abundant proteins",
+       x      = "log2 Fold Change (Exp − Ctrl)",
+       y      = NULL,
+       fill   = NULL) +
+  theme_bw(base_size = 12) +
+  theme(legend.position = "top",
+        axis.text.y     = element_text(size = 8))
+```
+
+---
+
+# 8 · Export results
+
+```{r export}
+# Full results table sorted by adjusted p-value
+results_export <- results_tbl %>%
+  arrange(adj_p_BH) %>%
+  select(`Protein(s)`, `Protein Description(s)`,
+         logFC, mean_expr, mod_t, p_value, adj_p_BH, B_statistic)
+
+# Add individual normalised NSAF columns
+nsaf_export <- as.data.frame(log2_norm) %>%
+  rownames_to_column("protein_id")
+results_export <- left_join(
+  results_export %>% mutate(protein_id = results_tbl$protein_id[
+    match(results_tbl$adj_p_BH, results_export$adj_p_BH)]),   # re-attach id
+  nsaf_export, by = "protein_id") %>%
+  select(-protein_id)
+
+# Write to Excel
+wb <- createWorkbook()
+addWorksheet(wb, "limma_results")
+writeData(wb, "limma_results", results_export)
+
+addWorksheet(wb, "summary")
+writeData(wb, "summary", data.frame(
+  Metric = c("Proteins tested", "FDR<0.05 (total)",
+             "FDR<0.05 up in Exp", "FDR<0.05 down in Exp",
+             "FDR<0.01 (total)",
+             "Prior df (d0)", "Prior variance (s0²)",
+             "Posterior df"),
+  Value  = c(nrow(results_tbl),
+             sum(results_tbl$adj_p_BH < 0.05),
+             sum(results_tbl$adj_p_BH < 0.05 & results_tbl$logFC > 0),
+             sum(results_tbl$adj_p_BH < 0.05 & results_tbl$logFC < 0),
+             sum(results_tbl$adj_p_BH < 0.01),
+             round(fit_eb$df.prior, 2),
+             round(fit_eb$s2.prior, 6),
+             round(fit_eb$df.prior + fit_eb$df.residual[1], 2))
+))
+
+saveWorkbook(wb, "Bacteria_limma_results_R.xlsx", overwrite = TRUE)
+cat("Results saved to Bacteria_limma_results_R.xlsx\n")
+```
+
+---
+
+# 9 · Session info
+
+```{r session-info}
+sessionInfo()
+```
