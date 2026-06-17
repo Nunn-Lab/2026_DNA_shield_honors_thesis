@@ -1,0 +1,514 @@
+---
+title: "GO-Annotated Volcano Plots — DNA Shield Proteomics"
+author: "Evelyn Bartlett (Brook Lab)"
+date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    fig_width: 8
+    fig_height: 7
+knit: (function(inputFile, encoding) {
+    rmarkdown::render(inputFile,
+                      encoding = encoding,
+                      knit_root_dir = getwd()) })
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo    = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  dpi     = 300
+)
+```
+
+## Overview
+
+Differential abundance volcano plots comparing:
+
+1. **CP34H** (*Colwellia psychrerythraea* 34H) — B-CTL vs B-1.5 (DNA Shield 1:1.5)
+2. **T. pseudonana** (*Thalassiosira pseudonana*) — P-CTL vs P-2.0 (DNA Shield 1:2)
+
+Points are colored by GO biological process category, assigned via priority-ordered
+regex matching against metaGOmics2 annotations. Statistics: Welch's t-test on
+log₁₀ NSAF values per protein, with Benjamini-Hochberg FDR correction. Significance
+threshold: FDR < 0.05 AND |log₂FC| > 1.
+
+Upstream pipeline: Comet 2023.02 → Percolator via Limelight; PSM- and peptide-level
+q ≤ 0.01 FDR; contaminants excluded.
+
+---
+
+## Packages
+
+```{r packages}
+library(tidyverse)
+library(ggplot2)
+library(ggrepel)
+library(arrow)    # arrow::read_parquet()
+library(scales)
+```
+
+---
+
+## GO category definitions
+
+Priority order: the first matching category wins.
+
+```{r go-categories}
+GO_CATS <- list(
+  list(name    = "Photosynthesis",
+       color   = "#2ecc71",
+       pattern = "photosynthes|light reaction|chlorophyll|photosystem|calvin"),
+  list(name    = "Translation / Ribosome",
+       color   = "#e74c3c",
+       pattern = "translat|ribosom|trna|aminoacyl-trna|peptide biosynthes|rrna"),
+  list(name    = "DNA / RNA processes",
+       color   = "#3498db",
+       pattern = "dna replic|dna repair|transcription|rna process|nucleotide|chromosome|dna metabol"),
+  list(name    = "Protein quality control",
+       color   = "#9b59b6",
+       pattern = "protein fold|chaperone|proteolysis|proteasome|ubiquitin|protein catabol|misfolded"),
+  list(name    = "Metabolic process",
+       color   = "#f39c12",
+       pattern = "biosynthes|catabolic|metabolic process|carbon|nitrogen|lipid|fatty acid|glucos|glycol|amino acid|carbohydrate"),
+  list(name    = "Transport",
+       color   = "#1abc9c",
+       pattern = "transport|transmembrane transport|ion transport|export|import|secretion"),
+  list(name    = "Stress response",
+       color   = "#e67e22",
+       pattern = "response to stress|response to heat|response to cold|response to oxidat|response to osmot|stress"),
+  list(name    = "Signal / Regulation",
+       color   = "#e91e63",
+       pattern = "signal transduct|regulation|chemotaxis|phosphorylat|two-component"),
+  list(name    = "Cell cycle / Division",
+       color   = "#607d8b",
+       pattern = "cell cycle|cell division|cytokinesis|chromosome segregat")
+)
+
+CAT_OTHER       <- list(name = "Other / Unassigned", color = "#aaaaaa")
+CAT_HYPOTHETICAL <- list(name = "Hypothetical",       color = "#dddddd")
+```
+
+---
+
+## Helper functions
+
+### Build protein → GO name map from metaGOmics2 output
+
+```{r fn-load-go-map}
+#' Build a protein-to-BP-GO-name map from one or more metaGOmics2 list dirs.
+#'
+#' @param list_dirs Character vector of paths to list_XXX folders, each
+#'   containing go_terms.csv and peptide_mapping.parquet.
+#' @return Named list: protein_id → character vector of lowercase BP GO names.
+load_go_map <- function(list_dirs) {
+  prot_go <- list()   # protein_id → set of BP GO term names
+
+  for (d in list_dirs) {
+    # GO term metadata: go_id, name, namespace
+    gt <- read_csv(file.path(d, "go_terms.csv"), show_col_types = FALSE)
+    bp_info <- gt %>%
+      filter(namespace == "biological_process") %>%
+      select(go_id, name) %>%
+      mutate(name = tolower(name))
+
+    # Peptide → GO mapping
+    pm <- arrow::read_parquet(file.path(d, "peptide_mapping.parquet"))
+
+    # peptide_go_terms may be a list column (Arrow list type) or a string
+    # (Python-style repr e.g. "['GO:0006810', 'GO:0055085']")
+    if (is.list(pm$peptide_go_terms)) {
+      # Already a list column — each element is a character vector of GO IDs
+      go_lists <- pm$peptide_go_terms
+    } else {
+      # String representation — parse with eval(parse())
+      go_lists <- lapply(pm$peptide_go_terms, function(s) {
+        if (is.na(s) || s == "") return(character(0))
+        tryCatch(eval(parse(text = s)), error = function(e) character(0))
+      })
+    }
+
+    for (i in seq_len(nrow(pm))) {
+      pid  <- pm$background_protein[i]
+      gos  <- go_lists[[i]]
+      if (length(gos) == 0) next
+
+      # Keep only BP terms
+      bp_names <- bp_info$name[bp_info$go_id %in% gos]
+      if (length(bp_names) == 0) next
+
+      prot_go[[pid]] <- unique(c(prot_go[[pid]], bp_names))
+    }
+  }
+
+  message("GO map built: ", length(prot_go), " proteins annotated")
+  prot_go
+}
+```
+
+### Assign GO category to a protein group
+
+```{r fn-assign-go-category}
+#' Assign the highest-priority GO category to a protein group entry.
+#'
+#' @param protein_ids_str Comma-separated protein IDs (from "Protein(s)" column).
+#' @param prot_go_map Named list from load_go_map().
+#' @return List with $name and $color.
+assign_go_category <- function(protein_ids_str, prot_go_map) {
+  ids    <- trimws(strsplit(as.character(protein_ids_str), ",")[[1]])
+  all_bp <- unique(unlist(prot_go_map[ids[ids %in% names(prot_go_map)]]))
+
+  if (length(all_bp) == 0) return(CAT_HYPOTHETICAL)
+
+  combined <- paste(all_bp, collapse = " ")
+  for (cat in GO_CATS) {
+    if (grepl(cat$pattern, combined, ignore.case = TRUE)) return(cat)
+  }
+  CAT_OTHER
+}
+```
+
+### Clean protein description label
+
+```{r fn-clean-label}
+#' Strip UniProt annotation noise and truncate for plot labels.
+clean_label <- function(desc_str, max_chars = 38) {
+  raw <- strsplit(as.character(desc_str), ",")[[1]][1]
+  lab <- gsub("\\[.*?\\]|RecName: Full=|AltName:.*|;.*", "", raw)
+  lab <- trimws(lab)
+  substr(lab, 1, max_chars)
+}
+```
+
+### Core volcano plot function
+
+```{r fn-run-volcano}
+#' Run a full GO-annotated volcano analysis and return a list with the
+#' annotated data frame and the ggplot object.
+#'
+#' @param nsaf_path   Path to the tab-delimited protein table.
+#' @param ctrl_cols   Character vector of control NSAF column names (n=3).
+#' @param treat_cols  Character vector of treatment NSAF column names (n=3).
+#' @param go_list_dirs Character vector of metaGOmics2 list_XXX directories.
+#' @param ctrl_label  Short label for control condition.
+#' @param treat_label Short label for treatment condition.
+#' @param title       Plot title.
+#' @param out_dir     Directory to save PNG + PDF outputs (created if needed).
+#' @param out_prefix  File prefix for saved figures.
+#' @return Invisible list: $data (annotated df), $plot (ggplot).
+run_volcano <- function(nsaf_path,
+                        ctrl_cols,
+                        treat_cols,
+                        go_list_dirs,
+                        ctrl_label  = "Control",
+                        treat_label = "Treatment",
+                        title       = "Volcano",
+                        out_dir     = "figures/volcano_plots",
+                        out_prefix  = "volcano") {
+
+  # ── 1. Load & filter ────────────────────────────────────────────────────────
+  df <- read_tsv(nsaf_path, show_col_types = FALSE, na = c("", "NA")) %>%
+    filter(!grepl("CONTAMINANT", `Protein Description(s)`,
+                  ignore.case = TRUE, perl = TRUE)) %>%
+    mutate(across(all_of(c(ctrl_cols, treat_cols)),
+                  ~ as.numeric(.)))
+
+  # Keep proteins detected (NSAF > 0) in ALL replicates of BOTH conditions
+  df <- df %>%
+    filter(
+      rowSums(select(., all_of(ctrl_cols))  > 0) == length(ctrl_cols),
+      rowSums(select(., all_of(treat_cols)) > 0) == length(treat_cols)
+    )
+  message(title, ": n=", nrow(df), " proteins (all replicates detected)")
+
+  # ── 2. GO annotations ───────────────────────────────────────────────────────
+  go_map <- load_go_map(go_list_dirs)
+
+  cats <- lapply(df$`Protein(s)`, assign_go_category, prot_go_map = go_map)
+  df$category <- vapply(cats, `[[`, character(1), "name")
+  df$color    <- vapply(cats, `[[`, character(1), "color")
+
+  # ── 3. Statistics ────────────────────────────────────────────────────────────
+  # Welch's t-test on log10 NSAF; log2FC from raw NSAF means
+  log_mat <- log10(as.matrix(df[, c(ctrl_cols, treat_cols)]))
+
+  n_ctrl  <- length(ctrl_cols)
+  n_treat <- length(treat_cols)
+
+  stats <- lapply(seq_len(nrow(df)), function(i) {
+    ctrl_vals  <- log_mat[i, seq_len(n_ctrl)]
+    treat_vals <- log_mat[i, n_ctrl + seq_len(n_treat)]
+    tt <- tryCatch(
+      t.test(treat_vals, ctrl_vals, var.equal = FALSE),
+      error = function(e) list(p.value = 1)
+    )
+    list(
+      p_val   = if (is.nan(tt$p.value)) 1 else tt$p.value,
+      log2FC  = log2(mean(as.numeric(df[i, treat_cols])) /
+                     mean(as.numeric(df[i, ctrl_cols])))
+    )
+  })
+
+  df$p_val  <- vapply(stats, `[[`, numeric(1), "p_val")
+  df$log2FC <- vapply(stats, `[[`, numeric(1), "log2FC")
+  df$FDR    <- p.adjust(df$p_val, method = "BH")
+
+  # Y-axis: -log10(p) capped at 6
+  y_cap         <- 6.0
+  p_line        <- -log10(0.05)   # ≈ 1.301
+  df$neg_log_p  <- pmin(-log10(pmax(df$p_val, 1e-10)), y_cap)
+
+  df$sig     <- df$FDR < 0.05 & abs(df$log2FC) > 1
+  df$up      <- df$sig & df$log2FC > 0
+  df$down    <- df$sig & df$log2FC < 0
+
+  message("  Sig (FDR<0.05 & |FC|>1): ", sum(df$sig),
+          "  up=", sum(df$up), "  down=", sum(df$down))
+
+  # ── 4. Build ordered category factor for legend ──────────────────────────────
+  all_cat_names   <- c(vapply(GO_CATS, `[[`, character(1), "name"),
+                       CAT_OTHER$name, CAT_HYPOTHETICAL$name)
+  all_cat_colors  <- c(vapply(GO_CATS, `[[`, character(1), "color"),
+                       CAT_OTHER$color, CAT_HYPOTHETICAL$color)
+  names(all_cat_colors) <- all_cat_names
+
+  # Only include categories present among significant points
+  sig_cats <- intersect(all_cat_names, unique(df$category[df$sig]))
+  legend_colors <- c("Non-significant" = "lightgray",
+                     all_cat_colors[sig_cats])
+
+  df$plot_cat <- ifelse(df$sig,
+                        df$category,
+                        "Non-significant")
+  df$plot_cat <- factor(df$plot_cat,
+                        levels = c("Non-significant", sig_cats))
+
+  # ── 5. Hyperbolic boundary curves ────────────────────────────────────────────
+  k     <- 1.0 * p_line
+  xs_r  <- seq(1.001, 2.5, length.out = 400)
+  xs_l  <- seq(-2.5, -1.001, length.out = 400)
+  ys_r  <- k / (xs_r - 1)
+  ys_l  <- k / (-xs_l - 1)
+
+  curve_r <- data.frame(x = xs_r, y = ys_r) %>%
+    filter(y > p_line, y <= y_cap)
+  curve_l <- data.frame(x = xs_l, y = ys_l) %>%
+    filter(y > p_line, y <= y_cap)
+
+  # ── 6. Top 15 labels ─────────────────────────────────────────────────────────
+  top15 <- df %>%
+    filter(sig) %>%
+    arrange(FDR) %>%
+    head(15) %>%
+    mutate(label = vapply(`Protein Description(s)`, clean_label, character(1)))
+
+  # ── 7. Build plot ─────────────────────────────────────────────────────────────
+  # Non-significant layer plotted first (gray, smaller)
+  p <- ggplot() +
+    geom_point(
+      data = df %>% filter(!sig),
+      aes(x = log2FC, y = neg_log_p),
+      color = "lightgray", size = 1.0, alpha = 0.45, stroke = 0
+    ) +
+    # Significant points colored by GO category
+    geom_point(
+      data = df %>% filter(sig),
+      aes(x = log2FC, y = neg_log_p, color = plot_cat),
+      size = 2.2, alpha = 0.9, stroke = 0
+    ) +
+    # Threshold lines
+    geom_hline(yintercept = p_line, linetype = "dashed",
+               color = "black", linewidth = 0.5, alpha = 0.6) +
+    geom_vline(xintercept =  1, linetype = "dashed",
+               color = "black", linewidth = 0.5, alpha = 0.6) +
+    geom_vline(xintercept = -1, linetype = "dashed",
+               color = "black", linewidth = 0.5, alpha = 0.6) +
+    # Hyperbolic boundary curves
+    geom_line(data = curve_r, aes(x = x, y = y),
+              color = "black", linewidth = 0.7) +
+    geom_line(data = curve_l, aes(x = x, y = y),
+              color = "black", linewidth = 0.7) +
+    # Protein labels (top 15 by FDR)
+    ggrepel::geom_text_repel(
+      data         = top15,
+      aes(x = log2FC, y = neg_log_p, label = label),
+      size         = 2.2,
+      color        = "black",
+      segment.color = "gray60",
+      segment.size  = 0.3,
+      max.overlaps  = 20,
+      box.padding   = 0.2,
+      point.padding = 0.1
+    ) +
+    # Color scale for significant points
+    scale_color_manual(
+      values = legend_colors,
+      name   = "GO biological process",
+      guide  = guide_legend(
+        override.aes = list(size = 3, alpha = 1),
+        title.theme  = element_text(size = 8, face = "bold")
+      )
+    ) +
+    # Axis limits
+    coord_cartesian(xlim = c(-2.5, 2.5), ylim = c(0, y_cap)) +
+    labs(
+      title    = title,
+      subtitle = sprintf(
+        "n = %d proteins  ·  ↑ %d  ↓ %d significant (FDR < 0.05, |log₂FC| > 1)",
+        nrow(df), sum(df$up), sum(df$down)
+      ),
+      x = bquote(log[2] ~ "NSAF  (" ~ .(treat_label) ~ "−" ~ .(ctrl_label) ~ ")"),
+      y = expression(textstyle(-log[10] ~ p))
+    ) +
+    theme_bw(base_size = 12) +
+    theme(
+      panel.grid.minor = element_blank(),
+      plot.title       = element_text(face = "bold", size = 12),
+      plot.subtitle    = element_text(color = "gray30", size = 9),
+      legend.position  = "right",
+      legend.text      = element_text(size = 7.5),
+      legend.key.size  = unit(0.45, "cm"),
+      axis.title       = element_text(size = 11)
+    )
+
+  # ── 8. Save ──────────────────────────────────────────────────────────────────
+  dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+
+  ggsave(file.path(out_dir, paste0(out_prefix, ".png")),
+         p, width = 8, height = 7, dpi = 600, bg = "white")
+  ggsave(file.path(out_dir, paste0(out_prefix, ".pdf")),
+         p, width = 8, height = 7)
+  message("  Saved to: ", out_dir)
+
+  invisible(list(data = df, plot = p))
+}
+```
+
+---
+
+# 1 · CP34H — B-CTL vs B-1.5
+
+*Colwellia psychrerythraea* 34H: control (HR_BC1–3) vs DNA Shield 1:1.5 (HR-E1–E3).
+metaGOmics2 lists used: `list_000` and `list_001`.
+
+```{r bact-volcano, fig.cap="CP34H: B-CTL vs B-1.5 GO-annotated volcano plot"}
+bact_nsaf_path <- "data/Bacteria/Bactera_Comet_all_samples_proteins.txt"
+
+bact_ctrl_cols  <- c("NSAF (HR_BC1)", "NSAF (HR_BC2)", "NSAF (HR_BC3)")
+bact_treat_cols <- c("NSAF (HR-E1)",  "NSAF (HR_E2)",  "NSAF (HR_E3)")
+
+bact_go_dirs <- c("data/metagomics2_results/list_000",
+                  "data/metagomics2_results/list_001")
+
+bact_result <- run_volcano(
+  nsaf_path    = bact_nsaf_path,
+  ctrl_cols    = bact_ctrl_cols,
+  treat_cols   = bact_treat_cols,
+  go_list_dirs = bact_go_dirs,
+  ctrl_label   = "B-CTL",
+  treat_label  = "B-1.5",
+  title        = "B-CTL vs B-1.5 (Colwellia psychrerythraea 34H)",
+  out_dir      = "figures/volcano_plots",
+  out_prefix   = "bact_volcano_GO"
+)
+
+bact_result$plot
+```
+
+## CP34H significant proteins
+
+```{r bact-sig-table}
+bact_result$data %>%
+  filter(sig) %>%
+  arrange(FDR) %>%
+  select(`Protein(s)`, `Protein Description(s)`, category,
+         log2FC, p_val, FDR) %>%
+  mutate(
+    log2FC = round(log2FC, 3),
+    p_val  = signif(p_val, 3),
+    FDR    = signif(FDR,   3)
+  ) %>%
+  knitr::kable(
+    caption = "Significant proteins: B-CTL vs B-1.5 (FDR < 0.05, |log2FC| > 1)"
+  )
+```
+
+---
+
+# 2 · T. pseudonana — P-CTL vs P-2.0
+
+*Thalassiosira pseudonana*: control (PEC1–3) vs DNA Shield 1:2 (PED4–6 1:2).
+metaGOmics2 lists used: `list_004` and `list_006`.
+
+```{r phyto-volcano, fig.cap="T. pseudonana: P-CTL vs P-2.0 GO-annotated volcano plot"}
+phyto_nsaf_path <- "data/Phytoplankton/Phytoplankton_Comet_all_samples_proteins.txt"
+
+phyto_ctrl_cols  <- c("NSAF (PEC1)",     "NSAF (PEC2)",     "NSAF (PEC3)")
+phyto_treat_cols <- c("NSAF (PED4 1:2)", "NSAF (PED5 1:2)", "NSAF (PED6 1:2)")
+
+phyto_go_dirs <- c("data/metagomics2_results/list_004",
+                   "data/metagomics2_results/list_006")
+
+phyto_result <- run_volcano(
+  nsaf_path    = phyto_nsaf_path,
+  ctrl_cols    = phyto_ctrl_cols,
+  treat_cols   = phyto_treat_cols,
+  go_list_dirs = phyto_go_dirs,
+  ctrl_label   = "P-CTL",
+  treat_label  = "P-2.0",
+  title        = "P-CTL vs P-2.0 (Thalassiosira pseudonana)",
+  out_dir      = "figures/volcano_plots",
+  out_prefix   = "phyto_volcano_GO"
+)
+
+phyto_result$plot
+```
+
+## T. pseudonana significant proteins
+
+```{r phyto-sig-table}
+phyto_result$data %>%
+  filter(sig) %>%
+  arrange(FDR) %>%
+  select(`Protein(s)`, `Protein Description(s)`, category,
+         log2FC, p_val, FDR) %>%
+  mutate(
+    log2FC = round(log2FC, 3),
+    p_val  = signif(p_val, 3),
+    FDR    = signif(FDR,   3)
+  ) %>%
+  knitr::kable(
+    caption = "Significant proteins: P-CTL vs P-2.0 (FDR < 0.05, |log2FC| > 1)"
+  )
+```
+
+---
+
+# 3 · GO category breakdown
+
+Summary of how many significant proteins fall into each GO category, across
+both comparisons.
+
+```{r go-summary}
+# Combine both result sets
+combined_sig <- bind_rows(
+  bact_result$data  %>% filter(sig) %>% mutate(comparison = "B-CTL vs B-1.5"),
+  phyto_result$data %>% filter(sig) %>% mutate(comparison = "P-CTL vs P-2.0")
+)
+
+combined_sig %>%
+  count(comparison, category) %>%
+  arrange(comparison, desc(n)) %>%
+  knitr::kable(caption = "Significant proteins by GO category and comparison")
+```
+
+---
+
+# Session info
+
+```{r session}
+sessionInfo()
+```

@@ -1,0 +1,1040 @@
+---
+title: "DNA Shield Proteomics — T. pseudonana (*Thalassiosira pseudonana*)"
+subtitle: "PSM-based analysis of control vs. two DNA Shield dilutions"
+author: "Evelyn Bartlett — Brook Lab"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: show
+    df_print: paged
+  pdf_document:
+    toc: true
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo       = TRUE,
+  warning    = FALSE,
+  message    = FALSE,
+  fig.path   = "figures/",
+  dev        = "png",
+  dpi        = 600,
+  fig.width  = 7,
+  fig.height = 4.5
+)
+```
+
+# Overview
+
+Comet PSM analysis for T. pseudonana (*Thalassiosira pseudonana*) across three conditions
+(n = 3 each):
+
+| Group | Label              | Replicates                       |
+|-------|--------------------|----------------------------------|
+| PEC   | Control            | PEC1, PEC2, PEC3                 |
+| PED1  | DNA Shield 1:1.5   | PED1 1.5, PED2 1.5, PED3 1.5     |
+| PED2  | DNA Shield 1:2     | PED4 1:2, PED5 1:2, PED6 1:2     |
+
+Note: there is no 1:1.75 condition for this organism — phytoplankton has
+only two dilutions tested.
+
+Same upstream pipeline as the bacteria arm: Comet + Limelight, PSM and
+peptide Percolator q ≤ 0.01.
+
+## Outputs index
+
+Every figure and every CSV produced by this notebook is listed below with
+the chunk that generates it.
+
+**Figures** (saved to `figures/`, all 600 DPI PNG):
+
+| File                                | Chunk             | Section                                      |
+|-------------------------------------|-------------------|----------------------------------------------|
+| `fig1_sample_QC.png`                | `qc_fig1`         | Figure 1 — Sample-level QC (PSMs + peptides) |
+| `fig1_sample_QC_with_significance.png`| `qc_fig1`       | Figure 1 — Same, with Welch t-test brackets  |
+| `fig1_peptides_only.png`            | `qc_fig1`         | Figure 1 (peptides only, standalone)         |
+| `fig1_peptides_only_with_significance.png` | `qc_fig1`    | Figure 1 (peptides only) with brackets       |
+| `fig2_PCA.png`                      | `pca`             | Figure 2 — PCA on log2 PSM counts            |
+| `fig3_sample_correlation.png`       | `corr_heatmap`    | Figure 3 — Sample-sample correlation heatmap |
+| `fig4_volcano.png`                  | `volcano`         | Figure 4 — Volcano plots vs control          |
+| `fig5_top_variable_heatmap.png`     | `heatmap_top`     | Figure 5 — Top variable proteins heatmap     |
+| `fig6_total_PSMs_by_group.png`      | `boxplot`         | Figure 6 — Total PSM yield by condition      |
+| `fig7_NMDS.png`                     | `nmds`            | Figure 7 — NMDS on Bray-Curtis dissimilarity |
+| `fig8_peptide_PSM_scatter.png`              | `peptide_scatter` | Figure 8 — Per-peptide PSM scatter, control vs each dilution (KEGG-style coloring) |
+| `fig8_peptide_PSM_scatter_with_errorbars.png` | `peptide_scatter` | Figure 8b — Same scatter with SEM error bars                                       |
+| `fig9_modifications.png`                    | `modifications`   | Figure 9 — Top peptide modifications by PSM count (grouped bars per condition)     |
+| `fig11_NSAF_scatter.png`                    | `nsaf_scatter`    | Figure 11 — Per-protein NSAF scatter, control vs each dilution (KEGG-style colors) |
+| `fig11_NSAF_scatter_with_errorbars.png`     | `nsaf_scatter`    | Figure 11b — Same scatter with SEM error bars                                      |
+| `fig10_peptide_venn.png`                    | `peptide_overlap` | Figure 10 — 3-way Venn of peptide overlap across conditions                        |
+| `peptide_filtered/fig1_sample_QC.png`       | `peptide_filtered`| Figure 1 (singletons removed) — sample QC, peptide ≥ 2 PSMs total                  |
+| `peptide_filtered/fig3_sample_correlation.png` | `peptide_filtered` | Figure 3 (singletons removed) — peptide-level correlation heatmap               |
+| `peptide_filtered/fig7_NMDS.png`            | `peptide_filtered`| Figure 7 (singletons removed) — peptide-level NMDS                                 |
+| `peptide_filtered/fig10_peptide_venn.png`   | `peptide_filtered`| Figure 10 (singletons removed) — 3-way Venn                                        |
+
+**Data tables** (CSVs saved to the project folder):
+
+| File                            | Chunk            | Section                                                       |
+|---------------------------------|------------------|---------------------------------------------------------------|
+| `contaminants_to_verify.csv`    | `contaminants`   | Contaminant flagging                                          |
+| `proteins_clean.csv`            | `clean_matrix`   | Build clean protein matrix                                    |
+| `group_summary.csv`             | `summary_stats`  | Group-wise summary statistics (mean / SD per group)           |
+| `differential_abundance.csv`    | `diff_abundance` | Differential abundance — Welch t-test + BH-FDR vs control     |
+| `dose_response_trends.csv`      | `dose_response`  | Dose-response across the dilution gradient (Spearman ρ)       |
+
+# Setup
+
+```{r packages}
+library(tidyverse)
+library(stringr)
+library(readr)
+library(ggplot2)
+library(ggrepel)
+library(scales)
+library(viridis)
+library(RColorBrewer)
+library(patchwork)
+library(pheatmap)
+
+in_dir   <- "."
+fig_dir  <- "figures"
+dir.create(fig_dir, showWarnings = FALSE)
+```
+
+# Configuration
+
+```{r config}
+proteins_file <- file.path(in_dir, "Phytoplankton_Comet_all_samples_proteins.txt")
+
+# Source-file column headers embed the dilution ratio; preserve them exactly.
+samples <- list(
+  PEC  = c("PEC1", "PEC2", "PEC3"),
+  PED1 = c("PED1 1.5", "PED2 1.5", "PED3 1.5"),
+  PED2 = c("PED4 1:2", "PED5 1:2", "PED6 1:2")
+)
+group_labels <- c(PEC  = "T. pseudonana Control",
+                  PED1 = "DRS 1:1.5",
+                  PED2 = "DRS 1:2")
+group_order <- c("PEC", "PED1", "PED2")
+
+# Poster palette for the T. pseudonana arm: green family.
+palette_cols <- c(
+  PEC  = "#4D4D4D",  # control — neutral dark grey
+  PED1 = "#ABEBC6",  # 1:1.5  — light green
+  PED2 = "#196F3D"   # 1:2    — deep green
+)
+
+theme_nature <- function(base_size = 8) {
+  theme_classic(base_size = base_size, base_family = "sans") +
+  theme(
+    axis.line       = element_line(linewidth = 0.4),
+    axis.ticks      = element_line(linewidth = 0.4),
+    axis.text       = element_text(color = "black"),
+    plot.title      = element_text(face = "bold", hjust = 0,
+                                   size = base_size + 1),
+    legend.position = "right",
+    legend.key.size = unit(0.4, "cm"),
+    strip.background = element_blank(),
+    strip.text       = element_text(face = "bold")
+  )
+}
+
+save_png <- function(plot, name, w = 7, h = 4.5, dpi = 600) {
+  ggsave(file.path(fig_dir, paste0(name, ".png")),
+         plot = plot, width = w, height = h, units = "in",
+         dpi = dpi, bg = "white", type = "cairo")
+  invisible(plot)
+}
+```
+
+# Load & tidy
+
+```{r load}
+raw <- read_tsv(proteins_file, show_col_types = FALSE)
+
+all_samples <- unname(unlist(samples))
+psm_cols    <- paste0("PSMs (",  all_samples, ")")
+nsaf_cols   <- paste0("NSAF (", all_samples, ")")
+
+to_num <- function(x) {
+  if (is.character(x)) as.numeric(gsub(",", "", x, fixed = TRUE)) else x
+}
+raw <- raw %>%
+  mutate(across(all_of(c(psm_cols, nsaf_cols)), to_num))
+
+cat("Loaded", nrow(raw), "protein groups\n")
+```
+
+# Contaminant flagging  →  `contaminants_to_verify.csv`
+
+Same description-based regex panel as the bacteria arm. The host
+whitelist for this organism is **Thalassiosira / pseudonana** (anything
+explicitly hitting that string is not flagged, regardless of other
+keyword matches).
+
+```{r contaminants}
+contam_patterns <- tribble(
+  ~regex,                                            ~reason,
+  "(?i)\\bkeratin\\b",                               "keratin",
+  "(?i)\\bhuman\\b",                                 "human protein",
+  "(?i)homo sapiens|sapiens",                        "human (Homo sapiens)",
+  "(?i)trypsin",                                     "trypsin (digestion enzyme)",
+  "(?i)\\bBSA\\b|serum albumin|albumin",             "albumin / BSA",
+  "(?i)bovine",                                      "bovine carry-over",
+  "(?i)\\bsheep\\b|\\bovis\\b",                      "sheep carry-over",
+  "(?i)\\bpig\\b|\\bporcine\\b|sus scrofa",          "porcine carry-over",
+  "(?i)\\bchicken\\b|gallus",                        "chicken carry-over",
+  "(?i)\\bmouse\\b|\\brat\\b|mus musculus",          "rodent contaminant",
+  "(?i)hornerin|filaggrin|involucrin|loricrin",      "skin protein",
+  "(?i)hemoglobin",                                  "hemoglobin (blood)",
+  "(?i)casein",                                      "casein (milk)",
+  "(?i)streptavidin",                                "streptavidin",
+  "(?i)^cRAP|CON__",                                 "cRAP/contaminant DB tag",
+  "(?i)dermcidin",                                   "skin/sweat dermcidin",
+  "(?i)desmoplakin|desmoglein|corneodesmosin",       "skin desmosomal"
+)
+
+whitelist_re <- regex("thalassiosira|pseudonana", ignore_case = TRUE)
+
+flag_one <- function(desc, prot) {
+  txt <- paste(desc, prot, sep = " || ")
+  if (str_detect(txt, whitelist_re)) return(list(flag = "", reason = ""))
+  hits <- contam_patterns$reason[str_detect(txt, contam_patterns$regex)]
+  if (length(hits) == 0) list(flag = "", reason = "")
+  else list(flag = "YES", reason = paste(unique(hits), collapse = "; "))
+}
+
+flag_df <- map2_dfr(raw$`Protein Description(s)`, raw$`Protein(s)`, flag_one)
+raw$contaminant_flag   <- flag_df$flag
+raw$contaminant_reason <- flag_df$reason
+
+contam <- raw %>%
+  filter(contaminant_flag == "YES") %>%
+  mutate(total_PSMs_all_samples = rowSums(across(all_of(psm_cols)), na.rm = TRUE)) %>%
+  arrange(desc(total_PSMs_all_samples))
+
+cat("Flagged", nrow(contam), "contaminant candidates\n")
+
+contam %>%
+  select(`Protein(s)`, `Protein Description(s)`, contaminant_reason,
+         total_PSMs_all_samples, all_of(psm_cols), `Protein Group Number`) %>%
+  write_csv("contaminants_to_verify.csv")
+```
+
+# Build clean protein matrix  →  `proteins_clean.csv`
+
+```{r clean_matrix}
+clean <- raw %>% filter(contaminant_flag != "YES")
+cat("Clean protein set:", nrow(clean),
+    "(removed", nrow(raw) - nrow(clean), ")\n")
+
+psm_mat <- clean %>%
+  select(all_of(psm_cols)) %>%
+  rename_with(~ all_samples) %>%
+  mutate(across(everything(), ~ replace_na(.x, 0)))
+rownames(psm_mat) <- clean$`Protein(s)`
+psm_mat <- as.matrix(psm_mat)
+
+write_csv(
+  clean %>% select(`Protein(s)`, `Protein Description(s)`,
+                   all_of(psm_cols), all_of(nsaf_cols)),
+  "proteins_clean.csv"
+)
+```
+
+# Figure 1 — Sample-level QC (per-group bars with SEM)  →  `fig1_sample_QC.png`
+
+```{r qc_fig1}
+# Peptide counts come from the peptides file (not the proteins file).
+# Count = number of peptide sequences with PSM Count > 0 in each sample.
+peptides_file <- file.path(in_dir, "Phytoplankton_Comet_all_samples_peptides.txt")
+pep <- read_tsv(peptides_file, show_col_types = FALSE)
+pep_psm_cols <- paste0("PSM Count (", all_samples, ")")
+pep <- pep %>%
+  mutate(across(all_of(pep_psm_cols),
+                ~ if (is.character(.x))
+                    as.numeric(gsub(",", "", .x, fixed = TRUE)) else .x))
+n_peptides <- sapply(pep_psm_cols, function(c) sum(pep[[c]] > 0, na.rm = TRUE))
+names(n_peptides) <- all_samples
+
+qc <- tibble(
+  sample = all_samples,
+  group  = rep(group_order, each = 3),
+  total_PSMs = colSums(psm_mat),
+  n_peptides = n_peptides[all_samples]
+) %>% mutate(group = factor(group, levels = group_order))
+
+qc_grp <- qc %>%
+  group_by(group) %>%
+  summarize(
+    psm_mean  = mean(total_PSMs),
+    psm_sem   = sd(total_PSMs)   / sqrt(n()),
+    pep_mean  = mean(n_peptides),
+    pep_sem   = sd(n_peptides)   / sqrt(n()),
+    .groups = "drop"
+  )
+
+library(ggsignif)
+# Welch's t-test, control vs each treatment.  ns / * / ** / *** / ****
+sig_comparisons <- list(c("PEC", "PED1"), c("PEC", "PED2"))
+
+# ---- Build clean (no significance brackets) panels ----
+p1_clean <- ggplot(qc_grp, aes(group, psm_mean, fill = group)) +
+  geom_col(color = "black", linewidth = 0.4, width = 0.7) +
+  geom_errorbar(aes(ymin = psm_mean - psm_sem, ymax = psm_mean + psm_sem),
+                width = 0.18, linewidth = 0.5) +
+  geom_jitter(data = qc, aes(group, total_PSMs),
+              width = 0.10, shape = 21, fill = "white",
+              color = "black", stroke = 0.4, size = 1.6, inherit.aes = FALSE) +
+  scale_fill_manual(values = palette_cols, guide = "none") +
+  scale_x_discrete(labels = group_labels) +
+  labs(title = "a  Total PSMs per sample",
+       x = NULL, y = "Total PSMs (mean ± SEM)") +
+  theme_nature() +
+  theme(axis.text.x = element_text(angle = 20, hjust = 1))
+
+p2_clean <- ggplot(qc_grp, aes(group, pep_mean, fill = group)) +
+  geom_col(color = "black", linewidth = 0.4, width = 0.7) +
+  geom_errorbar(aes(ymin = pep_mean - pep_sem, ymax = pep_mean + pep_sem),
+                width = 0.18, linewidth = 0.5) +
+  geom_jitter(data = qc, aes(group, n_peptides),
+              width = 0.10, shape = 21, fill = "white",
+              color = "black", stroke = 0.4, size = 1.6, inherit.aes = FALSE) +
+  scale_fill_manual(values = palette_cols, guide = "none") +
+  scale_x_discrete(labels = group_labels) +
+  labs(title = "b  Peptides detected (PSM > 0)",
+       x = NULL, y = "Peptides detected (mean ± SEM)") +
+  theme_nature() +
+  theme(axis.text.x = element_text(angle = 20, hjust = 1))
+
+fig1 <- p1_clean + p2_clean
+fig1
+save_png(fig1, "fig1_sample_QC", w = 6.0, h = 3.5)
+
+# ---- Build with-significance variant by adding geom_signif() ----
+sig_layer <- function(yvar) {
+  geom_signif(data = qc, aes(group, !!sym(yvar)),
+              comparisons = sig_comparisons,
+              test = "t.test", test.args = list(var.equal = FALSE),
+              map_signif_level = TRUE, step_increase = 0.08,
+              tip_length = 0.01, vjust = 0.2, textsize = 2.6,
+              inherit.aes = FALSE)
+}
+p1_sig <- p1_clean + sig_layer("total_PSMs")
+p2_sig <- p2_clean + sig_layer("n_peptides")
+
+fig1_sig <- p1_sig + p2_sig
+fig1_sig
+save_png(fig1_sig, "fig1_sample_QC_with_significance", w = 7.0, h = 4.0)
+
+# ---- Standalone "peptides-only" figures (clean + with significance) ----
+p2_clean_solo <- p2_clean +
+  labs(title = "Peptides detected per sample (PSM > 0)")
+p2_sig_solo   <- p2_sig +
+  labs(title = "Peptides detected per sample (PSM > 0)")
+
+save_png(p2_clean_solo, "fig1_peptides_only",                   w = 3.6, h = 3.5)
+save_png(p2_sig_solo,   "fig1_peptides_only_with_significance", w = 3.8, h = 4.0)
+```
+
+# Figure 2 — PCA on log2 PSM counts  →  `fig2_PCA.png`
+
+```{r pca}
+log_mat <- log2(psm_mat + 1)
+pca <- prcomp(t(log_mat), center = TRUE, scale. = FALSE)
+var_exp <- (pca$sdev^2) / sum(pca$sdev^2)
+
+pca_df <- as_tibble(pca$x[, 1:2], rownames = "sample") %>%
+  mutate(group = rep(group_order, each = 3),
+         group = factor(group, levels = group_order))
+
+fig2 <- ggplot(pca_df, aes(PC1, PC2, fill = group)) +
+  geom_point(size = 3.2, shape = 21, color = "black", stroke = 0.4) +
+  geom_text_repel(aes(label = sample), size = 2.4, box.padding = 0.25) +
+  scale_fill_manual(values = palette_cols, labels = group_labels, name = NULL) +
+  labs(title = "PCA of log2 PSM counts",
+       x = sprintf("PC1 (%.1f%%)", var_exp[1]*100),
+       y = sprintf("PC2 (%.1f%%)", var_exp[2]*100)) +
+  theme_nature()
+fig2
+save_png(fig2, "fig2_PCA", w = 4.5, h = 3.5)
+```
+
+# Figure 7 — NMDS on Bray-Curtis dissimilarity  →  `fig7_NMDS.png`
+
+NMDS (non-metric multidimensional scaling) is a rank-based ordination
+that, unlike PCA, preserves only the rank-order of pairwise
+dissimilarities. It pairs naturally with **Bray-Curtis** for spectral
+count data (bounded 0–1, ignores joint absences, robust to many zeros).
+Stress < 0.05 is excellent, < 0.10 good, < 0.20 acceptable.
+
+```{r nmds}
+library(vegan)
+psm_for_bc <- t(psm_mat)                 # samples in rows
+set.seed(42)
+nmds_fit <- metaMDS(psm_for_bc, distance = "bray", k = 2,
+                    trymax = 50, autotransform = FALSE,
+                    trace = FALSE)
+nmds_df <- as_tibble(nmds_fit$points, rownames = "sample") %>%
+  mutate(group = rep(group_order, each = 3),
+         group = factor(group, levels = group_order))
+
+fig7 <- ggplot(nmds_df, aes(MDS1, MDS2, fill = group)) +
+  geom_point(size = 3.2, shape = 21, color = "black", stroke = 0.4) +
+  geom_text_repel(aes(label = sample), size = 2.4, box.padding = 0.25) +
+  scale_fill_manual(values = palette_cols, labels = group_labels, name = NULL) +
+  labs(title = sprintf("NMDS (Bray-Curtis)  —  stress = %.3f", nmds_fit$stress),
+       x = "NMDS 1", y = "NMDS 2") +
+  theme_nature()
+fig7
+save_png(fig7, "fig7_NMDS", w = 4.5, h = 3.5)
+cat(sprintf("NMDS stress = %.4f  (n iterations: %d)\n",
+            nmds_fit$stress, nmds_fit$tries))
+```
+
+# Figure 3 — Sample-sample correlation heatmap  →  `fig3_sample_correlation.png`
+
+```{r corr_heatmap}
+corr <- cor(log_mat, method = "pearson")
+png(file.path(fig_dir, "fig3_sample_correlation.png"),
+    width = 5, height = 4.5, units = "in", res = 600, type = "cairo")
+pheatmap::pheatmap(
+  corr, display_numbers = TRUE, number_format = "%.2f",
+  color = viridis::viridis(100),
+  fontsize = 7, fontsize_number = 5,
+  main = "Sample-sample correlation (log2 PSM)",
+  border_color = NA
+)
+invisible(dev.off())
+knitr::include_graphics(file.path(fig_dir, "fig3_sample_correlation.png"))
+```
+
+# Group-wise summary statistics  →  `group_summary.csv`
+
+```{r summary_stats}
+mean_by_group <- function(g) rowMeans(psm_mat[, samples[[g]], drop = FALSE])
+sd_by_group   <- function(g) apply(psm_mat[, samples[[g]], drop = FALSE], 1, sd)
+
+summary_tbl <- tibble(
+  protein     = clean$`Protein(s)`,
+  description = clean$`Protein Description(s)`
+)
+for (g in group_order) {
+  summary_tbl[[paste0("mean_PSMs_", g)]] <- mean_by_group(g)
+  summary_tbl[[paste0("sd_PSMs_",   g)]] <- sd_by_group(g)
+}
+write_csv(summary_tbl, "group_summary.csv")
+head(summary_tbl)
+```
+
+# Differential abundance — each treatment vs. control  →  `differential_abundance.csv`
+
+```{r diff_abundance}
+PC <- 1
+welch_one <- function(treat_vec, bc_vec) {
+  if (sd(treat_vec) == 0 && sd(bc_vec) == 0) return(c(t = 0, p = 1))
+  res <- tryCatch(t.test(treat_vec, bc_vec, var.equal = FALSE),
+                  error = function(e) NULL)
+  if (is.null(res)) c(t = NA, p = 1) else c(t = unname(res$statistic),
+                                            p = unname(res$p.value))
+}
+
+da_list <- list()
+for (g in c("PED1", "PED2")) {
+  bc_mat <- psm_mat[, samples[["PEC"]], drop = FALSE]
+  tr_mat <- psm_mat[, samples[[g]],     drop = FALSE]
+  log2fc <- log2(rowMeans(tr_mat) + PC) - log2(rowMeans(bc_mat) + PC)
+  tp <- t(mapply(function(i) welch_one(tr_mat[i, ], bc_mat[i, ]),
+                 i = seq_len(nrow(psm_mat))))
+  da_list[[g]] <- tibble(
+    protein     = clean$`Protein(s)`,
+    description = clean$`Protein Description(s)`,
+    comparison  = paste0(g, "_vs_PEC"),
+    mean_ctrl   = rowMeans(bc_mat),
+    mean_treat  = rowMeans(tr_mat),
+    log2FC      = log2fc,
+    t_stat      = tp[, 1],
+    p_value     = tp[, 2]
+  ) %>%
+    mutate(q_value = p.adjust(p_value, method = "BH"))
+}
+da <- bind_rows(da_list)
+write_csv(da, "differential_abundance.csv")
+
+da %>% group_by(comparison) %>%
+  summarize(up   = sum(q_value < 0.05 & log2FC >  1, na.rm = TRUE),
+            down = sum(q_value < 0.05 & log2FC < -1, na.rm = TRUE)) %>%
+  print()
+```
+
+# Figure 4 — Volcano plots vs control  →  `fig4_volcano.png`
+
+```{r volcano}
+da_plot <- da %>%
+  mutate(neglog10p = -log10(pmax(p_value, 1e-300)),
+         direction = case_when(
+           q_value < 0.05 & log2FC >  1 ~ "Up",
+           q_value < 0.05 & log2FC < -1 ~ "Down",
+           TRUE                          ~ "ns"
+         ),
+         comparison = factor(comparison,
+                             levels = c("PED1_vs_PEC", "PED2_vs_PEC"),
+                             labels = c("DNA Shield 1:1.5 vs Control",
+                                        "DNA Shield 1:2 vs Control")))
+
+fig4 <- ggplot(da_plot, aes(log2FC, neglog10p, color = direction)) +
+  geom_point(size = 0.7, alpha = 0.6) +
+  geom_hline(yintercept = -log10(0.05), linetype = "dotted", linewidth = 0.4) +
+  geom_vline(xintercept = c(-1, 1),     linetype = "dotted", linewidth = 0.4) +
+  scale_color_manual(values = c(Up = "#196F3D", Down = "#ABEBC6", ns = "lightgrey"),
+                     name = NULL) +
+  facet_wrap(~ comparison) +
+  labs(title = "Differential abundance vs control",
+       x = "log2 fold-change", y = "-log10 p-value") +
+  theme_nature()
+fig4
+save_png(fig4, "fig4_volcano", w = 7, h = 3.5)
+```
+
+# Figure 5 — Heatmap of top variable proteins  →  `fig5_top_variable_heatmap.png`
+
+```{r heatmap_top}
+group_mean_mat <- sapply(group_order, mean_by_group)
+rownames(group_mean_mat) <- clean$`Protein(s)`
+colnames(group_mean_mat) <- group_labels[group_order]
+
+top_n <- 50
+top_idx <- order(apply(group_mean_mat, 1, sd), decreasing = TRUE)[seq_len(top_n)]
+top_mat <- group_mean_mat[top_idx, ]
+zmat    <- t(scale(t(top_mat)))
+
+desc_lookup <- setNames(clean$`Protein Description(s)`, clean$`Protein(s)`)
+short <- str_split(desc_lookup[rownames(zmat)], ",", simplify = TRUE)[, 1]
+short <- ifelse(nchar(short) > 55, paste0(substr(short, 1, 55), "…"), short)
+rownames(zmat) <- short
+
+png(file.path(fig_dir, "fig5_top_variable_heatmap.png"),
+    width = 6, height = 9, units = "in", res = 600, type = "cairo")
+pheatmap::pheatmap(
+  zmat,
+  cluster_rows = TRUE, cluster_cols = FALSE,
+  color = colorRampPalette(rev(RColorBrewer::brewer.pal(11, "RdBu")))(100),
+  fontsize_row = 5, fontsize_col = 8, fontsize = 7,
+  main = sprintf("Top %d most variable proteins (z-score)", top_n),
+  border_color = NA
+)
+invisible(dev.off())
+knitr::include_graphics(file.path(fig_dir, "fig5_top_variable_heatmap.png"))
+```
+
+# Figure 6 — Total PSM yield by condition (boxplot)  →  `fig6_total_PSMs_by_group.png`
+
+```{r boxplot}
+fig6 <- ggplot(qc, aes(group, total_PSMs, fill = group)) +
+  geom_boxplot(width = 0.55, alpha = 0.55, color = "black",
+               outlier.shape = NA, linewidth = 0.4) +
+  geom_jitter(width = 0.08, size = 2, shape = 21,
+              color = "black", stroke = 0.3) +
+  scale_fill_manual(values = palette_cols, guide = "none") +
+  scale_x_discrete(labels = group_labels) +
+  labs(title = "Total PSM yield by condition",
+       x = NULL, y = "Total PSMs per sample") +
+  theme_nature() +
+  theme(axis.text.x = element_text(angle = 20, hjust = 1))
+fig6
+save_png(fig6, "fig6_total_PSMs_by_group", w = 4, h = 3.5)
+```
+
+# Dose-response across the dilution gradient  →  `dose_response_trends.csv`
+
+For each protein, compute the Spearman rank correlation between its
+group-mean PSM count and an ordered dilution variable (PEC = 0, PED1
+= 1, PED2 = 2). Strong negative ρ → protein decreases with stronger
+DNA Shield exposure; strong positive ρ → protein increases. Note: with
+only 3 ordered levels, ρ takes a small set of discrete values (±1,
+±0.5, 0), so this is most useful for ranking candidate trend proteins
+rather than for formal significance.
+
+```{r dose_response}
+dilution_score <- c(PEC = 0, PED1 = 1, PED2 = 2)
+trend_tbl <- tibble(
+  protein     = clean$`Protein(s)`,
+  description = clean$`Protein Description(s)`
+) %>%
+  mutate(
+    spearman_rho = mapply(function(i) {
+      x <- as.numeric(group_mean_mat[i, ])
+      suppressWarnings(cor(x, dilution_score, method = "spearman"))
+    }, seq_len(nrow(group_mean_mat))),
+    delta_PED2_minus_PEC = group_mean_mat[, 3] - group_mean_mat[, 1]
+  )
+
+write_csv(trend_tbl, "dose_response_trends.csv")
+
+trend_tbl %>% arrange(spearman_rho)            %>% head(10) %>% print()
+trend_tbl %>% arrange(desc(spearman_rho))      %>% head(10) %>% print()
+```
+
+# Figure 8 — Per-peptide PSM scatter, control vs each dilution  →  `fig8_peptide_PSM_scatter.png` / `fig8_peptide_PSM_scatter_with_errorbars.png`
+
+For each peptide, compare its mean PSM count in the control vs. its
+mean PSM count in each treatment dilution (one panel per comparison).
+Dots are colored by a **KEGG-style functional category** derived from
+the primary protein description (regex panel below).
+
+If you have a real KEGG-pathway annotation file, drop it into
+`kegg_annotations.tsv` in this folder with columns `protein_id` and
+`pathway`, and replace the `classify_kegg()` function below with a
+lookup against it. The rest of the chunk is identical.
+
+```{r peptide_scatter}
+library(scales)
+
+pep <- read_tsv(peptides_file, show_col_types = FALSE)
+pep_psm_cols <- paste0("PSM Count (", all_samples, ")")
+pep <- pep %>%
+  mutate(across(all_of(pep_psm_cols),
+                ~ if (is.character(.x))
+                    as.numeric(gsub(",", "", .x, fixed = TRUE)) else .x))
+
+prot_desc <- raw %>%
+  select(`Protein(s)`, `Protein Description(s)`) %>%
+  separate_rows(`Protein(s)`, sep = ",") %>%
+  mutate(`Protein(s)` = trimws(`Protein(s)`)) %>%
+  distinct(`Protein(s)`, .keep_all = TRUE) %>%
+  deframe()
+
+pep <- pep %>%
+  mutate(
+    first_prot = str_split_fixed(`Protein(s)`, ",", 2)[, 1] %>% trimws(),
+    desc       = unname(prot_desc[first_prot])
+  )
+
+kegg_rules <- tribble(
+  ~category,                ~regex,
+  "Photosynthesis",         "(?i)rubisco|ribulose.{0,5}bisphosphate|photosystem|chloroplast|plastid|thylakoid|chlorophyll|petF|cbbX|pyrenoid|carbonic anhydrase",
+  "Translation",            "(?i)ribosomal|ribosom|elongation factor|translation init|initiation factor|aminoacyl|tRNA synthetase|tRNA ligase|peptide chain release|EF-Tu|EF-G",
+  "Transcription/DNA",      "(?i)RNA polymerase|RNAP|sigma factor|transcription|DNA polymerase|topoisomerase|gyrase|helicase|primase|nucleoid",
+  "Chaperones / stress",    "(?i)chaperon|GroEL|GroES|DnaK|DnaJ|HtpG|heat shock|HSP|ClpX|ClpP|ClpA|trigger factor|FtsH|peptidyl-prolyl",
+  "Energy / ATP synth.",    "(?i)ATP synthase|F0F1|ATP-?synth|cytochrome|NADH dehydrogenase|ubiquinol|succinate dehydrog|electron transport",
+  "Central metabolism",     "(?i)citrate synthase|aconitase|isocitrate|2-oxoglut|alpha-?keto|succinyl|succinate|fumarat|malate dehydrog|GAPDH|glyceraldehyde|enolase|pyruvate kinase|hexokinase|phosphofructokin|aldolase|fructose|glucose-6|6-phosphate|TCA|tricarboxylic|glycolysis|pyruvate dehydrog|acetyl|fatty acid|lipid|amino acid|glutamate|glutamine|aspartate|alanine|serine|threonine|methionine|cyst|histid|lysine|arginin|tryptoph|phenylalan|tyrosin|leucin|isoleuc|valine|asparagine|glycine",
+  "Nucleotide metab.",      "(?i)purine|pyrimidine|GMP|adenylate kinase|nucleoside-?diphosphate kinase|nucleotide|ribonucleot|deoxyribonucleot|adenosine|inosine",
+  "Membrane / transport",   "(?i)porin|transporter|permease|channel|TonB|outer membrane|membrane protein|ABC transporter|secretion|TolQ|MotA|ExbB",
+  "Hypothetical",           "(?i)hypothetical|predicted protein|uncharacterized|DUF\\d+|unnamed protein"
+)
+classify_kegg <- function(desc) {
+  if (is.na(desc) || nchar(desc) == 0) return("Other")
+  for (i in seq_len(nrow(kegg_rules))) {
+    if (str_detect(desc, kegg_rules$regex[i])) return(kegg_rules$category[i])
+  }
+  "Other"
+}
+pep$category <- vapply(pep$desc, classify_kegg, character(1))
+
+cat_order  <- c(kegg_rules$category, "Other")
+cat_colors <- setNames(c("#2ca02c","#1f77b4","#17becf","#d62728","#ff7f0e",
+                         "#9467bd","#e377c2","#bcbd22","#7f7f7f","#cccccc"),
+                       cat_order)
+
+make_long <- function(samples_vec, group_name) {
+  m <- pep %>% select(all_of(paste0("PSM Count (", samples_vec, ")"))) %>%
+    rowwise() %>% summarize(
+      mean = mean(c_across(everything())),
+      sem  = sd(c_across(everything())) / sqrt(length(samples_vec)),
+      .groups = "drop"
+    )
+  tibble(peptide = pep$`Peptide Sequence`,
+         category = pep$category,
+         group = group_name, mean = m$mean, sem = m$sem)
+}
+
+ctrl_long  <- make_long(samples[["PEC"]], "Control")
+treat_dfs  <- list(
+  "DNA Shield 1:1.5" = make_long(samples[["PED1"]], "DNA Shield 1:1.5"),
+  "DNA Shield 1:2"   = make_long(samples[["PED2"]], "DNA Shield 1:2")
+)
+
+build_one <- function(treat_df, treat_label, show_errors) {
+  d <- ctrl_long %>%
+    rename(ctrl_mean = mean, ctrl_sem = sem) %>%
+    select(-group) %>%
+    inner_join(treat_df %>% rename(treat_mean = mean, treat_sem = sem) %>% select(-group),
+               by = c("peptide", "category")) %>%
+    filter(ctrl_mean + treat_mean > 0) %>%
+    mutate(category = factor(category, levels = cat_order))
+
+  ggplot(d, aes(x = ctrl_mean, y = treat_mean, color = category)) +
+    {if (show_errors)
+       geom_errorbar(aes(ymin = pmax(treat_mean - treat_sem, 0),
+                         ymax = treat_mean + treat_sem),
+                     width = 0, linewidth = 0.2, alpha = 0.3)} +
+    {if (show_errors)
+       geom_errorbarh(aes(xmin = pmax(ctrl_mean - ctrl_sem, 0),
+                          xmax = ctrl_mean + ctrl_sem),
+                      height = 0, linewidth = 0.2, alpha = 0.3)} +
+    geom_abline(slope = 1, intercept = 0, linetype = "dashed",
+                color = "black", linewidth = 0.5, alpha = 0.7) +
+    geom_point(size = 0.8, alpha = 0.7) +
+    scale_color_manual(values = cat_colors, drop = FALSE,
+                       name = "Functional category\n(KEGG-style)") +
+    coord_equal() +
+    labs(title = sprintf("%s vs Control", treat_label),
+         x = "Mean PSM count — Control",
+         y = sprintf("Mean PSM count — %s", treat_label)) +
+    theme_nature() +
+    guides(color = guide_legend(override.aes = list(size = 3, alpha = 1)))
+}
+
+fig8_panels  <- lapply(names(treat_dfs), function(k)
+                       build_one(treat_dfs[[k]], k, show_errors = FALSE))
+fig8         <- patchwork::wrap_plots(fig8_panels, nrow = 1, guides = "collect")
+ggsave("figures/fig8_peptide_PSM_scatter.png", fig8,
+       width = 11, height = 4.5, dpi = 600, bg = "white", type = "cairo")
+
+fig8b_panels <- lapply(names(treat_dfs), function(k)
+                       build_one(treat_dfs[[k]], k, show_errors = TRUE))
+fig8b        <- patchwork::wrap_plots(fig8b_panels, nrow = 1, guides = "collect")
+ggsave("figures/fig8_peptide_PSM_scatter_with_errorbars.png", fig8b,
+       width = 11, height = 4.5, dpi = 600, bg = "white", type = "cairo")
+
+knitr::include_graphics("figures/fig8_peptide_PSM_scatter.png")
+```
+
+# Figure 9 — Top peptide modifications by PSM count  →  `fig9_modifications.png`
+
+Loads the per-sample modification table
+(`phytoplankton_modification_table.txt` in the project root) — one row
+per integer-Da mass shift detected, one column per sample with PSM
+counts. The top 12 modifications by total PSM count are plotted as
+grouped bars per condition (mean ± SEM across the three replicates).
+Common PTM identities are annotated by mass shift using a
+Unimod-derived lookup.
+
+```{r modifications}
+mod_path <- "../phytoplankton_modification_table.txt"
+mods <- read_tsv(mod_path, show_col_types = FALSE)
+
+mod_cols <- list(
+  PEC  = c("PSM count (PEC1mag)", "PSM count (PEC2mag)", "PSM count (PEC3mag)"),
+  PED1 = c("PSM count (PED1mag)", "PSM count (PED2mag)", "PSM count (PED3mag)"),
+  PED2 = c("PSM count (PED4mag)", "PSM count (PED5mag)", "PSM count (PED6mag)")
+)
+
+ptm_names <- c(
+  `1`="Deamidation", `14`="Methylation", `15`="Reduction (-1H)",
+  `16`="Oxidation", `17`="Loss of NH₃", `18`="Loss of H₂O",
+  `22`="Sodium adduct", `28`="Dimethyl / Formyl", `32`="Dioxidation",
+  `42`="Acetylation", `43`="Carbamylation", `56`="Succinylation",
+  `57`="Carbamidomethyl (Cys)", `58`="Carboxymethyl",
+  `71`="Propionamide", `79`="Phosphorylation", `80`="Phosphorylation",
+  `114`="GG (di-glycyl, K-ubiq.)", `119`="Cysteinylation",
+  `128`="Gln/Lys", `144`="HexNAc (glyco)",
+  `156`="Aminoadipic semialdehyde", `162`="Hex (glyco)"
+)
+
+TOP_N <- 6
+mods <- mods %>%
+  mutate(total = rowSums(across(starts_with("PSM count")))) %>%
+  arrange(desc(total)) %>%
+  slice_head(n = TOP_N) %>%
+  mutate(mod_label = ifelse(as.character(`Mod Mass`) %in% names(ptm_names),
+    paste0("+", `Mod Mass`, "\n", ptm_names[as.character(`Mod Mass`)]),
+    paste0("+", `Mod Mass`)))
+
+mods_long <- imap_dfr(mod_cols, ~ {
+  m  <- mods[, .x, drop = FALSE]
+  tibble(
+    mod_label = mods$mod_label,
+    mod_mass  = mods$`Mod Mass`,
+    group     = .y,
+    mean_psm  = rowMeans(m),
+    sem_psm   = apply(m, 1, sd) / sqrt(ncol(m))
+  )
+}) %>%
+  mutate(mod_label = factor(mod_label, levels = mods$mod_label),
+         group     = factor(group, levels = c("PEC","PED1","PED2")))
+
+fig9 <- ggplot(mods_long, aes(mod_label, mean_psm, fill = group)) +
+  geom_col(position = position_dodge(width = 0.8), color = "black",
+           linewidth = 0.3, width = 0.8) +
+  geom_errorbar(aes(ymin = pmax(mean_psm - sem_psm, 0),
+                    ymax = mean_psm + sem_psm),
+                position = position_dodge(width = 0.8),
+                width = 0.3, linewidth = 0.4) +
+  scale_fill_manual(values = palette_cols, labels = group_labels, name = NULL) +
+  labs(title = sprintf("Top %d peptide modifications by total PSM count", TOP_N),
+       x = "Modification (Δ mass in Da)",
+       y = "PSM count (mean ± SEM per replicate)") +
+  theme_nature() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, size = 7),
+        legend.position = "top")
+
+fig9
+save_png(fig9, "fig9_modifications", w = 5.5, h = 4.5)
+```
+
+# Figure 11 — Per-protein NSAF scatter, control vs each dilution  →  `fig11_NSAF_scatter.png` / `fig11_NSAF_scatter_with_errorbars.png`
+
+NSAF (Normalized Spectral Abundance Factor) is the per-protein PSM
+count divided by protein length and then normalized so each sample
+sums to a constant. Because NSAF is per-sample-normalized, comparing
+means between treatments isolates **relative-abundance shifts** rather
+than yield differences — exactly the right metric for an X-Y
+treatment-comparison plot, and complementary to the peptide-level
+PSM scatter in Figure 8.
+
+```{r nsaf_scatter}
+clean_nsaf <- read_csv("proteins_clean.csv", show_col_types = FALSE)
+clean_nsaf$category <- vapply(clean_nsaf$`Protein Description(s)`,
+                              classify_kegg, character(1))
+
+nsaf_long <- function(samples_vec, group_name) {
+  m <- clean_nsaf %>% select(all_of(paste0("NSAF (", samples_vec, ")")))
+  tibble(
+    protein  = clean_nsaf$`Protein(s)`,
+    category = clean_nsaf$category,
+    group    = group_name,
+    mean     = rowMeans(m),
+    sem      = apply(m, 1, sd) / sqrt(ncol(m))
+  )
+}
+ctrl_long_n  <- nsaf_long(samples[["PEC"]], "Control")
+treat_dfs_n  <- list(
+  "DNA Shield 1:1.5" = nsaf_long(samples[["PED1"]], "DNA Shield 1:1.5"),
+  "DNA Shield 1:2"   = nsaf_long(samples[["PED2"]], "DNA Shield 1:2")
+)
+
+build_nsaf <- function(treat_df, treat_label, show_errors) {
+  d <- ctrl_long_n %>%
+    rename(ctrl_mean = mean, ctrl_sem = sem) %>%
+    select(-group) %>%
+    inner_join(treat_df %>% rename(treat_mean = mean, treat_sem = sem) %>% select(-group),
+               by = c("protein", "category")) %>%
+    filter(ctrl_mean > 0, treat_mean > 0) %>%   # both > 0 required for log10
+    mutate(
+      # Pre-transform to log10 — axes show actual log10 values (e.g. -4, -3, -2)
+      lx      = log10(ctrl_mean),
+      ly      = log10(treat_mean),
+      # Error bars in log10 space: asymmetric — upper/lower computed from raw then logged
+      eb_ymin = log10(pmax(treat_mean - treat_sem, treat_mean * 0.01)),
+      eb_ymax = log10(treat_mean + treat_sem),
+      eb_xmin = log10(pmax(ctrl_mean  - ctrl_sem,  ctrl_mean  * 0.01)),
+      eb_xmax = log10(ctrl_mean  + ctrl_sem)
+    )
+
+  # 2D kernel density in log10 space (matches the plotted axes)
+  dens2d    <- MASS::kde2d(d$lx, d$ly, n = 200)
+  ix        <- findInterval(d$lx, dens2d$x)
+  iy        <- findInterval(d$ly, dens2d$y)
+  d$density <- dens2d$z[cbind(ix, iy)]
+
+  ggplot(d, aes(x = lx, y = ly)) +
+    {if (show_errors)
+       geom_errorbar(aes(ymin = eb_ymin, ymax = eb_ymax),
+                     width = 0, linewidth = 0.2, alpha = 0.25, color = "grey50")} +
+    {if (show_errors)
+       geom_errorbarh(aes(xmin = eb_xmin, xmax = eb_xmax),
+                      height = 0, linewidth = 0.2, alpha = 0.25, color = "grey50")} +
+    geom_abline(slope = 1, intercept = 0, linetype = "dashed",
+                color = "grey20", linewidth = 0.5, alpha = 0.7) +
+    geom_point(aes(color = density), size = 1.0, alpha = 0.85) +
+    scale_color_viridis_c(
+      option    = "plasma",   # purple (sparse) -> yellow (dense)
+      direction = 1,
+      name      = "Density"
+    ) +
+    coord_equal() +
+    labs(title = sprintf("%s vs Control", treat_label),
+         x     = "log10(Mean NSAF) — Control",
+         y     = sprintf("log10(Mean NSAF) — %s", treat_label)) +
+    theme_nature()
+}
+
+fig11_panels  <- lapply(names(treat_dfs_n),
+                        function(k) build_nsaf(treat_dfs_n[[k]], k, FALSE))
+fig11         <- patchwork::wrap_plots(fig11_panels, nrow = 1, guides = "collect")
+ggsave("figures/fig11_NSAF_scatter.png", fig11,
+       width = 11, height = 4.5, dpi = 600, bg = "white", type = "cairo")
+
+fig11b_panels <- lapply(names(treat_dfs_n),
+                        function(k) build_nsaf(treat_dfs_n[[k]], k, TRUE))
+fig11b        <- patchwork::wrap_plots(fig11b_panels, nrow = 1, guides = "collect")
+ggsave("figures/fig11_NSAF_scatter_with_errorbars.png", fig11b,
+       width = 11, height = 4.5, dpi = 600, bg = "white", type = "cairo")
+
+knitr::include_graphics("figures/fig11_NSAF_scatter.png")
+```
+
+# Figure 10 — Peptide identification overlap across conditions (Venn)  →  `fig10_peptide_venn.png`
+
+A peptide is counted as "present in a group" if it has PSM Count > 0 in
+≥ 2 of the 3 replicates of that group (filters single-replicate noise).
+With 3 groups, a classic 3-circle Venn diagram is the cleanest view.
+
+```{r peptide_overlap}
+# install.packages("ggVennDiagram") if missing
+library(ggVennDiagram)
+
+make_present_set <- function(samples_vec) {
+  cols <- paste0("PSM Count (", samples_vec, ")")
+  pres <- rowSums(pep[, cols] > 0) >= 2
+  unique(as.character(pep$`Peptide Sequence`[pres]))
+}
+venn_sets <- list(
+  "Control"          = make_present_set(samples[["PEC"]]),
+  "DNA Shield 1:1.5" = make_present_set(samples[["PED1"]]),
+  "DNA Shield 1:2"   = make_present_set(samples[["PED2"]])
+)
+total_union <- length(unique(unlist(venn_sets)))
+
+# label = "both" prints count and percent in each region
+fig10 <- ggVennDiagram(
+  venn_sets,
+  label = "both", label_size = 3.5,
+  label_alpha = 0,
+  edge_color = "black", edge_size = 0.5,
+  set_size = 4
+) +
+  scale_fill_gradient(low = "white", high = "#196F3D", guide = "none") +
+  coord_fixed() +
+  labs(title = "Peptide identifications shared across conditions",
+       subtitle = sprintf("(present in ≥ 2 of 3 replicates per group; total union = %s peptides)",
+                          format(total_union, big.mark = ","))) +
+  theme_void(base_size = 9) +
+  theme(plot.title    = element_text(face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+
+fig10
+save_png(fig10, "fig10_peptide_venn", w = 5.5, h = 5.0)
+```
+
+# Singleton-peptide filter — alternative versions of fig 1, 3, 7, 10  →  `figures/peptide_filtered/*.png`
+
+This block re-renders four key figures (sample QC, sample correlation,
+NMDS, peptide Venn) after applying a **≥ 2 PSMs per peptide** filter —
+i.e., dropping "one-hit-wonder" peptides whose total PSM count across
+all samples is 1. Filter removes 6,910 / 33,437 peptides (~21% of the
+phytoplankton set). The filtered versions sit alongside the
+unfiltered originals in `figures/peptide_filtered/`.
+
+```{r peptide_filtered}
+library(vegan)
+pep_full <- read_tsv(peptides_file, show_col_types = FALSE)
+pep_cols <- paste0("PSM Count (", all_samples, ")")
+pep_full <- pep_full %>%
+  mutate(across(all_of(pep_cols),
+                ~ if (is.character(.x))
+                    as.numeric(gsub(",", "", .x, fixed = TRUE)) else .x))
+pep_full[is.na(pep_full)] <- 0
+pep_filt <- pep_full %>% mutate(total_psm = rowSums(across(all_of(pep_cols)))) %>%
+                        filter(total_psm >= 2)
+
+cat(sprintf("Kept %d / %d peptides (filtered out %d singletons, %.1f%%)\n",
+            nrow(pep_filt), nrow(pep_full),
+            nrow(pep_full) - nrow(pep_filt),
+            (nrow(pep_full) - nrow(pep_filt)) / nrow(pep_full) * 100))
+
+dir.create("figures/peptide_filtered", showWarnings = FALSE)
+
+qc_f <- tibble(
+  sample = all_samples,
+  group  = rep(group_order, each = 3),
+  total_PSMs = colSums(pep_filt[, pep_cols]),
+  n_peptides = colSums(pep_filt[, pep_cols] > 0)
+) %>% mutate(group = factor(group, levels = group_order))
+qc_grp_f <- qc_f %>% group_by(group) %>%
+  summarize(psm_mean = mean(total_PSMs), psm_sem = sd(total_PSMs)/sqrt(n()),
+            pep_mean = mean(n_peptides), pep_sem = sd(n_peptides)/sqrt(n()),
+            .groups = "drop")
+p1f <- ggplot(qc_grp_f, aes(group, psm_mean, fill = group)) +
+  geom_col(color = "black", linewidth = 0.4, width = 0.7) +
+  geom_errorbar(aes(ymin = psm_mean - psm_sem, ymax = psm_mean + psm_sem),
+                width = 0.18, linewidth = 0.5) +
+  geom_jitter(data = qc_f, aes(group, total_PSMs),
+              width = 0.10, shape = 21, fill = "white",
+              color = "black", stroke = 0.4, size = 1.6, inherit.aes = FALSE) +
+  geom_signif(data = qc_f, aes(group, total_PSMs),
+              comparisons = sig_comparisons, test = "t.test",
+              test.args = list(var.equal = FALSE),
+              map_signif_level = TRUE, step_increase = 0.08,
+              tip_length = 0.01, vjust = 0.2, textsize = 2.6, inherit.aes = FALSE) +
+  scale_fill_manual(values = palette_cols, guide = "none") +
+  scale_x_discrete(labels = group_labels) +
+  labs(title = "a  Total PSMs per sample (singletons removed)",
+       x = NULL, y = "Total PSMs (mean ± SEM)") +
+  theme_nature() + theme(axis.text.x = element_text(angle = 20, hjust = 1))
+p2f <- p1f %+% aes(y = pep_mean) +
+  geom_signif(data = qc_f, aes(group, n_peptides),
+              comparisons = sig_comparisons, test = "t.test",
+              test.args = list(var.equal = FALSE),
+              map_signif_level = TRUE, step_increase = 0.08,
+              tip_length = 0.01, vjust = 0.2, textsize = 2.6, inherit.aes = FALSE) +
+  labs(title = "b  Peptides detected (PSM > 0; singletons removed)",
+       y = "Peptides detected (mean ± SEM)")
+fig1_filt <- p1f + p2f
+ggsave("figures/peptide_filtered/fig1_sample_QC.png", fig1_filt,
+       width = 7, height = 4, dpi = 600, bg = "white", type = "cairo")
+
+mat_pep <- log2(as.matrix(pep_filt[, pep_cols]) + 1)
+colnames(mat_pep) <- all_samples
+corr_f <- cor(mat_pep, method = "pearson")
+png("figures/peptide_filtered/fig3_sample_correlation.png",
+    width = 5, height = 4.5, units = "in", res = 600, type = "cairo")
+pheatmap::pheatmap(corr_f, display_numbers = TRUE, number_format = "%.2f",
+  color = viridis::viridis(100), fontsize = 7, fontsize_number = 5,
+  main = "Sample correlation (log2 PSM, peptide-level, singletons removed)",
+  border_color = NA)
+invisible(dev.off())
+
+set.seed(42)
+nmds_f <- metaMDS(t(pep_filt[, pep_cols]), distance = "bray", k = 2,
+                  trymax = 50, autotransform = FALSE, trace = FALSE)
+nmds_df_f <- as_tibble(nmds_f$points, rownames = "sample") %>%
+  mutate(group = rep(group_order, each = 3),
+         group = factor(group, levels = group_order))
+fig7_filt <- ggplot(nmds_df_f, aes(MDS1, MDS2, fill = group)) +
+  geom_point(size = 3.2, shape = 21, color = "black", stroke = 0.4) +
+  geom_text_repel(aes(label = sample), size = 2.4, box.padding = 0.25) +
+  scale_fill_manual(values = palette_cols, labels = group_labels, name = NULL) +
+  labs(title = sprintf("NMDS (Bray-Curtis, peptide-level, singletons removed) — stress = %.3f",
+                       nmds_f$stress),
+       x = "NMDS 1", y = "NMDS 2") +
+  theme_nature()
+ggsave("figures/peptide_filtered/fig7_NMDS.png", fig7_filt,
+       width = 4.5, height = 3.5, dpi = 600, bg = "white", type = "cairo")
+
+library(ggVennDiagram)
+make_present_set_f <- function(samples_vec) {
+  cols <- paste0("PSM Count (", samples_vec, ")")
+  pres <- rowSums(pep_filt[, cols] > 0) >= 2
+  unique(as.character(pep_filt$`Peptide Sequence`[pres]))
+}
+venn_sets_f <- list(
+  "Control"          = make_present_set_f(samples[["PEC"]]),
+  "DNA Shield 1:1.5" = make_present_set_f(samples[["PED1"]]),
+  "DNA Shield 1:2"   = make_present_set_f(samples[["PED2"]])
+)
+total_union_f <- length(unique(unlist(venn_sets_f)))
+fig10_filt <- ggVennDiagram(venn_sets_f, label = "both", label_size = 3.5,
+                            label_alpha = 0, edge_color = "black",
+                            edge_size = 0.5, set_size = 4) +
+  scale_fill_gradient(low = "white", high = "#196F3D", guide = "none") +
+  coord_fixed() +
+  labs(title = "Peptide overlap (singletons removed)",
+       subtitle = sprintf("≥ 2 of 3 reps per group; union = %s peptides",
+                          format(total_union_f, big.mark = ","))) +
+  theme_void(base_size = 9) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+ggsave("figures/peptide_filtered/fig10_peptide_venn.png", fig10_filt,
+       width = 5.5, height = 5.0, dpi = 600, bg = "white", type = "cairo")
+```
+
+# Session info
+
+```{r session_info}
+sessionInfo()
+```

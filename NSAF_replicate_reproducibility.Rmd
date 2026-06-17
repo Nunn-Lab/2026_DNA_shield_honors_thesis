@@ -1,0 +1,534 @@
+---
+title: "DNA Shield Proteomics — NSAF Replicate Reproducibility (Figs 5 & 6)"
+subtitle: "Colwellia psychrerythraea 34H & Thalassiosira pseudonana | Pairwise correlations · NSAF scatter"
+author: "Evelyn Bartlett — Brook Lab"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    theme: flatly
+    code_folding: show
+  pdf_document:
+    toc: true
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo    = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width  = 9,
+  fig.height = 8,
+  dpi = 300
+)
+```
+
+# Overview
+
+This script generates **Figures 5 and 6** (replicate reproducibility) in two parts:
+
+- **Part 1 — Pairwise Correlation Plots (panels A & B):** GGally pairwise scatter
+  matrix with Pearson *r* labels, computed from protein-level log₂ PSM counts
+  aggregated from the peptide-filtered tables.
+- **Part 2 — NSAF Replicate Scatter (panel C):** Pairwise log₁₀ NSAF scatter
+  with R² annotations, computed from the per-protein NSAF tables
+  (`Bacteria/proteins_clean.csv`, `Phytoplankton/proteins_clean.csv`).
+
+Colour scheme follows the Brook Lab poster convention:
+**bacteria = blue family** (#2c7fb8 / #1f78b4), **phytoplankton = green family** (#2ca25f / #1A7E3B).
+
+Contaminants (keratins, trypsin, albumin, human/bovine sequences, cRAP tags)
+are removed before all analyses.
+
+Upstream pipeline: Comet 2023.02 via Limelight, PSM- and peptide-level q ≤ 0.01,
+no protein-level FDR applied.
+
+---
+
+```{r packages}
+library(tidyverse)
+library(ggplot2)
+library(GGally)      # Part 1
+library(patchwork)   # Part 2
+library(scales)
+```
+
+---
+
+# Part 1 — Pairwise Correlation Plots (Figs 5A–B, 6A–B)
+
+Protein-level log₂ PSM counts from peptide-filtered tables. Each peptide is
+assigned to its first-listed protein; PSMs are summed per protein per sample.
+
+## Shared helpers
+
+```{r p1_helpers}
+# Contaminant filter (applied to Protein(s) accession column)
+contam_pattern <- regex(
+  "keratin|trypsin|albumin|bsa|contam|KRT|fibrinogen|myosin|actin|
+   immunoglobulin|serum|casein|collagen|elastin",
+  ignore_case = TRUE
+)
+
+# Pearson r label for upper panels
+upper_pearson <- function(colour) {
+  function(data, mapping, ...) {
+    x_col <- as.character(mapping$x); y_col <- as.character(mapping$y)
+    x <- data[[x_col]]; y <- data[[y_col]]
+    keep <- is.finite(x) & is.finite(y) & (x > 0 | y > 0)
+    r <- cor(x[keep], y[keep], method = "pearson")
+    ggplot(data = data[keep, ], mapping = mapping) +
+      geom_blank() +
+      annotate("text", x = mean(range(x[keep])), y = mean(range(y[keep])),
+               label = sprintf("r = %.4f", r), size = 5, fontface = "bold",
+               colour = colour) +
+      theme_void()
+  }
+}
+
+# Scatter + 1:1 diagonal for lower panels
+lower_scatter <- function(colour) {
+  function(data, mapping, ...) {
+    x_col <- as.character(mapping$x); y_col <- as.character(mapping$y)
+    x <- data[[x_col]]; y <- data[[y_col]]
+    keep <- is.finite(x) & is.finite(y) & (x > 0 | y > 0)
+    ggplot(data = data[keep, ], mapping = mapping) +
+      geom_point(alpha = 0.35, size = 0.8, colour = colour) +
+      geom_abline(intercept = 0, slope = 1,
+                  colour = "firebrick", linewidth = 0.6, linetype = "dashed") +
+      theme_bw(base_size = 10)
+  }
+}
+```
+
+## 1.1 CP34H (*Colwellia psychrerythraea* 34H)
+
+```{r p1_bact_load}
+bact_raw <- read_csv("bacteria_peptides_filtered.csv", show_col_types = FALSE)
+bact_clean <- bact_raw %>% filter(!str_detect(`Protein(s)`, contam_pattern))
+cat("CP34H peptides — raw:", nrow(bact_raw), "| after contaminant filter:", nrow(bact_clean), "\n")
+
+# Aggregate to protein level (sum PSMs)
+bact_proteins <- bact_clean %>%
+  mutate(Protein = str_extract(`Protein(s)`, "[^,]+") %>% str_trim()) %>%
+  select(Protein, starts_with("PSM Count")) %>%
+  group_by(Protein) %>%
+  summarise(across(everything(), sum), .groups = "drop") %>%
+  rename_with(~ str_remove_all(.x, "PSM Count \\(|\\)"), starts_with("PSM"))
+
+# Log2 transform; remove all-zero proteins
+bact_log <- bact_proteins %>%
+  mutate(across(-Protein, ~ log2(.x + 1))) %>%
+  filter(rowSums(select(., -Protein)) > 0)
+
+cat("Protein groups retained:", nrow(bact_log), "\n")
+```
+
+### Condition BC — control triplicates
+
+```{r p1_bact_BC, fig.cap="CP34H — Condition BC pairwise correlations"}
+bact_log %>%
+  select(all_of(c("HR_BC1", "HR_BC2", "HR_BC3"))) %>%
+  ggpairs(
+    upper = list(continuous = upper_pearson("#2c7fb8")),
+    lower = list(continuous = lower_scatter("#2c7fb8")),
+    diag  = list(continuous = wrap("densityDiag", fill = "#a6cee3", colour = "#1f78b4", alpha = 0.7)),
+    columnLabels = c("HR_BC1", "HR_BC2", "HR_BC3")
+  ) +
+  labs(title = "CP34H — Condition BC (log₂ PSM, protein level)") +
+  theme_bw(base_size = 11)
+```
+
+### Condition E — DNA Shield 1:1.5 triplicates
+
+```{r p1_bact_E, fig.cap="CP34H — Condition E pairwise correlations"}
+bact_log %>%
+  select(all_of(c("HR-E1", "HR_E2", "HR_E3"))) %>%
+  ggpairs(
+    upper = list(continuous = upper_pearson("#2c7fb8")),
+    lower = list(continuous = lower_scatter("#2c7fb8")),
+    diag  = list(continuous = wrap("densityDiag", fill = "#a6cee3", colour = "#1f78b4", alpha = 0.7)),
+    columnLabels = c("HR-E1", "HR_E2", "HR_E3")
+  ) +
+  labs(title = "CP34H — Condition E (log₂ PSM, protein level)") +
+  theme_bw(base_size = 11)
+```
+
+### Condition F — DNA Shield 1:1.75 triplicates
+
+```{r p1_bact_F, fig.cap="CP34H — Condition F pairwise correlations"}
+bact_log %>%
+  select(all_of(c("HR_F1", "HR-F2", "HR_F3"))) %>%
+  ggpairs(
+    upper = list(continuous = upper_pearson("#2c7fb8")),
+    lower = list(continuous = lower_scatter("#2c7fb8")),
+    diag  = list(continuous = wrap("densityDiag", fill = "#a6cee3", colour = "#1f78b4", alpha = 0.7)),
+    columnLabels = c("HR_F1", "HR-F2", "HR_F3")
+  ) +
+  labs(title = "CP34H — Condition F (log₂ PSM, protein level)") +
+  theme_bw(base_size = 11)
+```
+
+### Condition G — DNA Shield 1:2 triplicates
+
+```{r p1_bact_G, fig.cap="CP34H — Condition G pairwise correlations"}
+bact_log %>%
+  select(all_of(c("HR_G1", "HR_G2", "HR_G3"))) %>%
+  ggpairs(
+    upper = list(continuous = upper_pearson("#2c7fb8")),
+    lower = list(continuous = lower_scatter("#2c7fb8")),
+    diag  = list(continuous = wrap("densityDiag", fill = "#a6cee3", colour = "#1f78b4", alpha = 0.7)),
+    columnLabels = c("HR_G1", "HR_G2", "HR_G3")
+  ) +
+  labs(title = "CP34H — Condition G (log₂ PSM, protein level)") +
+  theme_bw(base_size = 11)
+```
+
+---
+
+## 1.2 *T. pseudonana* (*Thalassiosira pseudonana*)
+
+```{r p1_phyto_load}
+phyto_raw <- read_csv("phytoplankton_peptides_filtered.csv", show_col_types = FALSE)
+phyto_clean <- phyto_raw %>% filter(!str_detect(`Protein(s)`, contam_pattern))
+cat("T. pseudonana peptides — raw:", nrow(phyto_raw), "| after contaminant filter:", nrow(phyto_clean), "\n")
+
+phyto_proteins <- phyto_clean %>%
+  mutate(Protein = str_extract(`Protein(s)`, "[^,]+") %>% str_trim()) %>%
+  select(Protein, starts_with("PSM Count")) %>%
+  group_by(Protein) %>%
+  summarise(across(everything(), sum), .groups = "drop") %>%
+  rename_with(~ str_remove_all(.x, "PSM Count \\(|\\)"), starts_with("PSM"))
+
+phyto_log <- phyto_proteins %>%
+  mutate(across(-Protein, ~ log2(.x + 1))) %>%
+  filter(rowSums(select(., -Protein)) > 0)
+
+cat("Protein groups retained:", nrow(phyto_log), "\n")
+```
+
+### Condition PEC — control triplicates
+
+```{r p1_phyto_PEC, fig.cap="T. pseudonana — Condition PEC pairwise correlations"}
+phyto_log %>%
+  select(all_of(c("PEC1", "PEC2", "PEC3"))) %>%
+  ggpairs(
+    upper = list(continuous = upper_pearson("#2ca25f")),
+    lower = list(continuous = lower_scatter("#2ca25f")),
+    diag  = list(continuous = wrap("densityDiag", fill = "#b2e2b0", colour = "#2ca25f", alpha = 0.7)),
+    columnLabels = c("PEC1", "PEC2", "PEC3")
+  ) +
+  labs(title = "T. pseudonana — Condition PEC (log₂ PSM, protein level)") +
+  theme_bw(base_size = 11)
+```
+
+### Condition PED 1:1.5 — triplicates
+
+```{r p1_phyto_PED15, fig.cap="T. pseudonana — Condition PED 1:1.5 pairwise correlations"}
+phyto_log %>%
+  select(all_of(c("PED1 1.5", "PED2 1.5", "PED3 1.5"))) %>%
+  ggpairs(
+    upper = list(continuous = upper_pearson("#2ca25f")),
+    lower = list(continuous = lower_scatter("#2ca25f")),
+    diag  = list(continuous = wrap("densityDiag", fill = "#b2e2b0", colour = "#2ca25f", alpha = 0.7)),
+    columnLabels = c("PED1 1.5", "PED2 1.5", "PED3 1.5")
+  ) +
+  labs(title = "T. pseudonana — Condition PED 1:1.5 (log₂ PSM, protein level)") +
+  theme_bw(base_size = 11)
+```
+
+### Condition PED 1:2 — replicates 4–5
+
+```{r p1_phyto_PED12, fig.cap="T. pseudonana — Condition PED 1:2 scatter"}
+ped12_cols <- c("PED4 1:2", "PED5 1:2")
+ped12_data <- phyto_log %>%
+  select(all_of(ped12_cols)) %>%
+  filter(is.finite(.[[1]]) & is.finite(.[[2]]) & (.[[1]] > 0 | .[[2]] > 0))
+
+r_val <- cor(ped12_data[[1]], ped12_data[[2]], method = "pearson")
+
+ggplot(ped12_data, aes(x = .data[[ped12_cols[1]]], y = .data[[ped12_cols[2]]])) +
+  geom_point(alpha = 0.35, size = 1, colour = "#2ca25f") +
+  geom_abline(intercept = 0, slope = 1, colour = "firebrick", linewidth = 0.7, linetype = "dashed") +
+  annotate("text",
+           x = quantile(ped12_data[[1]], 0.15),
+           y = quantile(ped12_data[[2]], 0.92),
+           label = sprintf("r = %.4f", r_val),
+           size = 5, fontface = "bold", colour = "#2ca25f") +
+  labs(
+    title = "T. pseudonana — Condition PED 1:2 (log₂ PSM, protein level)",
+    x = "PED4 1:2  (log₂ PSM)",
+    y = "PED5 1:2  (log₂ PSM)"
+  ) +
+  theme_bw(base_size = 12)
+```
+
+---
+
+# Part 2 — NSAF Replicate Scatter (Figs 5C, 6C)
+
+Pairwise log₁₀ NSAF scatter from per-protein NSAF tables. Only proteins with
+NSAF > 0 in both replicates of a given pair are plotted. Pearson R² is annotated
+on each panel; dashed line = 1:1 identity.
+
+## Shared helpers
+
+```{r p2_helpers, fig.width=13, fig.height=5}
+# Contaminant flagging using Protein Description column
+contam_patterns <- c(
+  "(?i)keratin", "(?i)trypsin", "(?i)albumin|serum albumin",
+  "(?i)\\bhomo sapiens\\b", "(?i)\\bbos taurus\\b",
+  "(?i)\\bmus musculus\\b|\\brat\\b",
+  "(?i)^cRAP|CON__", "(?i)\\(CONTAMINANT\\)"
+)
+
+flag_contaminants <- function(df, desc_col = "Protein Description(s)") {
+  descs <- df[[desc_col]]
+  is_contam <- rep(FALSE, nrow(df))
+  for (pat in contam_patterns) is_contam <- is_contam | grepl(pat, descs, perl = TRUE)
+  df$contaminant <- is_contam
+  df
+}
+
+scatter_pair <- function(df, col_x, col_y, label_x, label_y, colour = "#2166AC", title = "") {
+  sub <- df %>%
+    select(x = all_of(col_x), y = all_of(col_y)) %>%
+    filter(x > 0, y > 0) %>%
+    mutate(lx = log10(x), ly = log10(y))
+
+  r  <- cor(sub$lx, sub$ly, method = "pearson")
+  r2 <- r^2
+  n  <- nrow(sub)
+  lo <- min(sub$lx, sub$ly) - 0.1
+  hi <- max(sub$lx, sub$ly) + 0.1
+  ann <- sprintf("R² = %.4f\nn = %s", r2, format(n, big.mark = ","))
+
+  ggplot(sub, aes(lx, ly)) +
+    geom_point(size = 0.8, alpha = 0.35, color = colour) +
+    geom_abline(slope = 1, intercept = 0, linetype = "dashed",
+                colour = "#888888", linewidth = 0.7) +
+    annotate("text", x = lo + 0.05, y = hi - 0.05, label = ann,
+             hjust = 0, vjust = 1, size = 3.0, lineheight = 1.4, colour = "#222222") +
+    coord_fixed(xlim = c(lo, hi), ylim = c(lo, hi)) +
+    labs(title = title,
+         x = paste0("log₁₀ NSAF  (", label_x, ")"),
+         y = paste0("log₁₀ NSAF  (", label_y, ")")) +
+    theme_bw(base_size = 9) +
+    theme(plot.title = element_text(face = "bold", size = 9), aspect.ratio = 1)
+}
+```
+
+## 2.1 CP34H — NSAF scatter
+
+```{r p2_bact_load}
+bact_nsaf_raw <- read_csv("Bacteria/proteins_clean.csv", show_col_types = FALSE)
+bact_nsaf_raw <- flag_contaminants(bact_nsaf_raw)
+bact_nsaf     <- filter(bact_nsaf_raw, !contaminant)
+cat("Bacteria:", nrow(bact_nsaf_raw), "raw ->", nrow(bact_nsaf), "after contaminant removal\n")
+```
+
+### Control triplicates
+
+```{r p2_bact_ctrl, fig.width=13, fig.height=5}
+p1 <- scatter_pair(bact_nsaf, "NSAF (HR_BC1)", "NSAF (HR_BC2)", "BC1", "BC2", "#2166AC", "BC1 vs BC2")
+p2 <- scatter_pair(bact_nsaf, "NSAF (HR_BC1)", "NSAF (HR_BC3)", "BC1", "BC3", "#2166AC", "BC1 vs BC3")
+p3 <- scatter_pair(bact_nsaf, "NSAF (HR_BC2)", "NSAF (HR_BC3)", "BC2", "BC3", "#2166AC", "BC2 vs BC3")
+
+(p1 | p2 | p3) +
+  plot_annotation(title = "Colwellia 34H — Control Triplicates (log₁₀ NSAF)",
+                  theme = theme(plot.title = element_text(face = "bold", size = 12)))
+
+ggsave("figures/NSAF_replicate_scatter/BC_Controls_Combined.png", width = 13, height = 5, dpi = 300)
+```
+
+### DNA Shield 1:1.5
+
+```{r p2_bact_e, fig.width=13, fig.height=5}
+p4 <- scatter_pair(bact_nsaf, "NSAF (HR-E1)", "NSAF (HR_E2)", "E1", "E2", "#4393C3", "E1 vs E2")
+p5 <- scatter_pair(bact_nsaf, "NSAF (HR-E1)", "NSAF (HR_E3)", "E1", "E3", "#4393C3", "E1 vs E3")
+p6 <- scatter_pair(bact_nsaf, "NSAF (HR_E2)", "NSAF (HR_E3)", "E2", "E3", "#4393C3", "E2 vs E3")
+
+(p4 | p5 | p6) +
+  plot_annotation(title = "Colwellia 34H — DNA Shield 1:1.5",
+                  theme = theme(plot.title = element_text(face = "bold", size = 12)))
+
+ggsave("figures/NSAF_replicate_scatter/E_Dilutions_Combined.png", width = 13, height = 5, dpi = 300)
+```
+
+### DNA Shield 1:1.75
+
+```{r p2_bact_f, fig.width=13, fig.height=5}
+p7 <- scatter_pair(bact_nsaf, "NSAF (HR_F1)", "NSAF (HR-F2)", "F1", "F2", "#74ADD1", "F1 vs F2")
+p8 <- scatter_pair(bact_nsaf, "NSAF (HR_F1)", "NSAF (HR_F3)", "F1", "F3", "#74ADD1", "F1 vs F3")
+p9 <- scatter_pair(bact_nsaf, "NSAF (HR-F2)", "NSAF (HR_F3)", "F2", "F3", "#74ADD1", "F2 vs F3")
+
+(p7 | p8 | p9) +
+  plot_annotation(title = "Colwellia 34H — DNA Shield 1:1.75",
+                  theme = theme(plot.title = element_text(face = "bold", size = 12)))
+
+ggsave("figures/NSAF_replicate_scatter/F_Dilutions_Combined.png", width = 13, height = 5, dpi = 300)
+```
+
+### DNA Shield 1:2
+
+```{r p2_bact_g, fig.width=13, fig.height=5}
+p10 <- scatter_pair(bact_nsaf, "NSAF (HR_G1)", "NSAF (HR_G2)", "G1", "G2", "#92C5DE", "G1 vs G2")
+p11 <- scatter_pair(bact_nsaf, "NSAF (HR_G1)", "NSAF (HR_G3)", "G1", "G3", "#92C5DE", "G1 vs G3")
+p12 <- scatter_pair(bact_nsaf, "NSAF (HR_G2)", "NSAF (HR_G3)", "G2", "G3", "#92C5DE", "G2 vs G3")
+
+(p10 | p11 | p12) +
+  plot_annotation(title = "Colwellia 34H — DNA Shield 1:2",
+                  theme = theme(plot.title = element_text(face = "bold", size = 12)))
+
+ggsave("figures/NSAF_replicate_scatter/G_Dilutions_Combined.png", width = 13, height = 5, dpi = 300)
+```
+
+### All conditions combined — CP34H
+
+```{r p2_bact_all, fig.width=13, fig.height=18}
+(p1 | p2 | p3) / (p4 | p5 | p6) / (p7 | p8 | p9) / (p10 | p11 | p12) +
+  plot_annotation(
+    title    = "Colwellia psychrerythraea 34H — NSAF Replicate Reproducibility",
+    subtitle = "All conditions (log₁₀ NSAF, contaminants removed)",
+    theme    = theme(plot.title    = element_text(face = "bold", size = 13),
+                     plot.subtitle = element_text(size = 10, colour = "grey40"))
+  )
+
+ggsave("figures/NSAF_replicate_scatter/Bact_All_Conditions_Combined.png",
+       width = 13, height = 18, dpi = 300)
+```
+
+### R² summary — CP34H
+
+```{r p2_bact_r2}
+pairs_bact <- list(
+  list("NSAF (HR_BC1)", "NSAF (HR_BC2)", "BC1 vs BC2", "Control"),
+  list("NSAF (HR_BC1)", "NSAF (HR_BC3)", "BC1 vs BC3", "Control"),
+  list("NSAF (HR_BC2)", "NSAF (HR_BC3)", "BC2 vs BC3", "Control"),
+  list("NSAF (HR-E1)",  "NSAF (HR_E2)",  "E1 vs E2",   "1:1.5"),
+  list("NSAF (HR-E1)",  "NSAF (HR_E3)",  "E1 vs E3",   "1:1.5"),
+  list("NSAF (HR_E2)",  "NSAF (HR_E3)",  "E2 vs E3",   "1:1.5"),
+  list("NSAF (HR_F1)",  "NSAF (HR-F2)",  "F1 vs F2",   "1:1.75"),
+  list("NSAF (HR_F1)",  "NSAF (HR_F3)",  "F1 vs F3",   "1:1.75"),
+  list("NSAF (HR-F2)",  "NSAF (HR_F3)",  "F2 vs F3",   "1:1.75"),
+  list("NSAF (HR_G1)",  "NSAF (HR_G2)",  "G1 vs G2",   "1:2"),
+  list("NSAF (HR_G1)",  "NSAF (HR_G3)",  "G1 vs G3",   "1:2"),
+  list("NSAF (HR_G2)",  "NSAF (HR_G3)",  "G2 vs G3",   "1:2")
+)
+
+r2_bact <- map_dfr(pairs_bact, function(p) {
+  sub <- bact_nsaf %>% select(x = all_of(p[[1]]), y = all_of(p[[2]])) %>%
+    filter(x > 0, y > 0) %>% mutate(lx = log10(x), ly = log10(y))
+  r <- cor(sub$lx, sub$ly)
+  tibble(Pair = p[[3]], Condition = p[[4]], r = round(r, 4), R2 = round(r^2, 4), n = nrow(sub))
+})
+
+knitr::kable(r2_bact, caption = "CP34H — Pairwise Pearson r and R² (log₁₀ NSAF)")
+```
+
+---
+
+## 2.2 *T. pseudonana* — NSAF scatter
+
+```{r p2_phyto_load}
+phyto_nsaf_raw <- read_csv("Phytoplankton/proteins_clean.csv", show_col_types = FALSE)
+phyto_nsaf_raw <- flag_contaminants(phyto_nsaf_raw)
+phyto_nsaf     <- filter(phyto_nsaf_raw, !contaminant)
+cat("Phyto:", nrow(phyto_nsaf_raw), "raw ->", nrow(phyto_nsaf), "after contaminant removal\n")
+```
+
+### Control triplicates
+
+```{r p2_phyto_ctrl, fig.width=13, fig.height=5}
+q1 <- scatter_pair(phyto_nsaf, "NSAF (PEC1)", "NSAF (PEC2)", "PEC1", "PEC2", "#1A7E3B", "PEC1 vs PEC2")
+q2 <- scatter_pair(phyto_nsaf, "NSAF (PEC1)", "NSAF (PEC3)", "PEC1", "PEC3", "#1A7E3B", "PEC1 vs PEC3")
+q3 <- scatter_pair(phyto_nsaf, "NSAF (PEC2)", "NSAF (PEC3)", "PEC2", "PEC3", "#1A7E3B", "PEC2 vs PEC3")
+
+(q1 | q2 | q3) +
+  plot_annotation(title = "T. pseudonana — Control Triplicates (log₁₀ NSAF)",
+                  theme = theme(plot.title = element_text(face = "bold", size = 12)))
+
+ggsave("figures/NSAF_replicate_scatter_phyto/PEC_Controls_Combined.png",
+       width = 13, height = 5, dpi = 300)
+```
+
+### DNA Shield 1:1.5
+
+```{r p2_phyto_15, fig.width=13, fig.height=5}
+q4 <- scatter_pair(phyto_nsaf, "NSAF (PED1 1.5)", "NSAF (PED2 1.5)", "PED1", "PED2", "#52B788", "PED1 vs PED2")
+q5 <- scatter_pair(phyto_nsaf, "NSAF (PED1 1.5)", "NSAF (PED3 1.5)", "PED1", "PED3", "#52B788", "PED1 vs PED3")
+q6 <- scatter_pair(phyto_nsaf, "NSAF (PED2 1.5)", "NSAF (PED3 1.5)", "PED2", "PED3", "#52B788", "PED2 vs PED3")
+
+(q4 | q5 | q6) +
+  plot_annotation(title = "T. pseudonana — DNA Shield 1:1.5",
+                  theme = theme(plot.title = element_text(face = "bold", size = 12)))
+
+ggsave("figures/NSAF_replicate_scatter_phyto/PED1_5_Dilutions_Combined.png",
+       width = 13, height = 5, dpi = 300)
+```
+
+### DNA Shield 1:2
+
+```{r p2_phyto_2, fig.width=13, fig.height=5}
+q7 <- scatter_pair(phyto_nsaf, "NSAF (PED4 1:2)", "NSAF (PED5 1:2)", "PED4", "PED5", "#95D5B2", "PED4 vs PED5")
+q8 <- scatter_pair(phyto_nsaf, "NSAF (PED4 1:2)", "NSAF (PED6 1:2)", "PED4", "PED6", "#95D5B2", "PED4 vs PED6")
+q9 <- scatter_pair(phyto_nsaf, "NSAF (PED5 1:2)", "NSAF (PED6 1:2)", "PED5", "PED6", "#95D5B2", "PED5 vs PED6")
+
+(q7 | q8 | q9) +
+  plot_annotation(title = "T. pseudonana — DNA Shield 1:2",
+                  theme = theme(plot.title = element_text(face = "bold", size = 12)))
+
+ggsave("figures/NSAF_replicate_scatter_phyto/PED4_6_Dilutions_Combined.png",
+       width = 13, height = 5, dpi = 300)
+```
+
+### All conditions combined — T. pseudonana
+
+```{r p2_phyto_all, fig.width=13, fig.height=14}
+(q1 | q2 | q3) / (q4 | q5 | q6) / (q7 | q8 | q9) +
+  plot_annotation(
+    title    = "Thalassiosira pseudonana — NSAF Replicate Reproducibility",
+    subtitle = "All conditions (log₁₀ NSAF, contaminants removed)",
+    theme    = theme(plot.title    = element_text(face = "bold", size = 13),
+                     plot.subtitle = element_text(size = 10, colour = "grey40"))
+  )
+
+ggsave("figures/NSAF_replicate_scatter_phyto/Phyto_All_Conditions_Combined.png",
+       width = 13, height = 14, dpi = 300)
+```
+
+### R² summary — T. pseudonana
+
+```{r p2_phyto_r2}
+pairs_phyto <- list(
+  list("NSAF (PEC1)",     "NSAF (PEC2)",     "PEC1 vs PEC2", "Control"),
+  list("NSAF (PEC1)",     "NSAF (PEC3)",     "PEC1 vs PEC3", "Control"),
+  list("NSAF (PEC2)",     "NSAF (PEC3)",     "PEC2 vs PEC3", "Control"),
+  list("NSAF (PED1 1.5)", "NSAF (PED2 1.5)", "PED1 vs PED2", "1:1.5"),
+  list("NSAF (PED1 1.5)", "NSAF (PED3 1.5)", "PED1 vs PED3", "1:1.5"),
+  list("NSAF (PED2 1.5)", "NSAF (PED3 1.5)", "PED2 vs PED3", "1:1.5"),
+  list("NSAF (PED4 1:2)", "NSAF (PED5 1:2)", "PED4 vs PED5", "1:2"),
+  list("NSAF (PED4 1:2)", "NSAF (PED6 1:2)", "PED4 vs PED6", "1:2"),
+  list("NSAF (PED5 1:2)", "NSAF (PED6 1:2)", "PED5 vs PED6", "1:2")
+)
+
+r2_phyto <- map_dfr(pairs_phyto, function(p) {
+  sub <- phyto_nsaf %>% select(x = all_of(p[[1]]), y = all_of(p[[2]])) %>%
+    filter(x > 0, y > 0) %>% mutate(lx = log10(x), ly = log10(y))
+  r <- cor(sub$lx, sub$ly)
+  tibble(Pair = p[[3]], Condition = p[[4]], r = round(r, 4), R2 = round(r^2, 4), n = nrow(sub))
+})
+
+knitr::kable(r2_phyto, caption = "T. pseudonana — Pairwise Pearson r and R² (log₁₀ NSAF)")
+```
+
+---
+
+# Session Info
+
+```{r session}
+sessionInfo()
+```
