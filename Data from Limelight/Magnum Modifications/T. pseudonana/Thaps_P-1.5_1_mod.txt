@@ -1,0 +1,919 @@
+Protein(s)	Protein Description(s)	Sequence Coverage	PSMs	NSAF	Distinct Peptides	Unique Peptides	Protein Group Number
+gi|2050584475|gb|QWM93016.1|	ribulose-1,5-bisphosphate carboxylase/oxygenase large subunit (chloroplast) [Thalassiosira pseudonana]	0.249	223	0.014	56	0	1
+gi|98990547|gb|ABF60341.1|	ribulose-1,5-bisphosphate carboxylase/oxygenase large subunit, partial (chloroplast) [Thalassiosira pseudonana]	0.249	223	0.014	56	0	1
+gi|457864467|emb|CCP37706.1|,gi|457864473|emb|CCP37709.1|,gi|457864463|emb|CCP37704.1|,gi|457864477|emb|CCP37711.1|,gi|457864471|emb|CCP37708.1|,gi|457864465|emb|CCP37705.1|,gi|457864469|emb|CCP37707.1|,gi|457864459|emb|CCP37702.1|,gi|457864461|emb|CCP37703.1|,gi|457864475|emb|CCP37710.1|	RuBisCO, partial [Thalassiosira pseudonana]	0.255	201	0.013	46	14	2
+gi|98990583|gb|ABF60359.1|	ribulose-1,5-bisphosphate carboxylase/oxygenase large subunit, partial (chloroplast) [Thalassiosira pseudonana]	0.253	201	0.013	46	14	2
+gi|329343092|gb|AEB91175.1|,gi|125987521|sp|A0T0N6.1|RBL_THAPS,gi|224015740|ref|XP_002297518.1|,gi|220967782|gb|EED86158.1|,gi|98990549|gb|ABF60342.1|,gi|2451390273|gb|WEA82721.1|,gi|118411104|ref|YP_874498.1|,gi|116739851|gb|ABK20721.1|	ribulose-1,5-bisphosphate carboxylase/oxygenase large subunit (chloroplast) [Thalassiosira pseudonana],RecName: Full=Ribulose bisphosphate carboxylase large chain; Short=RuBisCO large subunit,ribulose-bisphosphate carboxylase, large subunit or chain, chloroplast, RuBisCo [Thalassiosira pseudonana CCMP1335],ribulose-1,5-bisphosphate carboxylase/oxygenase large subunit, partial (chloroplast) [Thalassiosira pseudonana]	0.249	201	0.013	46	14	2
+gi|125987721|sp|A0T0R6.1|ATPB_THAPS,gi|224015776|ref|XP_002297536.1|,gi|118411134|ref|YP_874528.1|,gi|2050584445|gb|QWM92986.1|,gi|116739881|gb|ABK20751.1|,gi|220967800|gb|EED86176.1|	RecName: Full=ATP synthase subunit beta, chloroplastic; AltName: Full=ATP synthase F1 sector subunit beta; AltName: Full=F-ATPase subunit beta,predicted protein [Thalassiosira pseudonana CCMP1335],ATP synthase CF1 beta subunit (chloroplast) [Thalassiosira pseudonana],CF1 beta subunit of ATP synthase (chloroplast) [Thalassiosira pseudonana],ATP synthase CF1 beta chain (chloroplast) [Thalassiosira pseudonana]	0.432	172	0.011	52	4	3
+gi|817091128|gb|AKF18168.1|	ATP synthase beta subunit, partial (chloroplast) [Thalassiosira pseudonana]	0.420	168	0.012	48	0	4
+gi|2414125445|gb|WAS08306.1|	ribulose-1,5-bisphosphate carboxylase/oxygenase large subunit (chloroplast) [Thalassiosira pseudonana]	0.313	167	0.019	46	0	5
+gi|2814830991|pdb|8WQP|A,gi|2814830992|pdb|8WQP|B	Chain A, Diatom the pyrenoid shell protein,Chain B, Diatom the pyrenoid shell protein	0.738	136	0.018	71	53	6
+gi|223995033|ref|XP_002287200.1|,gi|220976316|gb|EED94643.1|	transketolase [Thalassiosira pseudonana CCMP1335]	0.380	132	0.006	36	36	7
+gi|224004780|ref|XP_002296041.1|,gi|209586073|gb|ACI64758.1|	F-type H-ATPase beta subunit [Thalassiosira pseudonana CCMP1335]	0.430	130	0.008	40	39	8
+gi|224015796|ref|XP_002297546.1|,gi|220967810|gb|EED86186.1|,gi|116739859|gb|ABK20729.1|,gi|2050584467|gb|QWM93008.1|,gi|118411112|ref|YP_874506.1|,gi|125987716|sp|A0T0P4.1|ATPA_THAPS	ATP synthase alpha chain, thylakoid ATPase, plastid protein [Thalassiosira pseudonana CCMP1335],ATP synthase CF1 alpha chain (chloroplast) [Thalassiosira pseudonana],CF1 alpha subunit of ATP synthase (chloroplast) [Thalassiosira pseudonana],ATP synthase CF1 alpha subunit (chloroplast) [Thalassiosira pseudonana],RecName: Full=ATP synthase subunit alpha, chloroplastic; AltName: Full=ATP synthase F1 sector subunit alpha; AltName: Full=F-ATPase subunit alpha	0.298	126	0.008	31	31	9
+gi|224005154|ref|XP_002296228.1|,gi|209586260|gb|ACI64945.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.551	118	0.008	39	36	10
+gi|220972037|gb|EED90370.1|,gi|224006870|ref|XP_002292395.1|	hypothetical protein THAPSDRAFT_7881 [Thalassiosira pseudonana CCMP1335]	0.650	116	0.012	28	1	11
+gi|223993043|ref|XP_002286205.1|,gi|220977520|gb|EED95846.1|	glyceraldehyde-3-phosphate dehydrogenase precursor, partial [Thalassiosira pseudonana CCMP1335]	0.595	115	0.010	44	44	12
+gi|224006446|ref|XP_002292183.1|,gi|220971825|gb|EED90158.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.648	110	0.012	28	5	13
+gi|224013245|ref|XP_002295274.1|,gi|220968997|gb|EED87340.1|	hypothetical protein THAPSDRAFT_270138 [Thalassiosira pseudonana CCMP1335]	0.439	97	0.005	29	29	14
+gi|224003673|ref|XP_002291508.1|,gi|220973284|gb|EED91615.1|	heat shock protein 70 [Thalassiosira pseudonana CCMP1335]	0.306	94	0.005	24	22	15
+gi|224012869|ref|XP_002295087.1|,gi|220969526|gb|EED87867.1|	fucoxanthin chlorophyll a/c protein 1, partial [Thalassiosira pseudonana CCMP1335]	0.426	89	0.015	16	0	16
+gi|224012180|ref|XP_002294743.1|,gi|220969763|gb|EED88103.1|	fucoxanthin chlorophyll a/c protein 2, partial [Thalassiosira pseudonana CCMP1335]	0.409	89	0.014	16	0	16
+gi|1778745|gb|AAB40914.1|	fucoxanthin-chlorophyll a/c light-harvesting protein, partial [Thalassiosira pseudonana]	0.452	88	0.022	15	0	17
+gi|2599405797|pdb|8IWH|d,gi|2599405796|pdb|8IWH|D,gi|2050584431|gb|QWM92972.1|,gi|116739895|gb|ABK20765.1|,gi|221222714|sp|A0T0T0.1|PSBD_THAPS,gi|118411148|ref|YP_874542.1|	Chain d, Photosystem II D2 protein,Chain D, Photosystem II D2 protein,D2 reaction center protein of photosystem II (chloroplast) [Thalassiosira pseudonana],photosystem II reaction center protein D2 (chloroplast) [Thalassiosira pseudonana],RecName: Full=Photosystem II D2 protein; Short=PSII D2 protein; AltName: Full=Photosystem Q(A) protein,photosystem II protein D2 (chloroplast) [Thalassiosira pseudonana]	0.188	86	0.008	25	25	18
+gi|2599405819|pdb|8IWH|o,gi|2599405818|pdb|8IWH|O,gi|224003107|ref|XP_002291225.1|,gi|220973001|gb|EED91332.1|	Chain o, Oxygen-evolving enhancer protein 1,Chain O, Oxygen-evolving enhancer protein 1,oxygen-evolving enhancer protein 1 precursor [Thalassiosira pseudonana CCMP1335]	0.590	86	0.009	30	30	19
+gi|125991846|sp|A0T100.1|EFTU_THAPS,gi|116739965|gb|ABK20835.1|,gi|118411218|ref|YP_874612.1|,gi|2050584502|gb|QWM93043.1|	RecName: Full=Elongation factor Tu, chloroplastic; Short=EF-Tu,translation elongation factor Tu (chloroplast) [Thalassiosira pseudonana],elongation factor Tu (chloroplast) [Thalassiosira pseudonana],translational elongation factor Tu (chloroplast) [Thalassiosira pseudonana]	0.533	77	0.006	27	26	20
+gi|224003375|ref|XP_002291359.1|,gi|220973135|gb|EED91466.1|	ascorbate peroxidase, partial [Thalassiosira pseudonana CCMP1335]	0.616	76	0.008	21	21	21
+gi|589908182|dbj|BAO52718.1|	delta carbonic anhydrase [Thalassiosira pseudonana CCMP1335]	0.293	74	0.006	53	3	22
+gi|224013339|ref|XP_002295321.1|,gi|220969044|gb|EED87387.1|	ferredoxin-nadp reductase [Thalassiosira pseudonana CCMP1335]	0.437	73	0.007	30	17	23
+gi|224000918|ref|XP_002290131.1|,gi|220973553|gb|EED91883.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.275	70	0.008	50	0	24
+gi|220972727|gb|EED91058.1|,gi|220973118|gb|EED91449.1|,gi|224002559|ref|XP_002290951.1|,gi|224003341|ref|XP_002291342.1|	hypothetical protein THAPSDRAFT_28496 [Thalassiosira pseudonana CCMP1335],predicted protein [Thalassiosira pseudonana CCMP1335]	0.318	67	0.004	40	40	25
+gi|224000661|ref|XP_002290003.1|,gi|220975211|gb|EED93540.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.468	61	0.005	22	22	26
+gi|116739850|gb|ABK20720.1|,gi|118411103|ref|YP_874497.1|	ribulose-1,5-bisphosphate carboxylase/oxygenase small subunit (chloroplast) [Thalassiosira pseudonana]	0.633	60	0.014	45	12	27
+gi|220972175|gb|EED90508.1|,gi|224007146|ref|XP_002292533.1|	hypothetical protein THAPSDRAFT_269459 [Thalassiosira pseudonana CCMP1335]	0.354	50	0.004	20	3	28
+gi|220968079|gb|EED86435.1|,gi|2438234205|gb|WCI13887.1|,gi|224015254|ref|XP_002297285.1|	predicted protein [Thalassiosira pseudonana CCMP1335],theta carbonic anhydrase 1 [Thalassiosira pseudonana CCMP1335]	0.310	48	0.005	22	21	29
+gi|223995893|ref|XP_002287620.1|,gi|220976736|gb|EED95063.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.229	48	0.006	31	10	30
+gi|2050584476|gb|QWM93017.1|	small subunit Rubisco (chloroplast) [Thalassiosira pseudonana]	0.621	47	0.011	33	0	31
+gi|224009147|ref|XP_002293532.1|,gi|220970932|gb|EED89268.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.273	47	0.002	25	25	32
+gi|220975222|gb|EED93551.1|,gi|224000683|ref|XP_002290014.1|	ferredoxin--NADP+ reductase [Thalassiosira pseudonana CCMP1335]	0.269	46	0.004	18	5	33
+gi|2599405825|pdb|8IWH|v,gi|2599405824|pdb|8IWH|V	Chain v, Cytochrome c-550,Chain V, Cytochrome c-550	0.469	46	0.009	11	11	34
+gi|156632585|sp|A0T0N2.1|CY550_THAPS,gi|224015744|ref|XP_002297520.1|,gi|116739847|gb|ABK20717.1|,gi|2050584479|gb|QWM93020.1|,gi|220967784|gb|EED86160.1|,gi|118411100|ref|YP_874494.1|	RecName: Full=Photosystem II extrinsic protein V; Short=PsbV; AltName: Full=Cytochrome c-550; AltName: Full=Cytochrome c550; Flags: Precursor,cytochrome c550, PsbV [Thalassiosira pseudonana CCMP1335],PsbV (chloroplast) [Thalassiosira pseudonana],cytochrome c550 of photosystem II (chloroplast) [Thalassiosira pseudonana],photosystem II cytochrome c550 (chloroplast) [Thalassiosira pseudonana]	0.466	46	0.009	11	11	34
+gi|224000930|ref|XP_002290137.1|,gi|220973559|gb|EED91889.1|	fucoxanthin chlorophyll a/c protein 8 [Thalassiosira pseudonana CCMP1335]	0.335	44	0.005	11	2	35
+gi|220977751|gb|EED96077.1|,gi|223993505|ref|XP_002286436.1|	fucoxanthin chlorophyll a/c protein 8 [Thalassiosira pseudonana CCMP1335]	0.410	44	0.007	11	2	35
+gi|220972174|gb|EED90507.1|,gi|224007144|ref|XP_002292532.1|	hypothetical protein THAPSDRAFT_24060 [Thalassiosira pseudonana CCMP1335]	0.396	43	0.003	24	7	36
+gi|220971171|gb|EED89506.1|,gi|224008172|ref|XP_002293045.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.431	42	0.005	18	18	37
+gi|2742384286|pdb|8JP3|A,gi|2742384287|pdb|8JP3|B,gi|2742384288|pdb|8JP3|C	Chain A, Fucoxanthin chlorophyll a/c protein 8,Chain B, Fucoxanthin chlorophyll a/c protein 8,Chain C, Fucoxanthin chlorophyll a/c protein 8	0.306	42	0.007	9	0	38
+gi|1778747|gb|AAB40915.1|	fucoxanthin-chlorophyll a/c light-harvesting protein, partial [Thalassiosira pseudonana]	0.423	42	0.010	9	0	38
+gi|224008835|ref|XP_002293376.1|,gi|220970776|gb|EED89112.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.533	41	0.007	13	13	39
+gi|224011563|ref|XP_002295556.1|,gi|209583587|gb|ACI64273.1|	mitochondrial chaperonin [Thalassiosira pseudonana CCMP1335]	0.350	41	0.002	21	21	40
+gi|2599405855|pdb|8J0D|4	Chain 4, Fucoxanthin-chlorophyll a-c binding protein, plastid	0.429	40	0.008	14	14	41
+gi|220977139|gb|EED95466.1|,gi|2599405833|pdb|8IWH|4,gi|223996699|ref|XP_002288023.1|	fucoxanthin-chlorophyll a-c binding protein, plastid precursor [Thalassiosira pseudonana CCMP1335],Chain 4, Fucoxanthin-chlorophyll a-c binding protein, plastid	0.357	40	0.006	14	14	41
+gi|2873343219|pdb|8ZET|C,gi|2873343183|pdb|8ZEH|C	Chain C, Fucoxanthin chl a/c light-harvesting protein, major type	0.529	40	0.007	17	17	42
+gi|209583650|gb|ACI64336.1|,gi|2843533631|pdb|8XLS|4,gi|224011689|ref|XP_002295619.1|	fucoxanthin chl a/c light-harvesting protein, major type [Thalassiosira pseudonana CCMP1335],Chain 4, Fucoxanthin chl a/c light-harvesting protein, major type	0.448	40	0.006	17	17	42
+gi|193735617|ref|YP_874543.2|	photosystem II 44 kDa protein (chloroplast) [Thalassiosira pseudonana]	0.298	39	0.003	17	2	43
+gi|220969356|gb|EED87697.1|,gi|224012529|ref|XP_002294917.1|	actin-like protein [Thalassiosira pseudonana CCMP1335]	0.398	39	0.003	18	18	44
+gi|224013212|ref|XP_002295258.1|,gi|220969220|gb|EED87562.1|	fucoxanthin chlorophyll a/c protein, LI818 clade [Thalassiosira pseudonana CCMP1335]	0.359	39	0.006	12	12	45
+gi|224013064|ref|XP_002295184.1|,gi|220969146|gb|EED87488.1|	fucoxanthin chlorophyll a/c protein, LI818 clade [Thalassiosira pseudonana CCMP1335]	0.359	39	0.006	12	12	45
+gi|209586115|gb|ACI64800.1|,gi|224004864|ref|XP_002296083.1|	acetyl-coa carboxylase [Thalassiosira pseudonana CCMP1335]	0.184	38	5.76e-4	19	19	46
+gi|223997748|ref|XP_002288547.1|,gi|220975655|gb|EED93983.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.414	37	0.003	17	16	47
+gi|2050584430|gb|QWM92971.1|,gi|224015772|ref|XP_002297534.1|,gi|220967798|gb|EED86174.1|,gi|116739896|gb|ABK20766.1|	CP43 chlorophyll apoprotein of photosystem II (chloroplast) [Thalassiosira pseudonana],PSBC, photosystem II 44 kDa reaction center protein [Thalassiosira pseudonana CCMP1335],photosystem II chlorophyll A core antenna apoprotein CP43 (chloroplast) [Thalassiosira pseudonana]	0.299	36	0.002	16	0	48
+gi|220975793|gb|EED94121.1|,gi|223998024|ref|XP_002288685.1|	14-3-3-like protein [Thalassiosira pseudonana CCMP1335]	0.385	36	0.005	9	9	49
+gi|224005467|ref|XP_002291694.1|,gi|220972213|gb|EED90545.1|	mitochondrial ATPase, inner membrane [Thalassiosira pseudonana CCMP1335]	0.266	36	0.002	16	16	50
+gi|220975991|gb|EED94319.1|,gi|223998420|ref|XP_002288883.1|	probable S-adenosylmethionine synthetase [Thalassiosira pseudonana CCMP1335]	0.282	35	0.002	20	20	51
+gi|223994177|ref|XP_002286772.1|,gi|220978087|gb|EED96413.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.558	35	0.006	12	12	52
+gi|223997788|ref|XP_002288567.1|,gi|220975675|gb|EED94003.1|	heat shock protein/chaperone [Thalassiosira pseudonana CCMP1335]	0.300	35	0.002	19	18	53
+gi|2050584531|gb|QWM93072.1|	Hsp70-type chaperone (chloroplast) [Thalassiosira pseudonana]	0.337	34	0.002	19	19	54
+gi|118411189|ref|YP_874583.1|,gi|116739936|gb|ABK20806.1|,gi|125991836|sp|A0T0X1.1|DNAK_THAPS	heat shock protein 70 (chloroplast) [Thalassiosira pseudonana],Hsp70-type chaperone (chloroplast) [Thalassiosira pseudonana],RecName: Full=Chaperone protein dnaK; AltName: Full=HSP70; AltName: Full=Heat shock 70 kDa protein; AltName: Full=Heat shock protein 70	0.337	34	0.002	19	19	54
+gi|224007705|ref|XP_002292812.1|,gi|220971674|gb|EED90008.1|	translation elongation factor alpha [Thalassiosira pseudonana CCMP1335]	0.260	34	0.002	18	18	55
+gi|2438243983|gb|WCI13889.1|,gi|220968077|gb|EED86433.1|,gi|224015250|ref|XP_002297283.1|	theta carbonic anhydrase 3 [Thalassiosira pseudonana CCMP1335],predicted protein [Thalassiosira pseudonana CCMP1335]	0.249	34	0.004	18	17	56
+gi|220975699|gb|EED94027.1|,gi|223997836|ref|XP_002288591.1|	eucarytic translation initiation factor 5A [Thalassiosira pseudonana CCMP1335]	0.371	33	0.007	16	16	57
+gi|224011607|ref|XP_002295578.1|,gi|2599405836|pdb|8IWH|7,gi|209583609|gb|ACI64295.1|,gi|2599405843|pdb|8IWH|0	fucoxanthin chlorophyll a/c protein -LI818 clade [Thalassiosira pseudonana CCMP1335],Chain 7, Fucoxanthin chlorophyll a/c protein-LI818 clade,Chain 0, Fucoxanthin chlorophyll a/c protein-LI818 clade	0.211	33	0.005	14	14	58
+gi|224015794|ref|XP_002297545.1|,gi|2599405793|pdb|8IWH|B,gi|220967809|gb|EED86185.1|,gi|116739860|gb|ABK20730.1|,gi|118411113|ref|YP_874507.1|,gi|2050584466|gb|QWM93007.1|,gi|2599405838|pdb|8IWH|b	predicted protein [Thalassiosira pseudonana CCMP1335],Chain B, Photosystem II CP47 reaction center protein,photosystem II chlorophyll A core antenna apoprotein (chloroplast) [Thalassiosira pseudonana],photosystem II 47 kDa protein (chloroplast) [Thalassiosira pseudonana],CP47 chlorophyll apoprotein of photosystem II (chloroplast) [Thalassiosira pseudonana],Chain b, Photosystem II CP47 reaction center protein	0.159	33	0.002	10	10	59
+gi|2599405795|pdb|8IWH|c,gi|2599405794|pdb|8IWH|C	Chain c, Photosystem II CP43 reaction center protein,Chain C, Photosystem II CP43 reaction center protein	0.298	33	0.002	13	0	60
+gi|2050584442|gb|QWM92983.1|,gi|224015774|ref|XP_002297535.1|,gi|193805981|sp|A0T0R9.1|CYF_THAPS,gi|220967799|gb|EED86175.1|,gi|116739884|gb|ABK20754.1|,gi|118411137|ref|YP_874531.1|	apocytochrome f of cytochrome b6/f complex (chloroplast) [Thalassiosira pseudonana],predicted protein [Thalassiosira pseudonana CCMP1335],RecName: Full=Cytochrome f; Flags: Precursor,cytochrome f (chloroplast) [Thalassiosira pseudonana]	0.465	32	0.003	9	9	61
+gi|220969257|gb|EED87598.1|,gi|224012331|ref|XP_002294818.1|	ascorbate peroxidase [Thalassiosira pseudonana CCMP1335]	0.543	32	0.004	8	8	62
+gi|223995629|ref|XP_002287488.1|,gi|220976604|gb|EED94931.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.311	31	0.005	12	12	63
+gi|224007998|ref|XP_002292958.1|,gi|220971084|gb|EED89419.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.189	30	0.004	9	9	64
+gi|329342810|gb|AEB91047.1|	PsbC, partial (chloroplast) [Thalassiosira pseudonana]	0.233	30	0.002	10	0	65
+gi|98990421|gb|ABF60279.1|	PSbC, partial [Thalassiosira pseudonana]	0.269	30	0.003	10	0	65
+gi|98990385|gb|ABF60261.1|	PSbC, partial [Thalassiosira pseudonana]	0.235	30	0.002	10	0	65
+gi|118411153|ref|YP_874547.1|,gi|224015766|ref|XP_002297531.1|,gi|2050584426|gb|QWM92967.1|,gi|2843533619|pdb|8XLS|D,gi|220967795|gb|EED86171.1|,gi|116739900|gb|ABK20770.1|	photosystem I subunit II (chloroplast) [Thalassiosira pseudonana],predicted protein [Thalassiosira pseudonana CCMP1335],subunit II of photosystem I (chloroplast) [Thalassiosira pseudonana],Chain D, Photosystem I reaction center subunit II,photosystem I ferredoxin-binding protein (chloroplast) [Thalassiosira pseudonana]	0.324	29	0.007	10	6	66
+gi|220971597|gb|EED89931.1|,gi|224007551|ref|XP_002292735.1|	hypothetical protein THAPSDRAFT_24248 [Thalassiosira pseudonana CCMP1335]	0.044	28	5.78e-4	10	10	67
+gi|2873343212|pdb|8ZET|g,gi|2873343197|pdb|8ZEH|g	Chain g, Photosystem I reaction center subunit Psa29	0.725	28	0.007	8	8	68
+gi|220976502|gb|EED94829.1|,gi|223995405|ref|XP_002287386.1|,gi|2843533626|pdb|8XLS|W	hypothetical protein THAPSDRAFT_268304 [Thalassiosira pseudonana CCMP1335],Chain W, Photosystem I reaction center subunit Psa29	0.505	28	0.005	8	8	68
+gi|220977932|gb|EED96258.1|,gi|223993867|ref|XP_002286617.1|	hypothetical protein THAPSDRAFT_267952 [Thalassiosira pseudonana CCMP1335]	0.180	27	0.001	15	15	69
+gi|220973712|gb|EED92042.1|,gi|224001236|ref|XP_002290290.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.162	26	9.97e-4	14	14	70
+gi|224002643|ref|XP_002290993.1|,gi|220972769|gb|EED91100.1|	triose-phosphate isomerase [Thalassiosira pseudonana CCMP1335]	0.302	25	0.003	11	11	71
+gi|224015441|ref|XP_002297375.1|,gi|220967975|gb|EED86338.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.238	25	0.003	5	5	72
+gi|2873343218|pdb|8ZET|B,gi|2873343182|pdb|8ZEH|B	Chain B, Fucoxanthin chlorophyll a/c-binding protein Lhcq8	0.327	25	0.005	13	13	73
+gi|224006233|ref|XP_002292077.1|,gi|220972596|gb|EED90928.1|,gi|2843533632|pdb|8XLS|5	predicted protein [Thalassiosira pseudonana CCMP1335],Chain 5, Fucoxanthin chlorophyll a/c-binding protein Lhcq8	0.278	25	0.004	13	13	73
+gi|116739845|gb|ABK20715.1|,gi|220967786|gb|EED86162.1|,gi|118411098|ref|YP_874492.1|,gi|224015748|ref|XP_002297522.1|,gi|2050584481|gb|QWM93022.1|	ferredoxin (chloroplast) [Thalassiosira pseudonana],ferredoxin [Thalassiosira pseudonana CCMP1335]	0.465	24	0.008	11	11	74
+gi|223999217|ref|XP_002289281.1|,gi|220974489|gb|EED92818.1|	phosphoribulokinase [Thalassiosira pseudonana CCMP1335]	0.208	24	0.002	6	6	75
+gi|224009237|ref|XP_002293577.1|,gi|220970977|gb|EED89313.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.399	24	0.003	14	14	76
+gi|224000914|ref|XP_002290129.1|,gi|220973551|gb|EED91881.1|	glyceraldehyde 3-phosphate dehydrogenase [Thalassiosira pseudonana CCMP1335]	0.307	23	0.002	12	10	77
+gi|224010828|ref|XP_002294371.1|,gi|220969866|gb|EED88205.1|	pyruvate carboxylase-like protein [Thalassiosira pseudonana CCMP1335]	0.171	23	6.31e-4	12	12	78
+gi|220969384|gb|EED87725.1|,gi|224012585|ref|XP_002294945.1|	hypothetical protein THAPSDRAFT_26051 [Thalassiosira pseudonana CCMP1335]	0.262	22	0.002	15	15	79
+gi|220973450|gb|EED91781.1|,gi|224004005|ref|XP_002291674.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.239	22	0.001	11	11	80
+gi|224000942|ref|XP_002290143.1|,gi|220973565|gb|EED91895.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.203	22	0.005	5	5	81
+gi|2599405841|pdb|8IWH|Q,gi|223993775|ref|XP_002286571.1|,gi|2599405842|pdb|8IWH|q,gi|220977886|gb|EED96212.1|	Chain Q, Photosystem II subunit, PsbQ.,predicted protein [Thalassiosira pseudonana CCMP1335],Chain q, Photosystem II subunit, PsbQ.	0.417	22	0.003	11	11	82
+gi|118411168|ref|YP_874562.1|,gi|2843533621|pdb|8XLS|F,gi|2050584411|gb|QWM92952.1|,gi|116739915|gb|ABK20785.1|	photosystem I subunit III (chloroplast) [Thalassiosira pseudonana],Chain F, Photosystem I reaction center subunit III,subunit III of photosystem I (chloroplast) [Thalassiosira pseudonana],photosystem I protein F (chloroplast) [Thalassiosira pseudonana]	0.378	21	0.004	5	5	83
+gi|2873343196|pdb|8ZEH|f,gi|2873343211|pdb|8ZET|f	Chain f, Photosystem I reaction center subunit III	0.438	21	0.004	5	5	83
+gi|220967787|gb|EED86163.1|,gi|224015750|ref|XP_002297523.1|	PSAF, photosystem I reaction center subunit, partial [Thalassiosira pseudonana CCMP1335]	0.414	21	0.004	5	5	83
+gi|220970292|gb|EED88630.1|,gi|224010635|ref|XP_002294275.1|	hypothetical protein THAPSDRAFT_10234 [Thalassiosira pseudonana CCMP1335]	0.357	21	0.002	14	14	84
+gi|220972474|gb|EED90806.1|,gi|224005989|ref|XP_002291955.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.267	21	0.004	18	18	85
+gi|223992865|ref|XP_002286116.1|,gi|220977431|gb|EED95757.1|	probable malate dehydrogenase with mitochondrial or glyoxysomal precursor [Thalassiosira pseudonana CCMP1335]	0.403	21	0.002	14	14	86
+gi|224000667|ref|XP_002290006.1|,gi|220975214|gb|EED93543.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.088	21	4.84e-4	11	11	87
+gi|220977709|gb|EED96035.1|,gi|223993421|ref|XP_002286394.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.183	20	6.48e-4	11	11	88
+gi|224003669|ref|XP_002291506.1|,gi|220973282|gb|EED91613.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.206	20	0.002	15	15	89
+gi|224010722|ref|XP_002294318.1|,gi|220969813|gb|EED88152.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.706	20	0.004	12	12	90
+gi|209585731|gb|ACI64416.1|,gi|224004096|ref|XP_002295699.1|	F-type H-ATPase delta subunit, partial [Thalassiosira pseudonana CCMP1335]	0.416	19	0.004	7	7	91
+gi|220968570|gb|EED86916.1|,gi|224014104|ref|XP_002296715.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.329	19	0.003	14	14	92
+gi|224003529|ref|XP_002291436.1|,gi|220973212|gb|EED91543.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.157	19	0.002	8	8	93
+gi|2050584438|gb|QWM92979.1|	cell division protein (chloroplast) [Thalassiosira pseudonana]	0.143	18	8.42e-4	7	7	94
+gi|224015722|ref|XP_002297509.1|,gi|220967773|gb|EED86149.1|,gi|118411141|ref|YP_874535.1|,gi|116739888|gb|ABK20758.1|	plastid division protein [Thalassiosira pseudonana CCMP1335],cell division protein (chloroplast) [Thalassiosira pseudonana],cell division protein FtsH-like protein (chloroplast) [Thalassiosira pseudonana]	0.151	18	8.88e-4	7	7	94
+gi|21961605|gb|AAH34697.1|	(CONTAMINANT) Keratin 10 [Homo sapiens]	0.118	18	9.76e-4	14	14	95
+gi|220972894|gb|EED91225.1|,gi|224002893|ref|XP_002291118.1|	HSP90 family member [Thalassiosira pseudonana CCMP1335]	0.125	18	8.07e-4	10	10	96
+gi|220975075|gb|EED93404.1|,gi|224000389|ref|XP_002289867.1|	pyruvate kinase [Thalassiosira pseudonana CCMP1335]	0.175	18	0.001	13	13	97
+gi|220978061|gb|EED96387.1|,gi|223994125|ref|XP_002286746.1|	hypothetical protein THAPSDRAFT_1326 [Thalassiosira pseudonana CCMP1335]	0.225	18	0.001	11	11	98
+gi|223995685|ref|XP_002287516.1|,gi|220976632|gb|EED94959.1|	metalloprotease, partial [Thalassiosira pseudonana CCMP1335]	0.114	18	9.81e-4	6	6	99
+gi|223998931|ref|XP_002289138.1|,gi|220974346|gb|EED92675.1|	ATP synthase [Thalassiosira pseudonana CCMP1335]	0.172	18	0.002	7	7	100
+gi|224009442|ref|XP_002293679.1|,gi|2599405802|pdb|8IWH|G,gi|220970351|gb|EED88688.1|,gi|2599405803|pdb|8IWH|g	hypothetical protein THAPSDRAFT_24769 [Thalassiosira pseudonana CCMP1335],Chain G, Photosystem II Psb31 protein domain-containing protein,Chain g, Photosystem II Psb31 protein domain-containing protein	0.409	18	0.003	7	7	101
+gi|224011910|ref|XP_002294608.1|,gi|220969628|gb|EED87968.1|	fucoxanthin chlorophyll a/c protein 5 [Thalassiosira pseudonana CCMP1335]	0.460	18	0.003	11	8	102
+gi|2599405835|pdb|8IWH|6	Chain 6, Fucoxanthin chlorophyll a/c protein 5	0.462	18	0.003	11	8	102
+gi|2599405857|pdb|8J0D|6	Chain 6, Fucoxanthin chlorophyll a/c protein 5	0.548	18	0.003	11	8	102
+gi|220974544|gb|EED92873.1|,gi|223999327|ref|XP_002289336.1|	CPSase [Thalassiosira pseudonana CCMP1335]	0.094	17	3.62e-4	12	12	103
+gi|223997126|ref|XP_002288236.1|,gi|220975344|gb|EED93672.1|	enoyl-reductase [NADH] [Thalassiosira pseudonana CCMP1335]	0.321	17	0.002	8	8	104
+gi|224007941|ref|XP_002292930.1|,gi|220971792|gb|EED90126.1|	clathrin heavy chain [Thalassiosira pseudonana CCMP1335]	0.106	17	3.13e-4	11	11	105
+gi|224011888|ref|XP_002294597.1|,gi|220969617|gb|EED87957.1|	hypothetical protein THAPSDRAFT_25629 [Thalassiosira pseudonana CCMP1335]	0.180	17	6.81e-4	8	8	106
+gi|327258980|gb|AEA41995.1|	ribulose-1,5-biphosphate carboxylase/oxygenase small subunit, partial (chloroplast) [Thalassiosira pseudonana]	0.548	17	0.004	9	0	107
+gi|220970459|gb|EED88796.1|,gi|224009658|ref|XP_002293787.1|	phosphoadenosine-phosphosulphate reductase [Thalassiosira pseudonana CCMP1335]	0.226	16	0.001	8	8	108
+gi|224000862|ref|XP_002290103.1|,gi|220973525|gb|EED91855.1|	hypothetical protein THAPSDRAFT_268840 [Thalassiosira pseudonana CCMP1335]	0.370	16	0.003	8	8	109
+gi|224007002|ref|XP_002292461.1|,gi|220972103|gb|EED90436.1|	adenosine kinase [Thalassiosira pseudonana CCMP1335]	0.267	16	0.002	8	8	110
+gi|224014072|ref|XP_002296699.1|,gi|220968554|gb|EED86900.1|	phosphoglycerate kinase precursor [Thalassiosira pseudonana CCMP1335]	0.249	16	0.001	8	5	111
+gi|220972615|gb|EED90947.1|,gi|224006271|ref|XP_002292096.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.373	15	0.004	5	5	112
+gi|220977460|gb|EED95786.1|,gi|223992923|ref|XP_002286145.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.306	15	0.002	8	8	113
+gi|223995691|ref|XP_002287519.1|,gi|220976635|gb|EED94962.1|,gi|313471265|sp|B8BVM7.1|EFTS1_THAPS	predicted protein [Thalassiosira pseudonana CCMP1335],RecName: Full=Elongation factor Ts 1, mitochondrial; Short=EF-Ts 1; Short=EF-TsMt 1	0.306	15	0.001	10	10	114
+gi|223996381|ref|XP_002287864.1|,gi|220976980|gb|EED95307.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.293	15	0.001	6	6	115
+gi|224001278|ref|XP_002290311.1|,gi|220973733|gb|EED92063.1|	enolase [Thalassiosira pseudonana CCMP1335]	0.255	15	0.001	7	6	116
+gi|224002096|ref|XP_002290720.1|,gi|220974142|gb|EED92472.1|	probable bifunctional purine synthesis protein [Thalassiosira pseudonana CCMP1335]	0.109	15	7.71e-4	6	6	117
+gi|224005631|ref|XP_002291776.1|,gi|220972295|gb|EED90627.1|	inorganic pyrophosphatase [Thalassiosira pseudonana CCMP1335]	0.362	15	0.002	9	9	118
+gi|152003262|gb|ABS19631.1|	p100 precursor [Thalassiosira pseudonana]	0.212	14	7.46e-4	11	2	119
+gi|220969917|gb|EED88256.1|,gi|224010930|ref|XP_002294422.1|	3-isopropylmalate dehydratase [Thalassiosira pseudonana CCMP1335]	0.163	14	5.50e-4	8	8	120
+gi|220972372|gb|EED90704.1|,gi|224005785|ref|XP_002291853.1|	probable serine protease inhibitor [Thalassiosira pseudonana CCMP1335]	0.105	14	9.12e-4	7	7	121
+gi|224006249|ref|XP_002292085.1|,gi|220972604|gb|EED90936.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.095	14	0.001	7	7	121
+gi|220974850|gb|EED93179.1|,gi|223999939|ref|XP_002289642.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.288	14	0.002	8	8	122
+gi|220977545|gb|EED95871.1|,gi|223993093|ref|XP_002286230.1|	ornithine cyclodeaminase, partial [Thalassiosira pseudonana CCMP1335],ornithine cyclodeaminase [Thalassiosira pseudonana CCMP1335]	0.238	14	0.001	6	6	123
+gi|223998112|ref|XP_002288729.1|,gi|220975837|gb|EED94165.1|	fucoxanthin chlorophyll a/c protein 6 [Thalassiosira pseudonana CCMP1335]	0.189	14	0.002	6	6	124
+gi|2599405856|pdb|8J0D|5	Chain 5, Fucoxanthin chlorophyll a/c protein 6	0.237	14	0.003	6	6	124
+gi|2599405834|pdb|8IWH|5	Chain 5, Fucoxanthin chlorophyll a/c protein 6	0.198	14	0.002	6	6	124
+gi|223999069|ref|XP_002289207.1|,gi|220974415|gb|EED92744.1|	ABC cassette-containing protein, partial [Thalassiosira pseudonana CCMP1335]	0.150	14	4.74e-4	9	9	125
+gi|2438237389|gb|WCI13888.1|	theta carbonic anhydrase 2 [Thalassiosira pseudonana CCMP1335]	0.209	14	0.001	7	7	126
+gi|220977366|gb|EED95692.1|,gi|223992735|ref|XP_002286051.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.089	14	5.22e-4	7	7	126
+gi|220967888|gb|EED86258.1|,gi|224015580|ref|XP_002297441.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.354	13	0.002	5	5	127
+gi|220970841|gb|EED89177.1|,gi|224008965|ref|XP_002293441.1|	RL6, ribosomal protein 6, partial [Thalassiosira pseudonana CCMP1335]	0.152	13	0.002	5	5	128
+gi|220973347|gb|EED91678.1|,gi|224003799|ref|XP_002291571.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.146	13	7.68e-4	7	7	129
+gi|220975205|gb|EED93534.1|,gi|224000649|ref|XP_002289997.1|	fucoxanthin chl a/c light-harvesting protein [Thalassiosira pseudonana CCMP1335]	0.369	13	0.002	6	1	130
+gi|220976781|gb|EED95108.1|,gi|223995983|ref|XP_002287665.1|	NADPH nitrite reductase [Thalassiosira pseudonana CCMP1335]	0.128	13	4.09e-4	7	7	131
+gi|220977638|gb|EED95964.1|,gi|223993279|ref|XP_002286323.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.216	13	6.26e-4	8	8	132
+gi|220978058|gb|EED96384.1|,gi|223994119|ref|XP_002286743.1|	heat shock protein belonging to the HSP70 family [Thalassiosira pseudonana CCMP1335]	0.096	13	5.01e-4	7	7	133
+gi|220978390|gb|EED96716.1|,gi|223994783|ref|XP_002287075.1|	fucoxanthin chlorophyll a/c protein, LI818 clade [Thalassiosira pseudonana CCMP1335]	0.174	13	0.002	2	2	134
+gi|223994191|ref|XP_002286779.1|,gi|220978094|gb|EED96420.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.439	13	0.003	8	8	135
+gi|224004316|ref|XP_002295809.1|,gi|209585841|gb|ACI64526.1|	chaperone, heat shock protein 70 [Thalassiosira pseudonana CCMP1335]	0.110	13	6.14e-4	8	5	136
+gi|116739935|gb|ABK20805.1|,gi|118411188|ref|YP_874582.1|,gi|2050584532|gb|QWM93073.1|,gi|125863543|sp|A0T0X0.1|CH60_THAPS	60 kDa chaperonin (chloroplast) [Thalassiosira pseudonana],chaperonin GroEL (chloroplast) [Thalassiosira pseudonana],60 KDa chaperonin (chloroplast) [Thalassiosira pseudonana],RecName: Full=Chaperonin GroEL, chloroplastic; AltName: Full=60 kDa chaperonin; AltName: Full=Chaperonin-60; Short=Cpn60	0.247	12	7.16e-4	7	7	137
+gi|220970014|gb|EED88353.1|,gi|224011124|ref|XP_002294519.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.048	12	3.93e-4	6	6	138
+gi|220970671|gb|EED89008.1|,gi|224010082|ref|XP_002293999.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.394	12	0.002	11	11	139
+gi|220973226|gb|EED91557.1|,gi|224003557|ref|XP_002291450.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.237	12	8.92e-4	8	8	140
+gi|220975010|gb|EED93339.1|,gi|224000259|ref|XP_002289802.1|	hypothetical protein THAPSDRAFT_27892 [Thalassiosira pseudonana CCMP1335]	0.259	12	8.35e-4	6	6	141
+gi|220977307|gb|EED95633.1|,gi|223992617|ref|XP_002285992.1|	aspartate aminotransferase [Thalassiosira pseudonana CCMP1335]	0.249	12	9.29e-4	7	7	142
+gi|223994697|ref|XP_002287032.1|,gi|220978347|gb|EED96673.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.129	12	3.15e-4	8	8	143
+gi|223997160|ref|XP_002288253.1|,gi|220975361|gb|EED93689.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.161	12	0.001	2	2	144
+gi|224000728|ref|XP_002290036.1|,gi|220973458|gb|EED91788.1|,gi|220973902|gb|EED92232.1|,gi|224001616|ref|XP_002290480.1|	cation transporting ATPase, partial [Thalassiosira pseudonana CCMP1335],predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.095	12	4.04e-4	5	4	145
+gi|224008298|ref|XP_002293108.1|,gi|220971234|gb|EED89569.1|	copper induced cell-surface protein [Thalassiosira pseudonana CCMP1335]	0.141	12	6.31e-4	9	0	146
+gi|224009329|ref|XP_002293623.1|,gi|220971023|gb|EED89359.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.190	12	8.92e-4	9	9	147
+gi|224014381|ref|XP_002296853.1|,gi|220968490|gb|EED86837.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.164	12	0.002	5	5	148
+gi|2873343188|pdb|8ZEH|I	Chain I, Fucoxanthin chl a/c light-harvesting protein	0.302	12	0.002	5	0	149
+gi|98990387|gb|ABF60262.1|	PSbC, partial [Thalassiosira pseudonana]	0.185	12	0.001	6	0	150
+gi|2050584454|gb|QWM92995.1|,gi|125987531|sp|A0T0Q7.1|RK12_THAPS,gi|118411125|ref|YP_874519.1|,gi|116739872|gb|ABK20742.1|	ribosomal protein L12 (chloroplast) [Thalassiosira pseudonana],RecName: Full=Large ribosomal subunit protein bL12c; AltName: Full=50S ribosomal protein L12, chloroplastic,50S ribosomal protein L12 (chloroplast) [Thalassiosira pseudonana]	0.313	11	0.003	7	7	151
+gi|209586160|gb|ACI64845.1|,gi|224004954|ref|XP_002296128.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.217	11	7.49e-4	7	7	152
+gi|220968643|gb|EED86989.1|,gi|224014250|ref|XP_002296788.1|	glutathione s-transferase [Thalassiosira pseudonana CCMP1335]	0.097	11	0.001	5	5	153
+gi|220971013|gb|EED89349.1|,gi|224009309|ref|XP_002293613.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.159	11	0.002	5	5	154
+gi|220975262|gb|EED93590.1|,gi|223996962|ref|XP_002288154.1|	pcna-like protein [Thalassiosira pseudonana CCMP1335]	0.184	11	0.001	7	7	155
+gi|223993143|ref|XP_002286255.1|,gi|220977570|gb|EED95896.1|	adenine nucleotide translocator; ATP/ADP translocase [Thalassiosira pseudonana CCMP1335]	0.278	11	0.001	6	6	156
+gi|223999219|ref|XP_002289282.1|,gi|220974490|gb|EED92819.1|	phosphofructokinase [Thalassiosira pseudonana CCMP1335]	0.265	11	8.56e-4	6	6	157
+gi|224000653|ref|XP_002289999.1|,gi|220975207|gb|EED93536.1|	vacuolar ATPase [Thalassiosira pseudonana CCMP1335]	0.188	11	6.88e-4	6	6	158
+gi|224001010|ref|XP_002290177.1|,gi|220973599|gb|EED91929.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.120	11	8.71e-4	6	6	159
+gi|224002156|ref|XP_002290750.1|,gi|220974172|gb|EED92502.1|	phosphoglycerate mutase [Thalassiosira pseudonana CCMP1335]	0.078	11	0.001	8	8	160
+gi|224007935|ref|XP_002292927.1|,gi|220971789|gb|EED90123.1|	triose-phosphate isomerase, partial [Thalassiosira pseudonana CCMP1335]	0.318	11	0.002	6	6	161
+gi|224013108|ref|XP_002295206.1|,gi|220969168|gb|EED87510.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.211	11	0.001	6	6	162
+gi|209586086|gb|ACI64771.1|,gi|224004806|ref|XP_002296054.1|	cytochrome C peroxidase, partial [Thalassiosira pseudonana CCMP1335]	0.216	10	0.001	6	6	163
+gi|220968739|gb|EED87083.1|,gi|224013446|ref|XP_002296387.1|	dead box family RNA helicase [Thalassiosira pseudonana CCMP1335]	0.076	10	7.31e-4	5	5	164
+gi|220968792|gb|EED87136.1|,gi|224013552|ref|XP_002296440.1|	pyruvate dehydrogenase [Thalassiosira pseudonana CCMP1335]	0.092	10	9.42e-4	3	3	165
+gi|220969226|gb|EED87568.1|,gi|224013224|ref|XP_002295264.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.414	10	0.002	5	5	166
+gi|220973702|gb|EED92032.1|,gi|224001216|ref|XP_002290280.1|	fucoxanthin chlorophyll a/c light-harvesting protein [Thalassiosira pseudonana CCMP1335]	0.218	10	0.001	8	5	167
+gi|220974594|gb|EED92923.1|,gi|223999427|ref|XP_002289386.1|	hypothetical protein THAPSDRAFT_268713 [Thalassiosira pseudonana CCMP1335]	0.190	10	9.68e-4	7	7	168
+gi|220975173|gb|EED93502.1|,gi|224000585|ref|XP_002289965.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.185	10	8.12e-4	7	7	169
+gi|2636060176|dbj|BEV25232.1|	bestrophin [Thalassiosira pseudonana]	0.164	10	7.23e-4	7	7	169
+gi|220975818|gb|EED94146.1|,gi|223998074|ref|XP_002288710.1|	hypothetical protein THAPSDRAFT_21646 [Thalassiosira pseudonana CCMP1335]	0.304	10	5.12e-4	7	7	170
+gi|223992877|ref|XP_002286122.1|,gi|220977437|gb|EED95763.1|	cysteine synthase [Thalassiosira pseudonana CCMP1335]	0.158	10	8.92e-4	4	3	171
+gi|223993621|ref|XP_002286494.1|,gi|220977809|gb|EED96135.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.223	10	6.18e-4	5	5	172
+gi|223998400|ref|XP_002288873.1|,gi|220975981|gb|EED94309.1|	heat shock protein [Thalassiosira pseudonana CCMP1335]	0.108	10	4.11e-4	5	5	173
+gi|223999031|ref|XP_002289188.1|,gi|220974396|gb|EED92725.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.127	10	7.70e-4	5	5	174
+gi|224011010|ref|XP_002294462.1|,gi|220969957|gb|EED88296.1|	glutamate synthase [Thalassiosira pseudonana CCMP1335]	0.037	10	1.92e-4	8	8	175
+gi|224011770|ref|XP_002294538.1|,gi|220969558|gb|EED87898.1|	precursor of synthase [Thalassiosira pseudonana CCMP1335]	0.224	10	6.69e-4	8	8	176
+gi|224013196|ref|XP_002295250.1|,gi|220969212|gb|EED87554.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.286	10	9.74e-4	9	9	177
+gi|116739856|gb|ABK20726.1|,gi|224015802|ref|XP_002297549.1|,gi|118411109|ref|YP_874503.1|,gi|220967813|gb|EED86189.1|,gi|226698825|sp|A0T0P1.1|ATPF2_THAPS,gi|2050584470|gb|QWM93011.1|	ATP synthase CF0 B' chain subunit II (chloroplast) [Thalassiosira pseudonana],predicted protein [Thalassiosira pseudonana CCMP1335],ATP synthase CF0 B' subunit (chloroplast) [Thalassiosira pseudonana],RecName: Full=ATP synthase subunit b', chloroplastic; AltName: Full=ATP synthase F(0) sector subunit b'; AltName: Full=ATPase subunit II,CF0 subunit II of ATP synthase (chloroplast) [Thalassiosira pseudonana]	0.359	9	0.002	7	7	178
+gi|118411126|ref|YP_874520.1|,gi|220967780|gb|EED86156.1|,gi|125987744|sp|A0T0Q8.1|RR2_THAPS,gi|224015736|ref|XP_002297516.1|,gi|2050584453|gb|QWM92994.1|,gi|116739873|gb|ABK20743.1|	ribosomal protein S2 (chloroplast) [Thalassiosira pseudonana],RR2, ribosomal protein 2 [Thalassiosira pseudonana CCMP1335],RecName: Full=Small ribosomal subunit protein uS2c; AltName: Full=30S ribosomal protein S2, chloroplastic,30S ribosomal protein S2 (chloroplast) [Thalassiosira pseudonana]	0.203	9	0.001	9	9	179
+gi|209583588|gb|ACI64274.1|,gi|224011565|ref|XP_002295557.1|	glycine or serine hydroxymethyltransferase, serine methylase [Thalassiosira pseudonana CCMP1335]	0.104	9	5.37e-4	5	5	180
+gi|220968788|gb|EED87132.1|,gi|224013544|ref|XP_002296436.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.144	9	9.11e-4	2	2	181
+gi|220973693|gb|EED92023.1|,gi|224001198|ref|XP_002290271.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.212	9	0.002	7	7	182
+gi|220977165|gb|EED95492.1|,gi|223996751|ref|XP_002288049.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.116	9	5.27e-4	2	2	183
+gi|220977410|gb|EED95736.1|,gi|223992823|ref|XP_002286095.1|	guanine nucleotide binding protein beta subunit-like protein [Thalassiosira pseudonana CCMP1335]	0.071	9	8.74e-4	1	1	184
+gi|220977677|gb|EED96003.1|,gi|223993357|ref|XP_002286362.1|	tubulin beta [Thalassiosira pseudonana CCMP1335]	0.207	9	6.35e-4	4	4	185
+gi|220978394|gb|EED96720.1|,gi|223994791|ref|XP_002287079.1|	proteasome subunit alpha type 3 [Thalassiosira pseudonana CCMP1335]	0.208	9	0.001	8	8	186
+gi|223994047|ref|XP_002286707.1|,gi|220978022|gb|EED96348.1|	cysteine synthase [Thalassiosira pseudonana CCMP1335]	0.260	9	9.16e-4	6	5	187
+gi|223994533|ref|XP_002286950.1|,gi|220978265|gb|EED96591.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.158	9	0.001	6	6	188
+gi|223995069|ref|XP_002287218.1|,gi|220976334|gb|EED94661.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.158	9	0.002	3	3	189
+gi|223995479|ref|XP_002287413.1|,gi|220976529|gb|EED94856.1|	hypothetical protein THAPSDRAFT_2669 [Thalassiosira pseudonana CCMP1335]	0.264	9	9.28e-4	7	7	190
+gi|224006554|ref|XP_002292237.1|,gi|220971879|gb|EED90212.1|	tubulin alpha [Thalassiosira pseudonana CCMP1335]	0.108	9	6.31e-4	6	6	191
+gi|224008957|ref|XP_002293437.1|,gi|220970837|gb|EED89173.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.146	9	7.31e-4	4	2	192
+gi|224008993|ref|XP_002293455.1|,gi|220970855|gb|EED89191.1|	vacuolar proton pump alpha subunit [Thalassiosira pseudonana CCMP1335]	0.166	9	4.59e-4	6	6	193
+gi|224011016|ref|XP_002294465.1|,gi|220969960|gb|EED88299.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.150	9	9.96e-4	4	4	194
+gi|224012725|ref|XP_002295015.1|,gi|220969454|gb|EED87795.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.183	9	0.001	3	1	195
+gi|116739966|gb|ABK20836.1|,gi|125987661|sp|A0T101.1|RR10_THAPS,gi|2050584501|gb|QWM93042.1|,gi|118411219|ref|YP_874613.1|	30S ribosomal protein S10 (chloroplast) [Thalassiosira pseudonana],RecName: Full=Small ribosomal subunit protein uS10c; AltName: Full=30S ribosomal protein S10, chloroplastic,ribosomal protein S10 (chloroplast) [Thalassiosira pseudonana]	0.374	8	0.002	6	6	196
+gi|118411190|ref|YP_874584.1|,gi|116739937|gb|ABK20807.1|,gi|125987628|sp|A0T0X2.1|RK3_THAPS	ribosomal protein L3 (chloroplast) [Thalassiosira pseudonana],50S ribosomal protein L3 (chloroplast) [Thalassiosira pseudonana],RecName: Full=Large ribosomal subunit protein uL3c; AltName: Full=50S ribosomal protein L3, chloroplastic	0.261	8	0.001	3	3	197
+gi|2050584530|gb|QWM93071.1|	ribosomal protein L3 (chloroplast) [Thalassiosira pseudonana]	0.249	8	0.001	3	3	197
+gi|2050584462|gb|QWM93003.1|	subunit IV of photosystem I (chloroplast) [Thalassiosira pseudonana]	0.746	8	0.004	6	1	198
+gi|118411117|ref|YP_874511.1|,gi|2843533620|pdb|8XLS|E,gi|116739864|gb|ABK20734.1|	photosystem I subunit IV (chloroplast) [Thalassiosira pseudonana],Chain E, Photosystem I reaction center subunit IV,photosystem I reaction center subunit IV (chloroplast) [Thalassiosira pseudonana]	0.769	8	0.004	6	1	198
+gi|220967807|gb|EED86183.1|,gi|224015790|ref|XP_002297543.1|	PSAE, photosystem I reaction center subunit, partial [Thalassiosira pseudonana CCMP1335]	0.794	8	0.004	6	1	198
+gi|220971224|gb|EED89559.1|,gi|224008278|ref|XP_002293098.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.105	8	4.43e-4	7	7	199
+gi|220971826|gb|EED90159.1|,gi|224006448|ref|XP_002292184.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.073	8	8.44e-4	2	0	200
+gi|220972011|gb|EED90344.1|,gi|224006818|ref|XP_002292369.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.241	8	0.002	1	1	201
+gi|220972945|gb|EED91276.1|,gi|224002995|ref|XP_002291169.1|	translation factor tu domain 2 [Thalassiosira pseudonana CCMP1335]	0.095	8	3.03e-4	5	5	202
+gi|220973313|gb|EED91644.1|,gi|224003731|ref|XP_002291537.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.219	8	4.92e-4	7	7	203
+gi|220974072|gb|EED92402.1|,gi|2843533629|pdb|8XLS|2,gi|224001956|ref|XP_002290650.1|	fucoxanthin chl a/c light-harvesting protein [Thalassiosira pseudonana CCMP1335],Chain 2, Fucoxanthin chl a/c light-harvesting protein	0.283	8	0.001	7	7	204
+gi|2873343187|pdb|8ZEH|H,gi|2873343222|pdb|8ZET|H	Chain H, Fucoxanthin chl a/c light-harvesting protein	0.333	8	0.002	7	7	204
+gi|220974494|gb|EED92823.1|,gi|223999227|ref|XP_002289286.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.116	8	6.12e-4	4	4	205
+gi|220976737|gb|EED95064.1|,gi|223995895|ref|XP_002287621.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.398	8	0.002	5	5	206
+gi|223992685|ref|XP_002286026.1|,gi|220977341|gb|EED95667.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.190	8	6.25e-4	6	6	207
+gi|223993855|ref|XP_002286611.1|,gi|220977926|gb|EED96252.1|	oxidoreductase [Thalassiosira pseudonana CCMP1335]	0.174	8	5.72e-4	6	6	207
+gi|223993801|ref|XP_002286584.1|,gi|220977899|gb|EED96225.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.174	8	5.23e-4	4	4	208
+gi|223997294|ref|XP_002288320.1|,gi|220975428|gb|EED93756.1|	fructose-bisphosphate aldolase [Thalassiosira pseudonana CCMP1335]	0.182	8	5.82e-4	6	6	209
+gi|223998666|ref|XP_002289006.1|,gi|220976114|gb|EED94442.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.095	8	5.73e-4	4	4	210
+gi|224005991|ref|XP_002291956.1|,gi|220972475|gb|EED90807.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.261	8	0.001	8	8	211
+gi|224006295|ref|XP_002292108.1|,gi|220972627|gb|EED90959.1|	gcpe-like protein [Thalassiosira pseudonana CCMP1335]	0.127	8	3.69e-4	6	6	212
+gi|224011487|ref|XP_002295518.1|,gi|209583549|gb|ACI64235.1|	ASSY [Thalassiosira pseudonana CCMP1335]	0.211	8	6.06e-4	6	6	213
+gi|1346343|sp|P04264|K2C1_HUMAN	(CONTAMINANT) Keratin, type II cytoskeletal 1 (Cytokeratin 1) (K1) (CK 1) (67 kDa cytokeratin) (Hair alpha protein)	0.130	7	3.44e-4	3	3	214
+gi|39794653|gb|AAH63697.1|	(CONTAMINANT) Keratin 1 [Homo sapiens]	0.130	7	3.44e-4	3	3	214
+gi|136429|sp|P00761|TRYP_PIG	(CONTAMINANT) Trypsin precursor	0.087	7	9.60e-4	3	3	215
+gi|1693116229|gb|QDF45210.1|	ribulose-1,5-bisphosphate carboxylase/oxygenase large subunit, partial (chloroplast) [Thalassiosira pseudonana]	0.092	7	0.001	2	0	216
+gi|209583608|gb|ACI64294.1|,gi|224011605|ref|XP_002295577.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.331	7	0.002	5	5	217
+gi|209585774|gb|ACI64459.1|,gi|224004182|ref|XP_002295742.1|	isocitrate lyase [Thalassiosira pseudonana CCMP1335]	0.116	7	4.10e-4	6	6	218
+gi|220968754|gb|EED87098.1|,gi|224013476|ref|XP_002296402.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.035	7	2.80e-4	5	5	219
+gi|220969005|gb|EED87348.1|,gi|224013261|ref|XP_002295282.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.105	7	5.29e-4	5	5	220
+gi|220972312|gb|EED90644.1|,gi|224005665|ref|XP_002291793.1|	dual function enzyme: UDP-glucose 4-epimerase [Thalassiosira pseudonana CCMP1335]	0.107	7	6.11e-4	5	5	221
+gi|220973545|gb|EED91875.1|,gi|224000902|ref|XP_002290123.1|	RL4e, ribosomal protein 4e 60S large ribosomal subunit [Thalassiosira pseudonana CCMP1335]	0.085	7	5.86e-4	5	5	222
+gi|220973711|gb|EED92041.1|,gi|224001234|ref|XP_002290289.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.341	7	0.002	3	3	223
+gi|220973809|gb|EED92139.1|,gi|224001430|ref|XP_002290387.1|	hypothetical protein THAPSDRAFT_22863 [Thalassiosira pseudonana CCMP1335]	0.056	7	1.87e-4	4	4	224
+gi|220974298|gb|EED92628.1|,gi|224002408|ref|XP_002290876.1|	aconitase hydratase 2 [Thalassiosira pseudonana CCMP1335]	0.054	7	2.54e-4	4	4	225
+gi|220976148|gb|EED94476.1|,gi|223998734|ref|XP_002289040.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.230	7	6.54e-4	5	5	226
+gi|220976583|gb|EED94910.1|,gi|223995587|ref|XP_002287467.1|	2-dehydro-3-deoxyphosphoheptonate aldolase-like protein [Thalassiosira pseudonana CCMP1335]	0.114	7	4.58e-4	3	3	227
+gi|223993235|ref|XP_002286301.1|,gi|220977616|gb|EED95942.1|	receptor protein kinase, partial [Thalassiosira pseudonana CCMP1335]	0.157	7	0.001	6	6	228
+gi|223993443|ref|XP_002286405.1|,gi|220977720|gb|EED96046.1|	precursor of synthetase [Thalassiosira pseudonana CCMP1335]	0.126	7	5.29e-4	5	5	229
+gi|223998614|ref|XP_002288980.1|,gi|220976088|gb|EED94416.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.095	7	3.99e-4	4	4	230
+gi|224000067|ref|XP_002289706.1|,gi|220974914|gb|EED93243.1|	RS9, ribosomal protein 9 [Thalassiosira pseudonana CCMP1335]	0.116	7	0.001	5	5	231
+gi|224000209|ref|XP_002289777.1|,gi|220974985|gb|EED93314.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.089	7	2.22e-4	7	7	232
+gi|224000946|ref|XP_002290145.1|,gi|220973567|gb|EED91897.1|	phosphoenolpyruvate carboxykinase [Thalassiosira pseudonana CCMP1335]	0.112	7	3.59e-4	6	6	233
+gi|589908238|dbj|BAO52743.1|	phosphoenolpyruvate carboxykinase [Thalassiosira pseudonana]	0.108	7	3.47e-4	6	6	233
+gi|224001716|ref|XP_002290530.1|,gi|220973952|gb|EED92282.1|	heat shock protein, HSP70, hsc70 [Thalassiosira pseudonana CCMP1335]	0.144	7	3.55e-4	7	7	234
+gi|224004604|ref|XP_002295953.1|,gi|209585985|gb|ACI64670.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.206	7	8.46e-4	7	7	235
+gi|224008689|ref|XP_002293303.1|,gi|220970703|gb|EED89039.1|	eukaryotic translation initiation factor 6 [Thalassiosira pseudonana CCMP1335]	0.188	7	8.69e-4	3	3	236
+gi|224009568|ref|XP_002293742.1|,gi|220970414|gb|EED88751.1|	hypothetical protein THAPSDRAFT_269759 [Thalassiosira pseudonana CCMP1335]	0.303	7	8.40e-4	4	4	237
+gi|224009610|ref|XP_002293763.1|,gi|220970435|gb|EED88772.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.139	7	8.09e-4	5	5	238
+gi|224011591|ref|XP_002295570.1|,gi|209583601|gb|ACI64287.1|	triose-phosphate isomerase [Thalassiosira pseudonana CCMP1335]	0.058	7	8.03e-4	1	1	239
+gi|224012385|ref|XP_002294845.1|,gi|220969284|gb|EED87625.1|	fucoxanthin chlorophyll a/c protein 4 [Thalassiosira pseudonana CCMP1335]	0.186	7	0.001	3	1	240
+gi|224013150|ref|XP_002295227.1|,gi|220969189|gb|EED87531.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.165	7	9.35e-4	5	5	241
+gi|2873343194|pdb|8ZEH|d,gi|2873343209|pdb|8ZET|d	Chain d, Photosystem I reaction center subunit II	0.288	7	0.002	4	0	242
+gi|209583632|gb|ACI64318.1|,gi|224011653|ref|XP_002295601.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.190	6	5.72e-4	6	6	243
+gi|220968944|gb|EED87288.1|,gi|224013856|ref|XP_002296592.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.296	6	0.002	3	3	244
+gi|220972918|gb|EED91249.1|,gi|224002941|ref|XP_002291142.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.096	6	3.71e-4	2	2	245
+gi|220973173|gb|EED91504.1|,gi|224003451|ref|XP_002291397.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.173	6	8.02e-4	2	2	246
+gi|220975110|gb|EED93439.1|,gi|224000459|ref|XP_002289902.1|	probable dihydroxyacid dehydratase [Thalassiosira pseudonana CCMP1335]	0.050	6	2.97e-4	3	3	247
+gi|223993205|ref|XP_002286286.1|,gi|220977601|gb|EED95927.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.170	6	4.20e-4	6	6	248
+gi|223994401|ref|XP_002286884.1|,gi|220978199|gb|EED96525.1|	light-repressed protein a [Thalassiosira pseudonana CCMP1335]	0.192	6	9.60e-4	3	3	249
+gi|223995701|ref|XP_002287524.1|,gi|220976640|gb|EED94967.1|	hypothetical protein THAPSDRAFT_39696 [Thalassiosira pseudonana CCMP1335]	0.121	6	3.05e-4	5	5	250
+gi|223998266|ref|XP_002288806.1|,gi|220975914|gb|EED94242.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.070	6	2.95e-4	4	4	251
+gi|223999513|ref|XP_002289429.1|,gi|220974637|gb|EED92966.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.351	6	0.002	3	3	252
+gi|224000309|ref|XP_002289827.1|,gi|220975035|gb|EED93364.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.070	6	2.78e-4	3	3	253
+gi|224001646|ref|XP_002290495.1|,gi|220973917|gb|EED92247.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.114	6	5.41e-4	2	2	254
+gi|224001684|ref|XP_002290514.1|,gi|220973936|gb|EED92266.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.195	6	6.74e-4	4	4	255
+gi|224001804|ref|XP_002290574.1|,gi|220973996|gb|EED92326.1|	triosephosphate isomerase/glyceraldehyde-3-phosphate dehydrogenase precursor [Thalassiosira pseudonana CCMP1335]	0.128	6	3.09e-4	5	3	256
+gi|224001858|ref|XP_002290601.1|,gi|220974023|gb|EED92353.1|	malonyl coa-acyl carrier protein transacylase [Thalassiosira pseudonana CCMP1335]	0.101	6	5.34e-4	4	4	257
+gi|224002132|ref|XP_002290738.1|,gi|220974160|gb|EED92490.1|	pyruvate phosphate dikinase [Thalassiosira pseudonana CCMP1335]	0.088	6	2.04e-4	5	5	258
+gi|224005613|ref|XP_002291767.1|,gi|220972286|gb|EED90618.1|	putative v-type h-ATPase subunit [Thalassiosira pseudonana CCMP1335]	0.156	6	8.96e-4	2	2	259
+gi|224006968|ref|XP_002292444.1|,gi|220972086|gb|EED90419.1|	thioredoxin [Thalassiosira pseudonana CCMP1335]	0.314	6	0.002	5	5	260
+gi|224008839|ref|XP_002293378.1|,gi|220970778|gb|EED89114.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.170	6	6.86e-4	2	2	261
+gi|224009323|ref|XP_002293620.1|,gi|220971020|gb|EED89356.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.137	6	4.92e-4	4	2	262
+gi|224009668|ref|XP_002293792.1|,gi|220970464|gb|EED88801.1|	RS6, ribosomal protein 6 [Thalassiosira pseudonana CCMP1335]	0.082	6	7.82e-4	3	3	263
+gi|224010639|ref|XP_002294277.1|,gi|220970294|gb|EED88632.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.161	6	7.12e-4	4	4	264
+gi|224013492|ref|XP_002296410.1|,gi|220968762|gb|EED87106.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.226	6	9.74e-4	2	2	265
+gi|2873343185|pdb|8ZEH|F	Chain F, Tp-Lhcr20	0.129	6	0.001	5	5	266
+gi|2873343195|pdb|8ZEH|e,gi|2873343210|pdb|8ZET|e	Chain e, Photosystem I reaction center subunit IV	0.790	6	0.003	5	0	267
+gi|220967856|gb|EED86229.1|,gi|224015681|ref|XP_002297490.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.075	5	2.78e-4	2	1	268
+gi|220969459|gb|EED87800.1|,gi|224012735|ref|XP_002295020.1|	Hypothetical protein THAPSDRAFT_30659 [Thalassiosira pseudonana CCMP1335],THAPSDRAFT_30659 [Thalassiosira pseudonana CCMP1335]	0.174	5	5.40e-4	3	3	269
+gi|220970707|gb|EED89043.1|,gi|224008697|ref|XP_002293307.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.159	5	0.001	3	3	270
+gi|220970725|gb|EED89061.1|,gi|224008733|ref|XP_002293325.1|	coatomer protein subunit gamma [Thalassiosira pseudonana CCMP1335]	0.050	5	1.74e-4	2	2	271
+gi|220971307|gb|EED89642.1|,gi|224008444|ref|XP_002293181.1|	translation factor elongation factor ef-tu [Thalassiosira pseudonana CCMP1335]	0.093	5	3.68e-4	3	2	272
+gi|220971321|gb|EED89656.1|,gi|224008472|ref|XP_002293195.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.727	5	0.002	5	5	273
+gi|220973409|gb|EED91740.1|,gi|224003923|ref|XP_002291633.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.085	5	5.39e-4	5	5	274
+gi|220973734|gb|EED92064.1|,gi|224001280|ref|XP_002290312.1|	alanine-trna ligase [Thalassiosira pseudonana CCMP1335]	0.050	5	1.64e-4	4	4	275
+gi|220975311|gb|EED93639.1|,gi|223997060|ref|XP_002288203.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.071	5	2.83e-4	4	4	276
+gi|220975449|gb|EED93777.1|,gi|223997336|ref|XP_002288341.1|	phosphoglycerate kinase [Thalassiosira pseudonana CCMP1335]	0.106	5	4.10e-4	3	3	277
+gi|220975923|gb|EED94251.1|,gi|223998284|ref|XP_002288815.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.067	5	5.07e-4	3	3	278
+gi|220977557|gb|EED95883.1|,gi|223993117|ref|XP_002286242.1|	hypothetical protein THAPSDRAFT_260958, partial [Thalassiosira pseudonana CCMP1335]	0.081	5	2.80e-4	4	4	279
+gi|223992539|ref|XP_002285953.1|,gi|220977268|gb|EED95594.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.062	5	1.38e-4	4	4	280
+gi|223993805|ref|XP_002286586.1|,gi|220977901|gb|EED96227.1|	hypothetical protein THAPSDRAFT_997 [Thalassiosira pseudonana CCMP1335]	0.188	5	4.50e-4	5	5	281
+gi|223993843|ref|XP_002286605.1|,gi|220977920|gb|EED96246.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.037	5	1.69e-4	2	2	282
+gi|223995279|ref|XP_002287323.1|,gi|220976439|gb|EED94766.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.223	5	0.001	3	3	283
+gi|223995731|ref|XP_002287539.1|,gi|220976655|gb|EED94982.1|	cyclophilin-type peptidyl-prolyl cis-trans isomerase [Thalassiosira pseudonana CCMP1335]	0.225	5	9.15e-4	5	5	284
+gi|223995745|ref|XP_002287546.1|,gi|220976662|gb|EED94989.1|	phosphate transport protein [Thalassiosira pseudonana CCMP1335]	0.173	5	5.26e-4	3	3	285
+gi|223995987|ref|XP_002287667.1|,gi|220976783|gb|EED95110.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.199	5	4.99e-4	4	4	286
+gi|223997044|ref|XP_002288195.1|,gi|220975303|gb|EED93631.1|	histone H2B [Thalassiosira pseudonana CCMP1335]	0.100	5	0.001	1	1	287
+gi|220974278|gb|EED92608.1|,gi|224002368|ref|XP_002290856.1|,gi|220970505|gb|EED88842.1|,gi|209586203|gb|ACI64888.1|,gi|224004324|ref|XP_002295813.1|,gi|224005040|ref|XP_002296171.1|,gi|209585845|gb|ACI64530.1|,gi|224009750|ref|XP_002293833.1|	histone H2B [Thalassiosira pseudonana CCMP1335],predicted protein [Thalassiosira pseudonana CCMP1335]	0.100	5	0.001	1	1	287
+gi|223997688|ref|XP_002288517.1|,gi|220975625|gb|EED93953.1|	fucoxanthin chl a/c light-harvesting protein [Thalassiosira pseudonana CCMP1335]	0.182	5	7.40e-4	2	2	288
+gi|2873343189|pdb|8ZEH|J	Chain J, Fucoxanthin chl a/c light-harvesting protein	0.213	5	8.65e-4	2	2	288
+gi|223999105|ref|XP_002289225.1|,gi|220974433|gb|EED92762.1|	glutamate dehydrogenase [Thalassiosira pseudonana CCMP1335]	0.075	5	3.14e-4	1	1	289
+gi|223999297|ref|XP_002289321.1|,gi|220974529|gb|EED92858.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.148	5	4.78e-4	3	3	290
+gi|224001514|ref|XP_002290429.1|,gi|220973851|gb|EED92181.1|	RS19, ribosomal protein 19 40S small ribosomal subunit [Thalassiosira pseudonana CCMP1335]	0.128	5	0.001	2	2	291
+gi|224001730|ref|XP_002290537.1|,gi|220973959|gb|EED92289.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.177	5	3.68e-4	4	4	292
+gi|224003395|ref|XP_002291369.1|,gi|220973145|gb|EED91476.1|	glycine decarboxylase h-protein [Thalassiosira pseudonana CCMP1335]	0.608	5	0.001	5	5	293
+gi|224003531|ref|XP_002291437.1|,gi|220973213|gb|EED91544.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.166	5	4.62e-4	3	3	294
+gi|224003851|ref|XP_002291597.1|,gi|292630745|sp|B8C4D7.1|DRE2_THAPS,gi|220973373|gb|EED91704.1|	predicted protein [Thalassiosira pseudonana CCMP1335],RecName: Full=Anamorsin homolog; AltName: Full=Fe-S cluster assembly protein DRE2 homolog	0.160	5	5.76e-4	3	3	295
+gi|224004900|ref|XP_002296101.1|,gi|209586133|gb|ACI64818.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.193	5	9.00e-4	2	2	296
+gi|224008230|ref|XP_002293074.1|,gi|220971200|gb|EED89535.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.201	5	0.001	2	2	297
+gi|224009880|ref|XP_002293898.1|,gi|220970570|gb|EED88907.1|	RS5, ribosomal protein 5 [Thalassiosira pseudonana CCMP1335]	0.211	5	7.26e-4	3	3	298
+gi|224012988|ref|XP_002295146.1|,gi|220969108|gb|EED87450.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.167	5	6.44e-4	5	5	299
+gi|224014134|ref|XP_002296730.1|,gi|220968585|gb|EED86931.1|	26S proteasome beta type 7 subunit [Thalassiosira pseudonana CCMP1335],26S proteasome beta type 7 subunit, partial [Thalassiosira pseudonana CCMP1335]	0.122	5	5.35e-4	5	5	300
+gi|224014925|ref|XP_002297124.1|,gi|220968243|gb|EED86592.1|	THAPSDRAFT_25507 [Thalassiosira pseudonana CCMP1335],Hypothetical protein THAPSDRAFT_25507 [Thalassiosira pseudonana CCMP1335]	0.170	5	2.80e-4	5	5	301
+gi|224015234|ref|XP_002297275.1|,gi|220968069|gb|EED86425.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.088	5	3.68e-4	3	3	302
+gi|2873343202|pdb|8ZEH|r,gi|2873343217|pdb|8ZET|r	Chain r, Tp-PsaR	0.225	5	0.002	4	4	303
+gi|223993351|ref|XP_002286359.1|,gi|220977674|gb|EED96000.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.144	5	0.001	4	4	303
+gi|589908234|dbj|BAO52741.1|	phosphoenolpyruvate carboxylase 1 [Thalassiosira pseudonana]	0.043	5	1.71e-4	5	4	304
+gi|125964509|sp|A0T0W4.1|PSAC_THAPS,gi|220967767|gb|EED86144.1|,gi|2050584496|gb|QWM93037.1|,gi|118411224|ref|YP_874618.1|,gi|116739971|gb|ABK20841.1|,gi|2843533618|pdb|8XLS|C,gi|116739929|gb|ABK20799.1|,gi|2050584538|gb|QWM93079.1|,gi|118411182|ref|YP_874576.1|,gi|224015823|ref|XP_002297559.1|	RecName: Full=Photosystem I iron-sulfur center; AltName: Full=9 kDa polypeptide; AltName: Full=PSI-C; AltName: Full=Photosystem I subunit VII; AltName: Full=PsaC,predicted protein [Thalassiosira pseudonana CCMP1335],subunit VII of photosystem I (Fe-Spolypeptide) (chloroplast) [Thalassiosira pseudonana],photosystem I subunit VII (chloroplast) [Thalassiosira pseudonana],photosystem I iron-sulfur center (chloroplast) [Thalassiosira pseudonana],Chain C, Photosystem I iron-sulfur center	0.383	4	0.002	4	4	305
+gi|2873343205|pdb|8ZEH|c,gi|2873343208|pdb|8ZET|c	Chain c, Photosystem I iron-sulfur center	0.388	4	0.002	4	4	305
+gi|209583455|gb|ACI64141.1|,gi|224011299|ref|XP_002295424.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.030	4	1.47e-4	1	1	306
+gi|209585984|gb|ACI64669.1|,gi|224004602|ref|XP_002295952.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.293	4	6.74e-4	4	4	307
+gi|209586173|gb|ACI64858.1|,gi|224004980|ref|XP_002296141.1|	RL3, ribosomal protein 3, 60S large ribosomal subunit [Thalassiosira pseudonana CCMP1335]	0.078	4	3.21e-4	4	4	308
+gi|209586378|gb|ACI65063.1|,gi|224005390|ref|XP_002296346.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.141	4	6.63e-4	2	2	309
+gi|224004686|ref|XP_002295994.1|,gi|209586026|gb|ACI64711.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.114	4	5.37e-4	2	2	309
+gi|209586392|gb|ACI65077.1|,gi|224005418|ref|XP_002296360.1|	acyl-CoA dehydrogenase-like protein [Thalassiosira pseudonana CCMP1335]	0.032	4	1.57e-4	3	3	310
+gi|220967775|gb|EED86151.1|,gi|116739885|gb|ABK20755.1|,gi|2050584441|gb|QWM92982.1|,gi|118411138|ref|YP_874532.1|,gi|224015726|ref|XP_002297511.1|	mg-protoporphyrin IX chelatase [Thalassiosira pseudonana CCMP1335],magnesium-chelatase subunit I (chloroplast) [Thalassiosira pseudonana],magnesium chelatase subunit of protochlorophyllide reductase (chloroplast) [Thalassiosira pseudonana],Mg-protoporyphyrin IX chelatase (chloroplast) [Thalassiosira pseudonana]	0.122	4	3.59e-4	2	2	311
+gi|220969112|gb|EED87454.1|,gi|224012996|ref|XP_002295150.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.027	4	2.15e-4	4	4	312
+gi|220969871|gb|EED88210.1|,gi|224010838|ref|XP_002294376.1|	oligopeptidase [Thalassiosira pseudonana CCMP1335]	0.078	4	1.77e-4	4	4	313
+gi|220969999|gb|EED88338.1|,gi|224011094|ref|XP_002294504.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.045	4	3.18e-4	1	1	314
+gi|220970120|gb|EED88458.1|,gi|224010291|ref|XP_002294103.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.030	4	1.83e-4	2	2	315
+gi|220970313|gb|EED88651.1|,gi|224010677|ref|XP_002294296.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.147	4	0.001	4	4	316
+gi|220970397|gb|EED88734.1|,gi|224009534|ref|XP_002293725.1|	udp-d-glucose 6-dehydrogenase [Thalassiosira pseudonana CCMP1335]	0.211	4	2.67e-4	4	4	317
+gi|220972099|gb|EED90432.1|,gi|224006994|ref|XP_002292457.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.135	4	4.87e-4	2	2	318
+gi|220972595|gb|EED90927.1|,gi|224006231|ref|XP_002292076.1|	luminal binding protein, partial [Thalassiosira pseudonana CCMP1335]	0.098	4	1.97e-4	4	4	319
+gi|220972664|gb|EED90996.1|,gi|224006369|ref|XP_002292145.1|	sulfolipid biosynthesis protein [Thalassiosira pseudonana CCMP1335]	0.091	4	2.74e-4	4	4	320
+gi|220973244|gb|EED91575.1|,gi|224003593|ref|XP_002291468.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.132	4	4.51e-4	3	3	321
+gi|220974143|gb|EED92473.1|,gi|224002098|ref|XP_002290721.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.089	4	3.43e-4	3	3	322
+gi|220974202|gb|EED92532.1|,gi|224002216|ref|XP_002290780.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.060	4	2.61e-4	1	1	323
+gi|220974283|gb|EED92613.1|,gi|224002378|ref|XP_002290861.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.028	4	8.91e-5	2	2	324
+gi|220974777|gb|EED93106.1|,gi|223999793|ref|XP_002289569.1|	hypothetical protein THAPSDRAFT_26224 [Thalassiosira pseudonana CCMP1335]	0.109	4	4.46e-4	3	3	325
+gi|220974845|gb|EED93174.1|,gi|223999929|ref|XP_002289637.1|	hypothetical protein THAPSDRAFT_262059, partial [Thalassiosira pseudonana CCMP1335]	0.100	4	2.94e-4	4	4	326
+gi|220975845|gb|EED94173.1|,gi|223998128|ref|XP_002288737.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.043	4	2.10e-4	1	1	327
+gi|220976132|gb|EED94460.1|,gi|223998702|ref|XP_002289024.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.155	4	6.12e-4	3	3	328
+gi|220976371|gb|EED94698.1|,gi|223995143|ref|XP_002287255.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.133	4	3.18e-4	3	3	329
+gi|220976574|gb|EED94901.1|,gi|223995569|ref|XP_002287458.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.105	4	4.02e-4	3	3	330
+gi|220976792|gb|EED95119.1|,gi|223996005|ref|XP_002287676.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.084	4	1.98e-4	3	3	331
+gi|220977577|gb|EED95903.1|,gi|223993157|ref|XP_002286262.1|	proteasome subunit alpha type 7-1 [Thalassiosira pseudonana CCMP1335]	0.077	4	5.11e-4	3	3	332
+gi|223992765|ref|XP_002286066.1|,gi|220977381|gb|EED95707.1|	chelatase of mg-protoporphyrin IX chelatase [Thalassiosira pseudonana CCMP1335]	0.025	4	9.45e-5	2	2	333
+gi|223994031|ref|XP_002286699.1|,gi|220978014|gb|EED96340.1|	hypothetical protein THAPSDRAFT_260862, partial [Thalassiosira pseudonana CCMP1335]	0.178	4	7.49e-4	3	3	334
+gi|223994089|ref|XP_002286728.1|,gi|220978043|gb|EED96369.1|	aldose-1-epimerase, partial [Thalassiosira pseudonana CCMP1335]	0.129	4	4.54e-4	2	2	335
+gi|223994655|ref|XP_002287011.1|,gi|220978326|gb|EED96652.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.131	4	4.74e-4	2	2	336
+gi|223994789|ref|XP_002287078.1|,gi|220978393|gb|EED96719.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.251	4	6.77e-4	4	4	337
+gi|223995245|ref|XP_002287306.1|,gi|220976422|gb|EED94749.1|	n-acetyl-gamma-glutamyl-phosphate reductase, urea cycle [Thalassiosira pseudonana CCMP1335]	0.081	4	3.55e-4	3	3	338
+gi|223995657|ref|XP_002287502.1|,gi|220976618|gb|EED94945.1|	hypothetical protein THAPSDRAFT_39666 [Thalassiosira pseudonana CCMP1335]	0.061	4	3.69e-4	2	2	339
+gi|223996485|ref|XP_002287916.1|,gi|220977032|gb|EED95359.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.125	4	6.88e-4	1	1	340
+gi|223996555|ref|XP_002287951.1|,gi|220977067|gb|EED95394.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.088	4	1.85e-4	3	3	341
+gi|223997116|ref|XP_002288231.1|,gi|220975339|gb|EED93667.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.030	4	2.09e-4	1	0	342
+gi|223997212|ref|XP_002288279.1|,gi|220975387|gb|EED93715.1|	l-lactate dehydrogenase [Thalassiosira pseudonana CCMP1335]	0.037	4	2.94e-4	1	1	343
+gi|223997214|ref|XP_002288280.1|,gi|220975388|gb|EED93716.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.055	4	3.17e-4	3	3	344
+gi|223997268|ref|XP_002288307.1|,gi|220975415|gb|EED93743.1|	mitochondrial manganese superoxide dismutase, partial [Thalassiosira pseudonana CCMP1335]	0.053	4	5.21e-4	2	2	345
+gi|223998678|ref|XP_002289012.1|,gi|220976120|gb|EED94448.1|	phosphoenolpyruvate carboxylase [Thalassiosira pseudonana CCMP1335]	0.062	4	1.43e-4	3	3	346
+gi|589908236|dbj|BAO52742.1|	phosphoenolpyruvate carboxylase 2 [Thalassiosira pseudonana]	0.053	4	1.22e-4	3	3	346
+gi|223998969|ref|XP_002289157.1|,gi|220974365|gb|EED92694.1|	coatomer protein subunit beta2 [Thalassiosira pseudonana CCMP1335]	0.072	4	1.21e-4	3	3	347
+gi|223999571|ref|XP_002289458.1|,gi|220974666|gb|EED92995.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.091	4	4.59e-4	1	1	348
+gi|223999739|ref|XP_002289542.1|,gi|220974750|gb|EED93079.1|	fucoxanthin chlorophyll a/c light-harvesting protein, lhcr type [Thalassiosira pseudonana CCMP1335]	0.069	4	6.24e-4	3	3	349
+gi|2873343192|pdb|8ZEH|M	Chain M, Fucoxanthin chlorophyll a/c light-harvesting protein, lhcr type	0.082	4	7.41e-4	3	3	349
+gi|224000015|ref|XP_002289680.1|,gi|220974888|gb|EED93217.1|	cold-shock DNA-binding domain-containing protein [Thalassiosira pseudonana CCMP1335]	0.257	4	9.31e-4	3	3	350
+gi|224000387|ref|XP_002289866.1|,gi|220975074|gb|EED93403.1|	alpha enolase [Thalassiosira pseudonana CCMP1335]	0.141	4	2.88e-4	3	2	351
+gi|224000489|ref|XP_002289917.1|,gi|220975125|gb|EED93454.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.083	4	3.91e-4	3	3	352
+gi|224000768|ref|XP_002290056.1|,gi|220973478|gb|EED91808.1|	3-oxoacyl-synthase [Thalassiosira pseudonana CCMP1335]	0.065	4	2.72e-4	3	3	353
+gi|224002709|ref|XP_002291026.1|,gi|220972802|gb|EED91133.1|	20S proteasome subunit alpha type 1 [Thalassiosira pseudonana CCMP1335]	0.055	4	4.66e-4	3	3	354
+gi|224004214|ref|XP_002295758.1|,gi|209585790|gb|ACI64475.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.048	4	2.41e-4	1	1	355
+gi|224004708|ref|XP_002296005.1|,gi|209586037|gb|ACI64722.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.050	4	2.44e-4	2	2	356
+gi|224005062|ref|XP_002296182.1|,gi|209586214|gb|ACI64899.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.053	4	4.76e-4	2	2	357
+gi|224006209|ref|XP_002292065.1|,gi|220972584|gb|EED90916.1|	probable naphthoate synthase [Thalassiosira pseudonana CCMP1335]	0.105	4	3.92e-4	4	4	358
+gi|224007094|ref|XP_002292507.1|,gi|220972149|gb|EED90482.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.131	4	5.73e-4	3	3	359
+gi|224007701|ref|XP_002292810.1|,gi|220971672|gb|EED90006.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.400	4	0.001	3	3	360
+gi|224009944|ref|XP_002293930.1|,gi|220970602|gb|EED88939.1|	cystathionine beta-lyase [Thalassiosira pseudonana CCMP1335]	0.068	4	3.32e-4	2	2	361
+gi|224010752|ref|XP_002294333.1|,gi|220969828|gb|EED88167.1|	glutamine fructose 6 phosphate transaminase [Thalassiosira pseudonana CCMP1335]	0.052	4	1.80e-4	3	3	362
+gi|224010836|ref|XP_002294375.1|,gi|220969870|gb|EED88209.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.038	4	8.04e-5	4	4	363
+gi|224011211|ref|XP_002295380.1|,gi|209583411|gb|ACI64097.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.204	4	5.86e-4	3	3	364
+gi|224012523|ref|XP_002294914.1|,gi|220969353|gb|EED87694.1|	polyadenlyte binding protein, partial [Thalassiosira pseudonana CCMP1335]	0.041	4	2.07e-4	1	1	365
+gi|224013082|ref|XP_002295193.1|,gi|220969155|gb|EED87497.1|	n-acetylornithine aminotransferase [Thalassiosira pseudonana CCMP1335]	0.073	4	2.64e-4	2	2	366
+gi|224014994|ref|XP_002297158.1|,gi|220968133|gb|EED86483.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.056	4	3.38e-4	2	2	367
+gi|2873343184|pdb|8ZEH|E,gi|2873343221|pdb|8ZET|E	Chain E, Tp-RedCAP	0.070	4	6.85e-4	2	2	368
+gi|2843533628|pdb|8XLS|1,gi|2694527766|gb|WWT48828.1|	Chain 1, Fucoxanthin chlorophyll a/c-binding protein RedCAP,early light induced protein, partial [Thalassiosira pseudonana]	0.059	4	5.73e-4	2	2	368
+WP_011043938.1,AAZ27758.1	phosphohistidine phosphatase SixA [Colwellia psychrerythraea],phosphohistidine phosphatase SixA [Colwellia psychrerythraea 34H]	0.145	3	5.72e-4	3	3	369
+gi|118411161|ref|YP_874555.1|,gi|224015716|ref|XP_002297506.1|,gi|220967770|gb|EED86146.1|,gi|125991260|sp|A0T0U3.1|YCF4_THAPS,gi|116739908|gb|ABK20778.1|,gi|2050584418|gb|QWM92959.1|	photosystem I assembly protein Ycf4 (chloroplast) [Thalassiosira pseudonana],predicted protein [Thalassiosira pseudonana CCMP1335],RecName: Full=Photosystem I assembly protein Ycf4,photosystem I assembly protein ycf4 (chloroplast) [Thalassiosira pseudonana],hypothetical protein RF4 (chloroplast) [Thalassiosira pseudonana]	0.138	3	5.25e-4	2	2	370
+gi|125987756|sp|A0T0Y9.1|RR5_THAPS,gi|118411207|ref|YP_874601.1|,gi|2050584513|gb|QWM93054.1|,gi|116739954|gb|ABK20824.1|	RecName: Full=Small ribosomal subunit protein uS5c; AltName: Full=30S ribosomal protein S5, chloroplastic,ribosomal protein S5 (chloroplast) [Thalassiosira pseudonana],30S ribosomal protein S5 (chloroplast) [Thalassiosira pseudonana]	0.179	3	5.31e-4	3	3	371
+gi|2050584527|gb|QWM93068.1|,gi|116739940|gb|ABK20810.1|,gi|118411193|ref|YP_874587.1|,gi|125987575|sp|A0T0X5.1|RK2_THAPS	ribosomal protein L2 (chloroplast) [Thalassiosira pseudonana],50S ribosomal protein L2 (chloroplast) [Thalassiosira pseudonana],RecName: Full=Large ribosomal subunit protein uL2c; AltName: Full=50S ribosomal protein L2, chloroplastic	0.175	3	3.45e-4	2	2	372
+gi|209586218|gb|ACI64903.1|,gi|224005070|ref|XP_002296186.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.134	3	3.85e-4	1	1	373
+gi|220967963|gb|EED86326.1|,gi|224015417|ref|XP_002297363.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.178	3	9.41e-4	1	1	374
+gi|220967993|gb|EED86354.1|,gi|224015377|ref|XP_002297344.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.043	3	1.29e-4	2	2	375
+gi|220968081|gb|EED86437.1|,gi|224015258|ref|XP_002297287.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.059	3	2.94e-4	1	1	376
+gi|220968219|gb|EED86568.1|,gi|224014877|ref|XP_002297100.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.067	3	1.87e-4	3	3	377
+gi|220968629|gb|EED86975.1|,gi|224014222|ref|XP_002296774.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.187	3	7.72e-4	3	3	378
+gi|220968841|gb|EED87185.1|,gi|224013650|ref|XP_002296489.1|	precursor of hydrogenase lipoamide dehydrogenase, partial [Thalassiosira pseudonana CCMP1335]	0.087	3	2.02e-4	2	2	379
+gi|220970584|gb|EED88921.1|,gi|224009908|ref|XP_002293912.1|	aspartate-ammonia ligase [Thalassiosira pseudonana CCMP1335]	0.053	3	2.67e-4	3	3	380
+gi|220970763|gb|EED89099.1|,gi|224008809|ref|XP_002293363.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.084	3	2.49e-4	1	1	381
+gi|220971301|gb|EED89636.1|,gi|224008432|ref|XP_002293175.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.106	3	6.69e-4	2	2	382
+gi|220971585|gb|EED89919.1|,gi|224007527|ref|XP_002292723.1|	hypothetical protein THAPSDRAFT_29506 [Thalassiosira pseudonana CCMP1335]	0.200	3	9.05e-4	2	2	383
+gi|220971624|gb|EED89958.1|,gi|224007605|ref|XP_002292762.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.146	3	4.48e-4	2	2	384
+gi|220971788|gb|EED90122.1|,gi|224007933|ref|XP_002292926.1|	hypothetical protein THAPSDRAFT_24250 [Thalassiosira pseudonana CCMP1335]	0.032	3	1.33e-4	1	1	385
+gi|220971797|gb|EED90131.1|,gi|224007951|ref|XP_002292935.1|	synaptobrevin, partial [Thalassiosira pseudonana CCMP1335]	0.138	3	5.97e-4	1	1	386
+gi|220973546|gb|EED91876.1|,gi|224000904|ref|XP_002290124.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.101	3	2.18e-4	2	2	387
+gi|220974387|gb|EED92716.1|,gi|223999013|ref|XP_002289179.1|	casein kinase-like protein [Thalassiosira pseudonana CCMP1335]	0.067	3	2.90e-4	2	2	388
+gi|220974560|gb|EED92889.1|,gi|223999359|ref|XP_002289352.1|	cell division cycle protein 48 [Thalassiosira pseudonana CCMP1335]	0.068	3	1.40e-4	3	3	389
+gi|220974636|gb|EED92965.1|,gi|223999511|ref|XP_002289428.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.346	3	0.001	1	1	390
+gi|220974844|gb|EED93173.1|,gi|223999927|ref|XP_002289636.1|	phosphoglucomutase [Thalassiosira pseudonana CCMP1335]	0.070	3	1.71e-4	2	2	391
+gi|220975807|gb|EED94135.1|,gi|223998052|ref|XP_002288699.1|	glycine decarboxylase p-protein [Thalassiosira pseudonana CCMP1335]	0.040	3	9.76e-5	2	2	392
+gi|220976302|gb|EED94629.1|,gi|223995005|ref|XP_002287186.1|	hypothetical protein THAPSDRAFT_21161 [Thalassiosira pseudonana CCMP1335]	0.030	3	8.50e-5	3	3	393
+gi|220976677|gb|EED95004.1|,gi|223995775|ref|XP_002287561.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.044	3	2.10e-4	3	3	394
+gi|220976720|gb|EED95047.1|,gi|223995861|ref|XP_002287604.1|	carbamate kinase [Thalassiosira pseudonana CCMP1335]	0.062	3	2.57e-4	3	3	395
+gi|220977111|gb|EED95438.1|,gi|223996643|ref|XP_002287995.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.049	3	2.10e-4	2	2	396
+gi|220978227|gb|EED96553.1|,gi|223994457|ref|XP_002286912.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.057	3	1.93e-4	3	3	397
+gi|223993513|ref|XP_002286440.1|,gi|220977755|gb|EED96081.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.037	3	1.46e-4	2	2	398
+gi|223995037|ref|XP_002287202.1|,gi|220976318|gb|EED94645.1|	dihydrolipoamide s-acetyltransferase [Thalassiosira pseudonana CCMP1335]	0.140	3	2.90e-4	2	2	399
+gi|223995153|ref|XP_002287260.1|,gi|220976376|gb|EED94703.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.084	3	1.43e-4	3	3	400
+gi|223995577|ref|XP_002287462.1|,gi|220976578|gb|EED94905.1|	thioredoxin f [Thalassiosira pseudonana CCMP1335]	0.139	3	6.60e-4	2	2	401
+gi|223995669|ref|XP_002287508.1|,gi|220976624|gb|EED94951.1|	atp-dependent RNA DEAD/DEAH box helicase [Thalassiosira pseudonana CCMP1335]	0.060	3	2.28e-4	2	2	402
+gi|223996365|ref|XP_002287856.1|,gi|220976972|gb|EED95299.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.051	3	2.87e-4	2	2	403
+gi|223997516|ref|XP_002288431.1|,gi|220975539|gb|EED93867.1|	aspartate-semialdehyde dehydrogenase [Thalassiosira pseudonana CCMP1335]	0.139	3	2.75e-4	2	2	404
+gi|223997680|ref|XP_002288513.1|,gi|220975621|gb|EED93949.1|	ubiquitin activating enzyme 1 [Thalassiosira pseudonana CCMP1335]	0.030	3	9.36e-5	2	2	405
+gi|223997764|ref|XP_002288555.1|,gi|220975663|gb|EED93991.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.043	3	2.57e-4	1	1	406
+gi|224009464|ref|XP_002293690.1|,gi|220970362|gb|EED88699.1|	eukaryotic translation initiation factor 4A [Thalassiosira pseudonana CCMP1335]	0.043	3	2.57e-4	1	1	406
+gi|223998258|ref|XP_002288802.1|,gi|220975910|gb|EED94238.1|	nitrate transporter [Thalassiosira pseudonana CCMP1335]	0.027	3	1.97e-4	2	2	407
+gi|223998328|ref|XP_002288837.1|,gi|220975945|gb|EED94273.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.093	3	3.86e-4	2	2	408
+gi|223999185|ref|XP_002289265.1|,gi|220974473|gb|EED92802.1|	nitrite reductase-ferredoxin dependent, partial [Thalassiosira pseudonana CCMP1335]	0.084	3	1.74e-4	3	3	409
+gi|223999607|ref|XP_002289476.1|,gi|220974684|gb|EED93013.1|	coatomer protein subunit beta 1 [Thalassiosira pseudonana CCMP1335]	0.045	3	1.12e-4	2	2	410
+gi|224000037|ref|XP_002289691.1|,gi|220974899|gb|EED93228.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.109	3	2.07e-4	2	2	411
+gi|224000295|ref|XP_002289820.1|,gi|220975028|gb|EED93357.1|	6-phosphogluconate dehydrogenase [Thalassiosira pseudonana CCMP1335]	0.073	3	1.94e-4	3	3	412
+gi|224000463|ref|XP_002289904.1|,gi|220975112|gb|EED93441.1|	alanine aminotransferase [Thalassiosira pseudonana CCMP1335]	0.126	3	2.14e-4	3	3	413
+gi|224001160|ref|XP_002290252.1|,gi|220973674|gb|EED92004.1|	replication protein A2, partial [Thalassiosira pseudonana CCMP1335]	0.135	3	3.30e-4	2	2	414
+gi|224001232|ref|XP_002290288.1|,gi|220973710|gb|EED92040.1|	glyceraldehyde-3-phosphate dehydrogenase [Thalassiosira pseudonana CCMP1335]	0.142	3	2.76e-4	3	3	415
+gi|224001660|ref|XP_002290502.1|,gi|220973924|gb|EED92254.1|	gdp-d-mannose 4,6-dehydratase [Thalassiosira pseudonana CCMP1335]	0.111	3	2.63e-4	2	2	416
+gi|224001930|ref|XP_002290637.1|,gi|220974059|gb|EED92389.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.065	3	2.29e-4	3	3	417
+gi|224002386|ref|XP_002290865.1|,gi|220974287|gb|EED92617.1|	hypothetical protein THAPSDRAFT_268958 [Thalassiosira pseudonana CCMP1335]	0.135	3	2.25e-4	2	2	418
+gi|224002473|ref|XP_002290908.1|,gi|220972684|gb|EED91015.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.007	3	2.37e-5	1	1	419
+gi|224003407|ref|XP_002291375.1|,gi|220973151|gb|EED91482.1|	GTP binding protein [Thalassiosira pseudonana CCMP1335]	0.157	3	2.62e-4	3	3	420
+gi|224004454|ref|XP_002295878.1|,gi|209585910|gb|ACI64595.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.026	3	1.16e-4	1	1	421
+gi|224005058|ref|XP_002296180.1|,gi|209586212|gb|ACI64897.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.046	3	1.29e-4	3	3	422
+gi|224005697|ref|XP_002291809.1|,gi|220972328|gb|EED90660.1|	NADH dehydrogenase [Thalassiosira pseudonana CCMP1335]	0.057	3	3.64e-4	1	1	423
+gi|224006297|ref|XP_002292109.1|,gi|220972628|gb|EED90960.1|	lysyl-trna synthetase [Thalassiosira pseudonana CCMP1335]	0.030	3	1.56e-4	2	2	424
+gi|224006530|ref|XP_002292225.1|,gi|220971867|gb|EED90200.1|	glycine decarboxylase t-protein [Thalassiosira pseudonana CCMP1335]	0.100	3	2.27e-4	3	3	425
+gi|224007497|ref|XP_002292708.1|,gi|220971570|gb|EED89904.1|	hypothetical protein THAPSDRAFT_8524 [Thalassiosira pseudonana CCMP1335]	0.048	3	8.87e-5	3	3	426
+gi|224007537|ref|XP_002292728.1|,gi|220971590|gb|EED89924.1|	heat shock protein, partial [Thalassiosira pseudonana CCMP1335]	0.029	3	1.09e-4	2	2	427
+gi|224007929|ref|XP_002292924.1|,gi|220971786|gb|EED90120.1|	isoleucine-trna synthetase, partial [Thalassiosira pseudonana CCMP1335]	0.051	3	9.00e-5	2	2	428
+gi|224008404|ref|XP_002293161.1|,gi|220971287|gb|EED89622.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.110	3	2.33e-4	2	2	429
+gi|224009075|ref|XP_002293496.1|,gi|220970896|gb|EED89232.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.119	3	2.70e-4	2	2	430
+gi|224009243|ref|XP_002293580.1|,gi|220970980|gb|EED89316.1|	hypothetical protein THAPSDRAFT_29850 [Thalassiosira pseudonana CCMP1335]	0.088	3	1.90e-4	2	2	431
+gi|224009582|ref|XP_002293749.1|,gi|220970421|gb|EED88758.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.077	3	3.64e-4	2	2	432
+gi|224009612|ref|XP_002293764.1|,gi|220970436|gb|EED88773.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.076	3	2.11e-4	3	3	433
+gi|224013710|ref|XP_002296519.1|,gi|220968871|gb|EED87215.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.062	3	1.56e-4	2	2	434
+gi|224014248|ref|XP_002296787.1|,gi|220968642|gb|EED86988.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.064	3	2.03e-4	2	1	435
+gi|224014437|ref|XP_002296881.1|,gi|220968518|gb|EED86865.1|	hypothetical protein THAPSDRAFT_42612 [Thalassiosira pseudonana CCMP1335]	0.054	3	2.84e-4	2	2	436
+gi|224015399|ref|XP_002297354.1|,gi|220967954|gb|EED86317.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.102	3	2.26e-4	2	2	437
+gi|75905845|gb|ABA29338.1|	copper expressed protein 15 [Thalassiosira pseudonana]	0.177	3	3.91e-4	2	2	437
+gi|2873343190|pdb|8ZEH|K	Chain K, Fucoxanthin chlorophyll a/c light-harvesting protein	0.227	3	5.40e-4	3	0	438
+gi|3069680535|gb|YAV07916.1|,gi|223997332|ref|XP_002288339.1|,gi|220975447|gb|EED93775.1|	Sequence 46 from patent US 12123042 B2,geranylgeranyl pyrophosphate synthetase [Thalassiosira pseudonana CCMP1335]	0.174	3	2.80e-4	3	3	439
+gi|817091490|gb|AKF18349.1|	PSI P700 apoprotein A2, partial (chloroplast) [Thalassiosira pseudonana]	0.042	3	1.48e-4	2	2	440
+gi|2050584482|gb|QWM93023.1|,gi|118411097|ref|YP_874491.1|,gi|220967818|gb|EED86194.1|,gi|125959480|sp|A0T0M9.1|PSAB_THAPS,gi|224015812|ref|XP_002297554.1|,gi|116739844|gb|ABK20714.1|,gi|2843533617|pdb|8XLS|B	P700 apoprotein A2 of photosystem I (chloroplast) [Thalassiosira pseudonana],photosystem I P700 chlorophyll a apoprotein A2 (chloroplast) [Thalassiosira pseudonana],predicted protein [Thalassiosira pseudonana CCMP1335],RecName: Full=Photosystem I P700 chlorophyll a apoprotein A2; AltName: Full=PSI-B; AltName: Full=PsaB,photosystem I p700 chlorophyll A apoprotein B (chloroplast) [Thalassiosira pseudonana],Chain B, Photosystem I P700 chlorophyll a apoprotein A2	0.037	3	1.30e-4	2	2	440
+gi|2873343204|pdb|8ZEH|b,gi|2873343207|pdb|8ZET|b	Chain b, Photosystem I P700 chlorophyll a apoprotein A2	0.037	3	1.30e-4	2	2	440
+AAZ27295.1,sp|Q486F9.1|DNAK1_COLP3,WP_011042150.1	chaperone protein DnaK [Colwellia psychrerythraea 34H],RecName: Full=Chaperone protein DnaK 1; AltName: Full=HSP70 1; AltName: Full=Heat shock 70 kDa protein 1; AltName: Full=Heat shock protein 70 1,molecular chaperone DnaK [Colwellia psychrerythraea]	0.025	2	1.00e-4	2	2	441
+WP_011042659.1,AAZ27366.1	S1 family peptidase [Colwellia psychrerythraea],serine protease, trypsin family [Colwellia psychrerythraea 34H]	0.012	2	9.60e-5	1	1	442
+WP_011044570.1,sp|Q47XI6.1|DNAK2_COLP3,AAZ27124.1	MULTISPECIES: molecular chaperone DnaK [Colwellia],RecName: Full=Chaperone protein DnaK 2; AltName: Full=HSP70 2; AltName: Full=Heat shock 70 kDa protein 2; AltName: Full=Heat shock protein 70 2,chaperone protein DnaK [Colwellia psychrerythraea 34H]	0.025	2	9.93e-5	1	0	443
+WP_011045748.1,AAZ24470.1	XrtA/PEP-CTERM system-associated ATPase [Colwellia psychrerythraea],putative general secretion pathway protein A [Colwellia psychrerythraea 34H]	0.020	2	1.83e-4	2	2	444
+gi|118411135|ref|YP_874529.1|,gi|125987726|sp|A0T0R7.1|ATPE_THAPS,gi|116739882|gb|ABK20752.1|,gi|2050584444|gb|QWM92985.1|	ATP synthase CF1 epsilon subunit (chloroplast) [Thalassiosira pseudonana],RecName: Full=ATP synthase epsilon chain, chloroplastic; AltName: Full=ATP synthase F1 sector epsilon subunit; AltName: Full=F-ATPase epsilon subunit,ATP synthase CF1 epsilon chain (chloroplast) [Thalassiosira pseudonana],CF1 epsilon subunit of ATP synthase (chloroplast) [Thalassiosira pseudonana]	0.120	2	4.76e-4	2	2	445
+gi|125964920|sp|A0T0U2.1|PSBE_THAPS,gi|2050584419|gb|QWM92960.1|,gi|118411160|ref|YP_874554.1|,gi|2599405799|pdb|8IWH|e,gi|2599405798|pdb|8IWH|E,gi|224015718|ref|XP_002297507.1|,gi|220967771|gb|EED86147.1|,gi|116739907|gb|ABK20777.1|	RecName: Full=Cytochrome b559 subunit alpha; AltName: Full=PSII reaction center subunit V,cytochrome b559 alpha subunit of photosystem II (chloroplast) [Thalassiosira pseudonana],photosystem II protein V (chloroplast) [Thalassiosira pseudonana],Chain e, Cytochrome b559 subunit alpha,Chain E, Cytochrome b559 subunit alpha,predicted protein [Thalassiosira pseudonana CCMP1335],cytochrome b559 alpha chain (chloroplast) [Thalassiosira pseudonana]	0.143	2	7.54e-4	1	1	446
+gi|2050584528|gb|QWM93069.1|	ribosomal protein L23 (chloroplast) [Thalassiosira pseudonana]	0.141	2	6.40e-4	1	1	447
+gi|116739939|gb|ABK20809.1|,gi|118411192|ref|YP_874586.1|,gi|125987566|sp|A0T0X4.1|RK23_THAPS	50S ribosomal protein L23 (chloroplast) [Thalassiosira pseudonana],ribosomal protein L23 (chloroplast) [Thalassiosira pseudonana],RecName: Full=Large ribosomal subunit protein uL23c; AltName: Full=50S ribosomal protein L23, chloroplastic	0.143	2	6.46e-4	1	1	447
+gi|220967836|gb|EED86209.1|,gi|224015641|ref|XP_002297470.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.027	2	1.07e-4	1	1	448
+gi|220967965|gb|EED86328.1|,gi|224015421|ref|XP_002297365.1|	hypothetical protein THAPSDRAFT_bd1658 [Thalassiosira pseudonana CCMP1335]	0.029	2	1.15e-4	1	1	449
+gi|220968192|gb|EED86542.1|,gi|224015112|ref|XP_002297217.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.020	2	6.86e-5	2	2	450
+gi|220968544|gb|EED86890.1|,gi|224014052|ref|XP_002296689.1|	phosphoglycerate kinase [Thalassiosira pseudonana CCMP1335]	0.041	2	1.45e-4	2	2	451
+gi|220968734|gb|EED87078.1|,gi|224013436|ref|XP_002296382.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.058	2	1.68e-4	1	1	452
+gi|220969014|gb|EED87357.1|,gi|224013279|ref|XP_002295291.1|	hypothetical protein THAPSDRAFT_264946, partial [Thalassiosira pseudonana CCMP1335]	0.099	2	1.84e-4	2	2	453
+gi|220969042|gb|EED87385.1|,gi|224013335|ref|XP_002295319.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.027	2	1.21e-4	2	2	454
+gi|220969069|gb|EED87412.1|,gi|224013389|ref|XP_002295346.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.092	2	1.19e-4	2	2	455
+gi|220969175|gb|EED87517.1|,gi|224013122|ref|XP_002295213.1|	importin alpha 1 subunit-like protein [Thalassiosira pseudonana CCMP1335]	0.037	2	1.13e-4	1	1	456
+gi|220969428|gb|EED87769.1|,gi|224012673|ref|XP_002294989.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.063	2	2.47e-4	1	1	457
+gi|220969534|gb|EED87875.1|,gi|224012885|ref|XP_002295095.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.104	2	1.94e-4	2	2	458
+gi|220969726|gb|EED88066.1|,gi|224012106|ref|XP_002294706.1|	tryptophane synthase [Thalassiosira pseudonana CCMP1335]	0.050	2	9.26e-5	2	2	459
+gi|220969819|gb|EED88158.1|,gi|224010734|ref|XP_002294324.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.010	2	7.65e-5	1	1	460
+gi|220969916|gb|EED88255.1|,gi|224010928|ref|XP_002294421.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.199	2	4.49e-4	1	1	461
+gi|220970059|gb|EED88397.1|,gi|224010169|ref|XP_002294042.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.042	2	1.79e-4	1	1	462
+gi|220970645|gb|EED88982.1|,gi|224010030|ref|XP_002293973.1|	26S proteasome regulatory ATPase subunit, partial [Thalassiosira pseudonana CCMP1335]	0.067	2	1.47e-4	1	1	463
+gi|220970944|gb|EED89280.1|,gi|224009171|ref|XP_002293544.1|	RS8, ribosomal protein 8 [Thalassiosira pseudonana CCMP1335]	0.070	2	3.17e-4	2	2	464
+gi|220971107|gb|EED89442.1|,gi|224008044|ref|XP_002292981.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.032	2	8.33e-5	1	1	465
+gi|220971112|gb|EED89447.1|,gi|224008054|ref|XP_002292986.1|	porphobilinogen deaminase [Thalassiosira pseudonana CCMP1335]	0.106	2	1.92e-4	2	2	466
+gi|220971645|gb|EED89979.1|,gi|224007647|ref|XP_002292783.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.091	2	2.40e-4	1	1	467
+gi|220971902|gb|EED90235.1|,gi|224006600|ref|XP_002292260.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.128	2	2.79e-4	2	2	468
+gi|220971958|gb|EED90291.1|,gi|224006712|ref|XP_002292316.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.024	2	8.15e-5	1	1	469
+gi|220973177|gb|EED91508.1|,gi|224003459|ref|XP_002291401.1|	t-complex protein 1 ETA subunit, partial [Thalassiosira pseudonana CCMP1335]	0.068	2	1.19e-4	2	2	470
+gi|220973385|gb|EED91716.1|,gi|224003875|ref|XP_002291609.1|	calreticulin-like protein, partial [Thalassiosira pseudonana CCMP1335]	0.059	2	1.68e-4	1	1	471
+gi|220973522|gb|EED91852.1|,gi|224000856|ref|XP_002290100.1|	RS23, ribosomal protein 23 40S small ribosomal subunit [Thalassiosira pseudonana CCMP1335]	0.140	2	4.43e-4	2	2	472
+gi|220973737|gb|EED92067.1|,gi|224001286|ref|XP_002290315.1|	ypt1-like rab-type small G protein [Thalassiosira pseudonana CCMP1335]	0.085	2	3.15e-4	1	1	473
+gi|220973938|gb|EED92268.1|,gi|224001688|ref|XP_002290516.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.072	2	1.42e-4	2	2	474
+gi|220974118|gb|EED92448.1|,gi|224002048|ref|XP_002290696.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.068	2	1.23e-4	2	2	475
+gi|220974251|gb|EED92581.1|,gi|224002314|ref|XP_002290829.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.129	2	4.09e-4	1	1	476
+gi|220974347|gb|EED92676.1|,gi|223998933|ref|XP_002289139.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.011	2	4.25e-5	1	1	477
+gi|220974484|gb|EED92813.1|,gi|223999207|ref|XP_002289276.1|	poly-a binding protein [Thalassiosira pseudonana CCMP1335]	0.207	2	4.52e-4	1	1	478
+gi|220974619|gb|EED92948.1|,gi|223999477|ref|XP_002289411.1|	RS21, ribosomal protein 21 40S small ribosomal subunit [Thalassiosira pseudonana CCMP1335]	0.179	2	7.54e-4	1	1	479
+gi|220974654|gb|EED92983.1|,gi|223999547|ref|XP_002289446.1|	precursor of synthetase [Thalassiosira pseudonana CCMP1335]	0.114	2	2.12e-4	2	2	480
+gi|220974717|gb|EED93046.1|,gi|223999673|ref|XP_002289509.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.029	2	1.55e-4	1	1	481
+gi|220974722|gb|EED93051.1|,gi|223999683|ref|XP_002289514.1|	20S proteasome subunit PAC1 [Thalassiosira pseudonana CCMP1335]	0.104	2	2.35e-4	2	2	482
+gi|220974746|gb|EED93075.1|,gi|223999731|ref|XP_002289538.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.050	2	1.03e-4	2	2	483
+gi|220974843|gb|EED93172.1|,gi|223999925|ref|XP_002289635.1|	RS20, ribosomal protein 20 40S small ribosomal subunit, partial [Thalassiosira pseudonana CCMP1335],RS20, ribosomal protein 20 40S small ribosomal subunit [Thalassiosira pseudonana CCMP1335]	0.097	2	5.11e-4	2	2	484
+gi|220974968|gb|EED93297.1|,gi|224000175|ref|XP_002289760.1|	phosphoglycerate mutase [Thalassiosira pseudonana CCMP1335]	0.069	2	2.18e-4	2	2	485
+gi|220975317|gb|EED93645.1|,gi|223997072|ref|XP_002288209.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.272	2	7.82e-4	1	1	486
+gi|220975340|gb|EED93668.1|,gi|223997118|ref|XP_002288232.1|	fucoxanthin chlorophyll a/c light-harvesting protein, major type [Thalassiosira pseudonana CCMP1335]	0.082	2	3.26e-4	1	1	487
+gi|2599405845|pdb|8IWH|2,gi|2599405846|pdb|8IWH|8,gi|2599405844|pdb|8IWH|9,gi|2599405847|pdb|8IWH|1	Chain 2, Fucoxanthin chlorophyll a/c light-harvesting protein, major type,Chain 8, Fucoxanthin chlorophyll a/c light-harvesting protein, major type,Chain 9, Fucoxanthin chlorophyll a/c light-harvesting protein, major type,Chain 1, Fucoxanthin chlorophyll a/c light-harvesting protein, major type	0.083	2	3.28e-4	1	1	487
+gi|220975518|gb|EED93846.1|,gi|223997474|ref|XP_002288410.1|	formate-tetrahydrofolate ligase [Thalassiosira pseudonana CCMP1335]	0.037	2	9.70e-5	1	1	488
+gi|220976099|gb|EED94427.1|,gi|223998636|ref|XP_002288991.1|	ubiquinol-cytochrome-c reductase-like protein, partial [Thalassiosira pseudonana CCMP1335],ubiquinol-cytochrome-c reductase-like protein [Thalassiosira pseudonana CCMP1335]	0.097	2	4.73e-4	2	2	489
+gi|220976243|gb|EED94570.1|,gi|223994887|ref|XP_002287127.1|	RS18, ribosomal protein 18 40S small ribosomal subunit [Thalassiosira pseudonana CCMP1335]	0.103	2	4.34e-4	2	2	490
+gi|220976310|gb|EED94637.1|,gi|223995021|ref|XP_002287194.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.163	2	3.96e-4	1	1	491
+gi|220976386|gb|EED94713.1|,gi|223995173|ref|XP_002287270.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.122	2	1.88e-4	2	2	492
+gi|220976430|gb|EED94757.1|,gi|223995261|ref|XP_002287314.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.086	2	1.81e-4	2	2	493
+gi|220976570|gb|EED94897.1|,gi|223995561|ref|XP_002287454.1|	transaldolase [Thalassiosira pseudonana CCMP1335]	0.050	2	2.00e-4	1	1	494
+gi|220976582|gb|EED94909.1|,gi|223995585|ref|XP_002287466.1|	glutamate dehydrogenase [Thalassiosira pseudonana CCMP1335]	0.041	2	1.08e-4	1	1	495
+gi|220976638|gb|EED94965.1|,gi|223995697|ref|XP_002287522.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.076	2	1.30e-4	2	2	496
+gi|220976821|gb|EED95148.1|,gi|223996063|ref|XP_002287705.1|	RL12, ribosomal protein 11 60S large ribosomal subunit [Thalassiosira pseudonana CCMP1335]	0.091	2	3.86e-4	1	1	497
+gi|220976862|gb|EED95189.1|,gi|223996145|ref|XP_002287746.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.145	2	2.79e-4	2	2	498
+gi|220976885|gb|EED95212.1|,gi|223996191|ref|XP_002287769.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.110	2	2.32e-4	2	2	499
+gi|220977000|gb|EED95327.1|,gi|223996421|ref|XP_002287884.1|	methionine aminopeptidase [Thalassiosira pseudonana CCMP1335]	0.058	2	1.85e-4	2	2	500
+gi|220977080|gb|EED95407.1|,gi|223996581|ref|XP_002287964.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.042	2	1.17e-4	2	2	501
+gi|220977308|gb|EED95634.1|,gi|223992619|ref|XP_002285993.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.092	2	2.65e-4	1	1	502
+gi|220977324|gb|EED95650.1|,gi|223992651|ref|XP_002286009.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.038	2	1.28e-4	1	1	503
+gi|220977613|gb|EED95939.1|,gi|223993229|ref|XP_002286298.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.088	2	2.42e-4	1	1	504
+gi|220977632|gb|EED95958.1|,gi|223993267|ref|XP_002286317.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.078	2	3.07e-4	1	1	505
+gi|220977985|gb|EED96311.1|,gi|223993973|ref|XP_002286670.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.152	2	4.59e-4	2	2	506
+gi|220978148|gb|EED96474.1|,gi|223994299|ref|XP_002286833.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.125	2	2.39e-4	2	2	507
+gi|220978165|gb|EED96491.1|,gi|223994333|ref|XP_002286850.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.046	2	2.63e-4	2	2	508
+gi|220978350|gb|EED96676.1|,gi|223994703|ref|XP_002287035.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.157	2	3.98e-4	1	1	509
+gi|220978363|gb|EED96689.1|,gi|223994729|ref|XP_002287048.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.101	2	3.54e-4	1	1	510
+gi|223992531|ref|XP_002285949.1|,gi|220977264|gb|EED95590.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.080	2	1.58e-4	2	2	511
+gi|223992801|ref|XP_002286084.1|,gi|220977399|gb|EED95725.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.043	2	1.93e-4	1	1	512
+gi|223993013|ref|XP_002286190.1|,gi|220977505|gb|EED95831.1|	aspartate aminotransferase [Thalassiosira pseudonana CCMP1335]	0.046	2	1.52e-4	1	1	513
+gi|223993165|ref|XP_002286266.1|,gi|220977581|gb|EED95907.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.058	2	1.32e-4	1	1	514
+gi|223994021|ref|XP_002286694.1|,gi|220978009|gb|EED96335.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.047	2	1.58e-4	1	1	515
+gi|223994737|ref|XP_002287052.1|,gi|220978367|gb|EED96693.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.059	2	1.56e-4	1	1	516
+gi|223994923|ref|XP_002287145.1|,gi|220976261|gb|EED94588.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.056	2	1.47e-4	1	1	517
+gi|223994985|ref|XP_002287176.1|,gi|220976292|gb|EED94619.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.066	2	1.62e-4	1	1	518
+gi|223995135|ref|XP_002287251.1|,gi|220976367|gb|EED94694.1|	fucoxanthin chlorophyll a/c light-harvesting protein [Thalassiosira pseudonana CCMP1335]	0.135	2	2.51e-4	2	2	519
+gi|223995193|ref|XP_002287280.1|,gi|220976396|gb|EED94723.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.013	2	5.29e-5	2	2	520
+gi|223995707|ref|XP_002287527.1|,gi|220976643|gb|EED94970.1|	probable RabGDI [Thalassiosira pseudonana CCMP1335]	0.049	2	1.42e-4	1	1	521
+gi|223996511|ref|XP_002287929.1|,gi|220977045|gb|EED95372.1|	spermidine synthase [Thalassiosira pseudonana CCMP1335]	0.012	2	6.53e-5	1	1	522
+gi|223996791|ref|XP_002288069.1|,gi|220977185|gb|EED95512.1|	methylenetetrahydrofolate reductase [Thalassiosira pseudonana CCMP1335]	0.031	2	1.65e-4	2	2	523
+gi|223996944|ref|XP_002288145.1|,gi|220975253|gb|EED93581.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.015	2	5.61e-5	1	1	524
+gi|223997634|ref|XP_002288490.1|,gi|220975598|gb|EED93926.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.061	2	1.44e-4	2	2	525
+gi|223997840|ref|XP_002288593.1|,gi|220975701|gb|EED94029.1|	ABC transporter [Thalassiosira pseudonana CCMP1335]	0.012	2	4.34e-5	1	1	526
+gi|223998170|ref|XP_002288758.1|,gi|220975866|gb|EED94194.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.165	2	4.99e-4	2	2	527
+gi|223998332|ref|XP_002288839.1|,gi|220975947|gb|EED94275.1|	RT15, ribosomal protein 15 mitochondrial small ribosomal subunit, partial [Thalassiosira pseudonana CCMP1335]	0.211	2	7.04e-4	2	2	528
+gi|223998466|ref|XP_002288906.1|,gi|220976014|gb|EED94342.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.033	2	7.77e-5	2	2	529
+gi|223998973|ref|XP_002289159.1|,gi|220974367|gb|EED92696.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.393	2	7.54e-4	2	2	530
+gi|223998987|ref|XP_002289166.1|,gi|220974374|gb|EED92703.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.041	2	1.31e-4	2	2	531
+gi|223999367|ref|XP_002289356.1|,gi|220974564|gb|EED92893.1|	phosphomannomutase [Thalassiosira pseudonana CCMP1335]	0.072	2	2.54e-4	2	2	532
+gi|223999453|ref|XP_002289399.1|,gi|220974607|gb|EED92936.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.164	2	5.46e-4	1	1	533
+gi|224000505|ref|XP_002289925.1|,gi|220975133|gb|EED93462.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.051	2	1.89e-4	1	1	534
+gi|224000820|ref|XP_002290082.1|,gi|220973504|gb|EED91834.1|	hypothetical protein THAPSDRAFT_22570 [Thalassiosira pseudonana CCMP1335]	0.053	2	1.52e-4	1	1	535
+gi|224000868|ref|XP_002290106.1|,gi|220973528|gb|EED91858.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.098	2	3.26e-4	1	1	536
+gi|224000906|ref|XP_002290125.1|,gi|220973547|gb|EED91877.1|	26S proteasome regulatory subunit RPN1 2 [Thalassiosira pseudonana CCMP1335]	0.017	2	7.01e-5	1	1	537
+gi|224001546|ref|XP_002290445.1|,gi|220973867|gb|EED92197.1|	D-3-phosphoglycerate dehydrogenase [Thalassiosira pseudonana CCMP1335]	0.025	2	1.32e-4	1	0	538
+gi|224001814|ref|XP_002290579.1|,gi|220974001|gb|EED92331.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.023	2	9.76e-5	1	1	539
+gi|224001992|ref|XP_002290668.1|,gi|220974090|gb|EED92420.1|	v-type h-atpase [Thalassiosira pseudonana CCMP1335]	0.022	2	7.79e-5	1	1	540
+gi|224002158|ref|XP_002290751.1|,gi|220974173|gb|EED92503.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.149	2	7.28e-4	1	1	541
+gi|224002202|ref|XP_002290773.1|,gi|220974195|gb|EED92525.1|	hypothetical protein THAPSDRAFT_262575, partial [Thalassiosira pseudonana CCMP1335]	0.043	2	1.95e-4	1	1	542
+gi|224002440|ref|XP_002290892.1|,gi|220974314|gb|EED92644.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.014	2	5.71e-5	2	2	543
+gi|224002675|ref|XP_002291009.1|,gi|220972785|gb|EED91116.1|	RL22, ribosomal protein 22 60S large ribosomal subunit [Thalassiosira pseudonana CCMP1335]	0.172	2	5.19e-4	1	1	544
+gi|224002777|ref|XP_002291060.1|,gi|220972836|gb|EED91167.1|	t-complex chaperonin protein, epsilon subunit [Thalassiosira pseudonana CCMP1335]	0.053	2	1.17e-4	1	1	545
+gi|224003355|ref|XP_002291349.1|,gi|220973125|gb|EED91456.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.021	2	1.63e-4	2	2	546
+gi|224003359|ref|XP_002291351.1|,gi|220973127|gb|EED91458.1|	hypothetical protein THAPSDRAFT_508 [Thalassiosira pseudonana CCMP1335]	0.052	2	1.38e-4	2	2	547
+gi|224003463|ref|XP_002291403.1|,gi|220973179|gb|EED91510.1|	L7Ae, ribosomal protein 7Ae 60S large ribosomal subunit [Thalassiosira pseudonana CCMP1335]	0.179	2	5.15e-4	1	1	548
+gi|224003771|ref|XP_002291557.1|,gi|220973333|gb|EED91664.1|	3-ketoacyl-coa thiolase, mitochondrial [Thalassiosira pseudonana CCMP1335]	0.083	2	1.60e-4	1	1	549
+gi|224003801|ref|XP_002291572.1|,gi|220973348|gb|EED91679.1|	dihydrolipamide s-acetyltransferase [Thalassiosira pseudonana CCMP1335]	0.045	2	1.49e-4	2	2	550
+gi|224004072|ref|XP_002295687.1|,gi|209585719|gb|ACI64404.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.096	2	2.44e-4	1	1	551
+gi|224005132|ref|XP_002296217.1|,gi|209586249|gb|ACI64934.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.051	2	1.15e-4	1	1	552
+gi|224005244|ref|XP_002296273.1|,gi|209586305|gb|ACI64990.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.091	2	3.60e-4	2	2	553
+gi|224005256|ref|XP_002296279.1|,gi|209586311|gb|ACI64996.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.023	2	4.96e-5	2	2	554
+gi|224005901|ref|XP_002291911.1|,gi|220972430|gb|EED90762.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.066	2	1.30e-4	1	1	555
+gi|224006027|ref|XP_002291974.1|,gi|220972493|gb|EED90825.1|	hypothetical protein THAPSDRAFT_35934 [Thalassiosira pseudonana CCMP1335]	0.308	2	4.76e-4	2	2	556
+gi|224006293|ref|XP_002292107.1|,gi|220972626|gb|EED90958.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.165	2	3.37e-4	2	2	557
+gi|224006325|ref|XP_002292123.1|,gi|220972642|gb|EED90974.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.096	2	5.51e-4	2	2	558
+gi|224006804|ref|XP_002292362.1|,gi|220972004|gb|EED90337.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.032	2	5.78e-5	2	2	559
+gi|224007283|ref|XP_002292601.1|,gi|220971463|gb|EED89797.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.064	2	1.35e-4	2	2	560
+gi|224008602|ref|XP_002293260.1|,gi|220971386|gb|EED89721.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.038	2	1.74e-4	1	1	561
+gi|224008654|ref|XP_002293286.1|,gi|220971412|gb|EED89747.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.047	2	1.47e-4	1	1	562
+gi|224008911|ref|XP_002293414.1|,gi|220970814|gb|EED89150.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.078	2	9.90e-5	2	2	563
+gi|224009484|ref|XP_002293700.1|,gi|220970372|gb|EED88709.1|	hypothetical protein THAPSDRAFT_42326 [Thalassiosira pseudonana CCMP1335]	0.071	2	1.04e-4	2	2	564
+gi|224009566|ref|XP_002293741.1|,gi|220970413|gb|EED88750.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.017	2	5.81e-5	1	1	565
+gi|224009574|ref|XP_002293745.1|,gi|220970417|gb|EED88754.1|	tom40-like protein, partial [Thalassiosira pseudonana CCMP1335]	0.105	2	2.22e-4	1	1	566
+gi|224010068|ref|XP_002293992.1|,gi|220970664|gb|EED89001.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.124	2	2.92e-4	2	2	567
+gi|224010070|ref|XP_002293993.1|,gi|220970665|gb|EED89002.1|	serine hydroxymethyltransferase [Thalassiosira pseudonana CCMP1335]	0.038	2	1.33e-4	2	2	568
+gi|224010579|ref|XP_002294247.1|,gi|220970264|gb|EED88602.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.025	2	1.12e-4	2	2	569
+gi|220970285|gb|EED88623.1|,gi|224010621|ref|XP_002294268.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.025	2	1.12e-4	2	2	569
+gi|224010633|ref|XP_002294274.1|,gi|220970291|gb|EED88629.1|	hypothetical protein THAPSDRAFT_10233 [Thalassiosira pseudonana CCMP1335]	0.076	2	9.13e-5	2	2	570
+gi|224010854|ref|XP_002294384.1|,gi|220969879|gb|EED88218.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.047	2	9.54e-5	1	1	571
+gi|224011241|ref|XP_002295395.1|,gi|209583426|gb|ACI64112.1|	RL5, ribosomal protein 5, 60S large ribosomal subunit [Thalassiosira pseudonana CCMP1335]	0.078	2	2.07e-4	2	2	572
+gi|224012942|ref|XP_002295123.1|,gi|220969085|gb|EED87427.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.033	2	8.70e-5	1	1	573
+gi|224013870|ref|XP_002296599.1|,gi|220968951|gb|EED87295.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.024	2	5.33e-5	1	1	574
+gi|224013957|ref|XP_002296642.1|,gi|220968692|gb|EED87037.1|	hypothetical protein THAPSDRAFT_24399 [Thalassiosira pseudonana CCMP1335]	0.084	2	1.27e-4	2	2	575
+gi|224014413|ref|XP_002296869.1|,gi|220968506|gb|EED86853.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.104	2	4.11e-4	1	1	576
+gi|224014576|ref|XP_002296950.1|,gi|220968330|gb|EED86678.1|	glucose-6-phosphate isomerase [Thalassiosira pseudonana CCMP1335]	0.079	2	1.14e-4	2	2	577
+gi|224015147|ref|XP_002297234.1|,gi|220968113|gb|EED86464.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.124	2	3.40e-4	1	1	578
+gi|224015252|ref|XP_002297284.1|,gi|220968078|gb|EED86434.1|	hypothetical protein THAPSDRAFT_bd1766 [Thalassiosira pseudonana CCMP1335]	0.073	2	1.54e-4	2	2	579
+gi|224015364|ref|XP_002297338.1|,gi|220968006|gb|EED86366.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.044	2	1.46e-4	1	1	580
+gi|224015815|ref|XP_002297555.1|,gi|220967763|gb|EED86140.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.133	2	3.52e-4	2	2	581
+gi|817090722|gb|AKF17965.1|	PSII protein D1, partial (chloroplast) [Thalassiosira pseudonana]	0.080	2	2.11e-4	2	2	581
+gi|118411180|ref|YP_874574.1|,gi|167011880|sp|A0T0W2.1|PSBA_THAPS,gi|118411226|ref|YP_874620.1|,gi|2050584540|gb|QWM93081.1|,gi|2050584494|gb|QWM93035.1|,gi|116739927|gb|ABK20797.1|,gi|116739973|gb|ABK20843.1|	photosystem II protein D1 (chloroplast) [Thalassiosira pseudonana],RecName: Full=Photosystem II protein D1; Short=PSII D1 protein; AltName: Full=Photosystem II Q(B) protein; Flags: Precursor,D1 reaction center protein of photosystem II (chloroplast) [Thalassiosira pseudonana],photosystem II reaction center protein D1 (chloroplast) [Thalassiosira pseudonana]	0.067	2	1.76e-4	2	2	581
+gi|2599405837|pdb|8IWH|a,gi|2599405792|pdb|8IWH|A	Chain a, Photosystem II protein D1,Chain A, Photosystem II protein D1	0.072	2	1.90e-4	2	2	581
+gi|2599405854|pdb|8J0D|3,gi|2599405832|pdb|8IWH|3	Chain 3, Fucoxanthin chl a/c protein, lhca clade	0.127	2	2.88e-4	1	1	582
+gi|223995387|ref|XP_002287377.1|,gi|220976493|gb|EED94820.1|	fucoxanthin chl a/c protein, lhca clade [Thalassiosira pseudonana CCMP1335]	0.112	2	2.53e-4	1	1	582
+gi|306531018|sp|B8BVB6.1|ARGJ_THAPS,gi|223996635|ref|XP_002287991.1|,gi|220977107|gb|EED95434.1|	RecName: Full=Arginine biosynthesis bifunctional protein ArgJ, mitochondrial; Includes: RecName: Full=Glutamate N-acetyltransferase; Short=GAT; AltName: Full=Ornithine acetyltransferase; Short=OATase; AltName: Full=Ornithine transacetylase; Includes: RecName: Full=Amino-acid acetyltransferase; AltName: Full=N-acetylglutamate synthase; Short=AGS; Contains: RecName: Full=Arginine biosynthesis bifunctional protein ArgJ alpha chain; Contains: RecName: Full=Arginine biosynthesis bifunctional protein ArgJ beta chain; Flags: Precursor,predicted protein [Thalassiosira pseudonana CCMP1335]	0.078	2	1.30e-4	2	2	583
+gi|4093213|gb|AAC99783.1|	ribulose-1,5-carboxylase/oxygenase large subunit, partial (chloroplast) [Thalassiosira pseudonana]	0.167	2	3.91e-4	2	1	584
+gi|74325195|ref|YP_316615.1|,gi|74100261|gb|AAZ99422.1|	NADH dehydrogenase subunit 11 (mitochondrion) [Thalassiosira pseudonana]	0.021	2	8.46e-5	2	2	585
+gi|2050584400|gb|QWM92942.1|	NADH dehydrogenase subunit 11 (mitochondrion) [Thalassiosira pseudonana]	0.023	2	9.07e-5	2	2	585
+AAZ26126.1,WP_011041182.1	TPR domain protein [Colwellia psychrerythraea 34H],XrtA/PEP-CTERM system TPR-repeat protein PrsT [Colwellia psychrerythraea]	0.008	1	3.46e-5	1	1	586
+AAZ27350.1,WP_011041456.1,CAY34444.1	GTP-binding protein TypA [Colwellia psychrerythraea 34H],translational GTPase TypA [Colwellia psychrerythraea],unnamed protein product [Colwellia psychrerythraea 34H]	0.030	1	5.23e-5	1	1	587
+AAZ28608.1,WP_011045516.1	hypothetical protein CPS_4797 [Colwellia psychrerythraea 34H],dienelactone hydrolase family protein [Colwellia psychrerythraea]	0.114	1	1.07e-4	1	1	588
+AAZ28710.1,WP_011042540.1	TonB-dependent receptor [Colwellia psychrerythraea 34H],MULTISPECIES: TonB-dependent receptor plug domain-containing protein [Colwellia]	0.011	1	3.88e-5	1	1	589
+PRTC-peptide|YDR432W	NPL3 SGDID:S000002840, Chr IV from 1328783-1330027, Genome Release 64-1-1, Verified ORF, "RNA-binding protein that promotes elongation, regulates termination, and carries poly(A) mRNA from nucleus to cytoplasm; required for pre-mRNA splicing; dissociation from mRNAs promoted by Mtr10p; phosphorylated by Sky1p in the cytoplasm"	0.053	1	7.65e-5	1	1	590
+gi|125987528|sp|A0T0Q5.1|RK11_THAPS,gi|116739870|gb|ABK20740.1|,gi|118411123|ref|YP_874517.1|,gi|2050584456|gb|QWM92997.1|	RecName: Full=Large ribosomal subunit protein uL11c; AltName: Full=50S ribosomal protein L11, chloroplastic,50S ribosomal protein L11 (chloroplast) [Thalassiosira pseudonana],ribosomal protein L11 (chloroplast) [Thalassiosira pseudonana]	0.170	1	2.25e-4	1	1	591
+gi|125987679|sp|A0T0Z2.1|RR13_THAPS,gi|2050584510|gb|QWM93051.1|,gi|116739957|gb|ABK20827.1|,gi|118411210|ref|YP_874604.1|	RecName: Full=Small ribosomal subunit protein uS13c; AltName: Full=30S ribosomal protein S13, chloroplastic,ribosomal protein S13 (chloroplast) [Thalassiosira pseudonana],30S ribosomal protein S13 (chloroplast) [Thalassiosira pseudonana]	0.122	1	2.57e-4	1	1	592
+gi|18999435|gb|AAH24292.1|,gi|27503816|gb|AAH42132.1|	(CONTAMINANT) Keratin 5 [Homo sapiens]	0.020	1	5.37e-5	1	1	593
+gi|21961227|gb|AAH34535.1|	(CONTAMINANT) Keratin 6B [Homo sapiens]	0.021	1	5.61e-5	1	1	593
+gi|2050584514|gb|QWM93055.1|	ribosomal protein L18 (chloroplast) [Thalassiosira pseudonana]	0.119	1	2.35e-4	1	1	594
+gi|116739953|gb|ABK20823.1|,gi|125987543|sp|A0T0Y8.1|RK18_THAPS,gi|118411206|ref|YP_874600.1|	50S ribosomal protein L18 (chloroplast) [Thalassiosira pseudonana],RecName: Full=Large ribosomal subunit protein uL18c; AltName: Full=50S ribosomal protein L18, chloroplastic,ribosomal protein L18 (chloroplast) [Thalassiosira pseudonana]	0.119	1	2.35e-4	1	1	594
+gi|209583499|gb|ACI64185.1|,gi|224011387|ref|XP_002295468.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.072	1	1.20e-4	1	1	595
+gi|209583509|gb|ACI64195.1|,gi|224011407|ref|XP_002295478.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.048	1	9.54e-5	1	1	596
+gi|209585754|gb|ACI64439.1|,gi|224004142|ref|XP_002295722.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335],predicted protein [Thalassiosira pseudonana CCMP1335]	0.028	1	5.59e-5	1	1	597
+gi|209585801|gb|ACI64486.1|,gi|224004236|ref|XP_002295769.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.035	1	4.24e-5	1	1	598
+gi|209585843|gb|ACI64528.1|,gi|224004320|ref|XP_002295811.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.200	1	2.18e-4	1	1	599
+gi|209585856|gb|ACI64541.1|,gi|224004346|ref|XP_002295824.1|	WD-40 repeat containing protein [Thalassiosira pseudonana CCMP1335]	0.083	1	8.72e-5	1	1	600
+gi|209585861|gb|ACI64546.1|,gi|224004356|ref|XP_002295829.1|	chloroplast protein Cpn21 in A-like protein, partial [Thalassiosira pseudonana CCMP1335]	0.167	1	3.52e-4	1	1	601
+gi|209585898|gb|ACI64583.1|,gi|224004430|ref|XP_002295866.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.065	1	1.15e-4	1	1	602
+gi|209585948|gb|ACI64633.1|,gi|224004530|ref|XP_002295916.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.040	1	6.65e-5	1	1	603
+gi|209585986|gb|ACI64671.1|,gi|224004606|ref|XP_002295954.1|	triose phosphate isomerase [Thalassiosira pseudonana CCMP1335]	0.064	1	1.13e-4	1	1	604
+gi|209586040|gb|ACI64725.1|,gi|224004714|ref|XP_002296008.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.015	1	3.11e-5	1	1	605
+gi|209586082|gb|ACI64767.1|,gi|224004798|ref|XP_002296050.1|	possibly a phosphatase from the CbbY protein family [Thalassiosira pseudonana CCMP1335]	0.055	1	1.16e-4	1	1	606
+gi|209586094|gb|ACI64779.1|,gi|224004822|ref|XP_002296062.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.059	1	8.97e-5	1	1	607
+gi|209586172|gb|ACI64857.1|,gi|224004978|ref|XP_002296140.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.072	1	8.49e-5	1	1	608
+gi|220967855|gb|EED86228.1|,gi|224015679|ref|XP_002297489.1|	hypothetical protein THAPSDRAFT_bd1542 [Thalassiosira pseudonana CCMP1335]	0.020	1	3.18e-5	1	1	609
+gi|220968161|gb|EED86511.1|,gi|224015050|ref|XP_002297186.1|	cytochrome c1 [Thalassiosira pseudonana CCMP1335]	0.061	1	1.14e-4	1	1	610
+gi|220968328|gb|EED86676.1|,gi|224014572|ref|XP_002296948.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.028	1	4.89e-5	1	1	611
+gi|220968517|gb|EED86864.1|,gi|224014435|ref|XP_002296880.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.028	1	3.69e-5	1	1	612
+gi|220968738|gb|EED87082.1|,gi|224013444|ref|XP_002296386.1|	26S proteasome regulatory subunit Rpn2 26S subunit, non-atpase [Thalassiosira pseudonana CCMP1335]	0.019	1	2.80e-5	1	1	613
+gi|220969160|gb|EED87502.1|,gi|224013092|ref|XP_002295198.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.040	1	8.54e-5	1	1	614
+gi|220969424|gb|EED87765.1|,gi|224012665|ref|XP_002294985.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.064	1	1.20e-4	1	1	615
+gi|220969553|gb|EED87894.1|,gi|224012923|ref|XP_002295114.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.056	1	1.04e-4	1	1	616
+gi|220969577|gb|EED87917.1|,gi|224011808|ref|XP_002294557.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335],predicted protein [Thalassiosira pseudonana CCMP1335]	0.054	1	9.51e-5	1	1	617
+gi|220969710|gb|EED88050.1|,gi|224012074|ref|XP_002294690.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.026	1	5.24e-5	1	1	618
+gi|220969727|gb|EED88067.1|,gi|224012108|ref|XP_002294707.1|	hypothetical protein THAPSDRAFT_38460, partial [Thalassiosira pseudonana CCMP1335]	0.141	1	2.03e-4	1	1	619
+gi|220969811|gb|EED88151.1|,gi|224012276|ref|XP_002294791.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.015	1	3.87e-5	1	1	620
+gi|220969827|gb|EED88166.1|,gi|224010750|ref|XP_002294332.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.096	1	1.01e-4	1	1	621
+gi|224010978|ref|XP_002294446.1|,gi|220969941|gb|EED88280.1|	WD40-repeat protein [Thalassiosira pseudonana CCMP1335]	0.072	1	7.65e-5	1	1	621
+gi|220969888|gb|EED88227.1|,gi|224010872|ref|XP_002294393.1|	t-complex protein 1 zeta subunit [Thalassiosira pseudonana CCMP1335]	0.029	1	5.78e-5	1	1	622
+gi|220969904|gb|EED88243.1|,gi|224010904|ref|XP_002294409.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.046	1	7.21e-5	1	1	623
+gi|220969937|gb|EED88276.1|,gi|224010970|ref|XP_002294442.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.052	1	1.02e-4	1	1	624
+gi|220970017|gb|EED88356.1|,gi|224011130|ref|XP_002294522.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.182	1	4.80e-4	1	1	625
+gi|220970134|gb|EED88472.1|,gi|224010319|ref|XP_002294117.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.094	1	1.56e-4	1	1	626
+gi|220970155|gb|EED88493.1|,gi|224010361|ref|XP_002294138.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.122	1	2.75e-4	1	1	627
+gi|220970175|gb|EED88513.1|,gi|224010401|ref|XP_002294158.1|	nadh-ubiquinone oxidoreductase, partial [Thalassiosira pseudonana CCMP1335]	0.066	1	9.93e-5	1	1	628
+gi|220970245|gb|EED88583.1|,gi|224010541|ref|XP_002294228.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.089	1	1.57e-4	1	1	629
+gi|220970316|gb|EED88654.1|,gi|224010683|ref|XP_002294299.1|	v-type H+ transporting ATPase, partial [Thalassiosira pseudonana CCMP1335]	0.214	1	2.83e-4	1	1	630
+gi|220970333|gb|EED88671.1|,gi|224010717|ref|XP_002294316.1|	hypothetical protein THAPSDRAFT_269858 [Thalassiosira pseudonana CCMP1335]	0.029	1	5.71e-5	1	1	631
+gi|220970383|gb|EED88720.1|,gi|224009506|ref|XP_002293711.1|	vacuolar proton pump D subunit [Thalassiosira pseudonana CCMP1335]	0.047	1	8.27e-5	1	1	632
+gi|220970480|gb|EED88817.1|,gi|224009700|ref|XP_002293808.1|	proteasome subunit alpha type 5 [Thalassiosira pseudonana CCMP1335]	0.143	1	1.30e-4	1	1	633
+gi|220970482|gb|EED88819.1|,gi|224009704|ref|XP_002293810.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.079	1	1.32e-4	1	1	634
+gi|220970552|gb|EED88889.1|,gi|224009844|ref|XP_002293880.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.103	1	2.73e-4	1	1	635
+gi|220970569|gb|EED88906.1|,gi|224009878|ref|XP_002293897.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.026	1	3.85e-5	1	1	636
+gi|220970601|gb|EED88938.1|,gi|224009942|ref|XP_002293929.1|	t-complex protein 1 alpha subunit chaperonin-like protein, partial [Thalassiosira pseudonana CCMP1335]	0.036	1	5.78e-5	1	1	637
+gi|220970758|gb|EED89094.1|,gi|224008799|ref|XP_002293358.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.059	1	1.17e-4	1	1	638
+gi|220970905|gb|EED89241.1|,gi|224009093|ref|XP_002293505.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.027	1	6.07e-5	1	1	639
+gi|220971016|gb|EED89352.1|,gi|224009315|ref|XP_002293616.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.068	1	1.20e-4	1	1	640
+gi|220971049|gb|EED89385.1|,gi|224009381|ref|XP_002293649.1|	RNA helicase [Thalassiosira pseudonana CCMP1335]	0.031	1	4.40e-5	1	1	641
+gi|220971387|gb|EED89722.1|,gi|224008604|ref|XP_002293261.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.057	1	9.07e-5	1	1	642
+gi|220971445|gb|EED89779.1|,gi|224007247|ref|XP_002292583.1|	catalytic subunit of clp protease [Thalassiosira pseudonana CCMP1335]	0.050	1	1.58e-4	1	1	643
+gi|220971683|gb|EED90017.1|,gi|224007723|ref|XP_002292821.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.033	1	3.49e-5	1	1	644
+gi|220971721|gb|EED90055.1|,gi|224007799|ref|XP_002292859.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.043	1	7.94e-5	1	1	645
+gi|220971768|gb|EED90102.1|,gi|224007893|ref|XP_002292906.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.013	1	2.58e-5	1	1	646
+gi|220971780|gb|EED90114.1|,gi|224007917|ref|XP_002292918.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.139	1	1.83e-4	1	1	647
+gi|220971794|gb|EED90128.1|,gi|224007945|ref|XP_002292932.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.023	1	3.05e-5	1	1	648
+gi|220971832|gb|EED90165.1|,gi|224006460|ref|XP_002292190.1|	NifU like N terminal domain, iron, partial [Thalassiosira pseudonana CCMP1335]	0.203	1	2.38e-4	1	1	649
+gi|220971935|gb|EED90268.1|,gi|224006666|ref|XP_002292293.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.062	1	8.16e-5	1	1	650
+gi|220972022|gb|EED90355.1|,gi|224006840|ref|XP_002292380.1|	hypothetical protein THAPSDRAFT_23902 [Thalassiosira pseudonana CCMP1335]	0.021	1	3.92e-5	1	1	651
+gi|220972089|gb|EED90422.1|,gi|224006974|ref|XP_002292447.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.005	1	1.93e-5	1	1	652
+gi|220972090|gb|EED90423.1|,gi|224006976|ref|XP_002292448.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.112	1	1.78e-4	1	1	653
+gi|220972274|gb|EED90606.1|,gi|224005589|ref|XP_002291755.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.050	1	9.34e-5	1	1	654
+gi|220972414|gb|EED90746.1|,gi|224005869|ref|XP_002291895.1|	peptidyl-prolyl cis-trans isomerase; ppiase [Thalassiosira pseudonana CCMP1335]	0.072	1	1.62e-4	1	1	655
+gi|220972446|gb|EED90778.1|,gi|224005933|ref|XP_002291927.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.052	1	1.03e-4	1	1	656
+gi|220972599|gb|EED90931.1|,gi|224006239|ref|XP_002292080.1|	diadinoxanthin de-epoxidase [Thalassiosira pseudonana CCMP1335]	0.035	1	6.90e-5	1	1	657
+gi|220972683|gb|EED91014.1|,gi|224002471|ref|XP_002290907.1|	cation transporting ATPase, partial [Thalassiosira pseudonana CCMP1335]	0.019	1	3.45e-5	1	0	658
+gi|220972688|gb|EED91019.1|,gi|224002481|ref|XP_002290912.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.033	1	4.79e-5	1	1	659
+gi|220972703|gb|EED91034.1|,gi|224002511|ref|XP_002290927.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.018	1	3.76e-5	1	1	660
+gi|220972844|gb|EED91175.1|,gi|224002793|ref|XP_002291068.1|	chromate transporter, partial [Thalassiosira pseudonana CCMP1335]	0.048	1	9.51e-5	1	1	661
+gi|220972861|gb|EED91192.1|,gi|224002827|ref|XP_002291085.1|	hypothetical protein THAPSDRAFT_262874, partial [Thalassiosira pseudonana CCMP1335]	0.020	1	2.46e-5	1	1	662
+gi|220972921|gb|EED91252.1|,gi|224002947|ref|XP_002291145.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.052	1	9.77e-5	1	1	663
+gi|220972963|gb|EED91294.1|,gi|224003031|ref|XP_002291187.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.077	1	1.52e-4	1	1	664
+gi|220973123|gb|EED91454.1|,gi|224003351|ref|XP_002291347.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.046	1	6.31e-5	1	1	665
+gi|220973278|gb|EED91609.1|,gi|224003661|ref|XP_002291502.1|	hypothetical protein THAPSDRAFT_269113 [Thalassiosira pseudonana CCMP1335]	0.042	1	5.97e-5	1	1	666
+gi|220973290|gb|EED91621.1|,gi|224003685|ref|XP_002291514.1|	serine/threonine dehydratase [Thalassiosira pseudonana CCMP1335]	0.085	1	9.57e-5	1	1	667
+gi|220973408|gb|EED91739.1|,gi|224003921|ref|XP_002291632.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.024	1	5.10e-5	1	1	668
+gi|220973756|gb|EED92086.1|,gi|224001324|ref|XP_002290334.1|	hypothetical protein THAPSDRAFT_40788 [Thalassiosira pseudonana CCMP1335]	0.051	1	1.00e-4	1	1	669
+gi|220973866|gb|EED92196.1|,gi|224001544|ref|XP_002290444.1|	DNA-binding protein, partial [Thalassiosira pseudonana CCMP1335]	0.042	1	9.42e-5	1	1	670
+gi|220973903|gb|EED92233.1|,gi|224001618|ref|XP_002290481.1|	thylakoid lumen 15.0-kDa protein, partial [Thalassiosira pseudonana CCMP1335],thylakoid lumen 15.0-kDa protein [Thalassiosira pseudonana CCMP1335]	0.119	1	1.64e-4	1	1	671
+gi|220973922|gb|EED92252.1|,gi|224001656|ref|XP_002290500.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.007	1	1.92e-5	1	1	672
+gi|220973935|gb|EED92265.1|,gi|224001682|ref|XP_002290513.1|	phenylalanyl-trna synthetase [Thalassiosira pseudonana CCMP1335]	0.030	1	6.26e-5	1	1	673
+gi|220973968|gb|EED92298.1|,gi|224001748|ref|XP_002290546.1|	hypothetical protein THAPSDRAFT_40630 [Thalassiosira pseudonana CCMP1335]	0.058	1	1.08e-4	1	1	674
+gi|220973987|gb|EED92317.1|,gi|224001786|ref|XP_002290565.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.054	1	8.63e-5	1	1	675
+gi|220973988|gb|EED92318.1|,gi|224001788|ref|XP_002290566.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.034	1	5.32e-5	1	1	676
+gi|220974026|gb|EED92356.1|,gi|224001864|ref|XP_002290604.1|	hypothetical protein THAPSDRAFT_5225 [Thalassiosira pseudonana CCMP1335]	0.049	1	6.71e-5	1	1	677
+gi|220974046|gb|EED92376.1|,gi|224001904|ref|XP_002290624.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.038	1	6.67e-5	1	1	678
+gi|220974108|gb|EED92438.1|,gi|224002028|ref|XP_002290686.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.078	1	1.08e-4	1	1	679
+gi|220974132|gb|EED92462.1|,gi|224002076|ref|XP_002290710.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.017	1	6.85e-5	1	1	680
+gi|220974227|gb|EED92557.1|,gi|224002266|ref|XP_002290805.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.045	1	5.33e-5	1	1	681
+gi|220974348|gb|EED92677.1|,gi|223998935|ref|XP_002289140.1|	violaxanthin de-epoxidase-like 1 [Thalassiosira pseudonana CCMP1335]	0.038	1	7.49e-5	1	1	682
+gi|220974436|gb|EED92765.1|,gi|223999111|ref|XP_002289228.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.057	1	1.19e-4	1	1	683
+gi|220974446|gb|EED92775.1|,gi|223999131|ref|XP_002289238.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.093	1	1.13e-4	1	1	684
+gi|220974613|gb|EED92942.1|,gi|223999465|ref|XP_002289405.1|	pyruvate kinase [Thalassiosira pseudonana CCMP1335]	0.039	1	5.91e-5	1	1	685
+gi|220974724|gb|EED93053.1|,gi|223999687|ref|XP_002289516.1|	hypothetical protein THAPSDRAFT_268773, partial [Thalassiosira pseudonana CCMP1335],hypothetical protein THAPSDRAFT_268773 [Thalassiosira pseudonana CCMP1335]	0.062	1	6.32e-5	1	1	686
+gi|220974730|gb|EED93059.1|,gi|223999699|ref|XP_002289522.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.127	1	1.43e-4	1	1	687
+gi|220974798|gb|EED93127.1|,gi|223999835|ref|XP_002289590.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.108	1	1.18e-4	1	1	688
+gi|220974955|gb|EED93284.1|,gi|224000149|ref|XP_002289747.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.077	1	1.11e-4	1	1	689
+gi|220975091|gb|EED93420.1|,gi|224000421|ref|XP_002289883.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.029	1	5.49e-5	1	1	690
+gi|220975177|gb|EED93506.1|,gi|224000593|ref|XP_002289969.1|	the actin binding protein cofilin-like protein [Thalassiosira pseudonana CCMP1335]	0.106	1	2.23e-4	1	1	691
+gi|220975266|gb|EED93594.1|,gi|223996970|ref|XP_002288158.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.094	1	1.85e-4	1	1	692
+gi|220975281|gb|EED93609.1|,gi|223997000|ref|XP_002288173.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.019	1	3.31e-5	1	1	693
+gi|220975309|gb|EED93637.1|,gi|223997056|ref|XP_002288201.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.053	1	6.00e-5	1	1	694
+gi|220975314|gb|EED93642.1|,gi|223997066|ref|XP_002288206.1|	ABC transporter, partial [Thalassiosira pseudonana CCMP1335]	0.025	1	5.30e-5	1	1	695
+gi|220975454|gb|EED93782.1|,gi|223997346|ref|XP_002288346.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.160	1	1.87e-4	1	1	696
+gi|220975488|gb|EED93816.1|,gi|223997414|ref|XP_002288380.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.063	1	1.26e-4	1	1	697
+gi|220975502|gb|EED93830.1|,gi|223997442|ref|XP_002288394.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.122	1	1.54e-4	1	1	698
+gi|220975658|gb|EED93986.1|,gi|223997754|ref|XP_002288550.1|	cyclophilin-type peptidyl-prolyl cis-trans isomerase [Thalassiosira pseudonana CCMP1335]	0.117	1	1.76e-4	1	1	699
+gi|220975821|gb|EED94149.1|,gi|223998080|ref|XP_002288713.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.036	1	5.23e-5	1	1	700
+gi|220975849|gb|EED94177.1|,gi|223998136|ref|XP_002288741.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.040	1	7.43e-5	1	1	701
+gi|220976190|gb|EED94518.1|,gi|223998818|ref|XP_002289082.1|	hypothetical protein THAPSDRAFT_22018 [Thalassiosira pseudonana CCMP1335]	0.035	1	5.00e-5	1	1	702
+gi|220976278|gb|EED94605.1|,gi|223994957|ref|XP_002287162.1|	cysteine desulfurase [Thalassiosira pseudonana CCMP1335]	0.034	1	7.80e-5	1	1	703
+gi|220976293|gb|EED94620.1|,gi|223994987|ref|XP_002287177.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.041	1	6.80e-5	1	1	704
+gi|220976503|gb|EED94830.1|,gi|223995427|ref|XP_002287387.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.048	1	7.67e-5	1	1	705
+gi|220976562|gb|EED94889.1|,gi|223995545|ref|XP_002287446.1|	hypothetical protein THAPSDRAFT_39622 [Thalassiosira pseudonana CCMP1335]	0.089	1	1.56e-4	1	1	706
+gi|220976586|gb|EED94913.1|,gi|223995593|ref|XP_002287470.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.008	1	1.41e-5	1	1	707
+gi|220976597|gb|EED94924.1|,gi|223995615|ref|XP_002287481.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.027	1	4.71e-5	1	1	708
+gi|220976754|gb|EED95081.1|,gi|223995929|ref|XP_002287638.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.260	1	3.30e-4	1	1	709
+gi|220976869|gb|EED95196.1|,gi|223996159|ref|XP_002287753.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.040	1	6.68e-5	1	1	710
+gi|220976890|gb|EED95217.1|,gi|223996201|ref|XP_002287774.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.139	1	1.63e-4	1	1	711
+gi|220976983|gb|EED95310.1|,gi|223996387|ref|XP_002287867.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.135	1	1.29e-4	1	1	712
+gi|220976988|gb|EED95315.1|,gi|223996397|ref|XP_002287872.1|	RS7, ribosomal protein 7 [Thalassiosira pseudonana CCMP1335]	0.149	1	1.68e-4	1	1	713
+gi|220977075|gb|EED95402.1|,gi|223996571|ref|XP_002287959.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.113	1	1.63e-4	1	1	714
+gi|220977076|gb|EED95403.1|,gi|223996573|ref|XP_002287960.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.013	1	3.42e-5	1	1	715
+gi|220977108|gb|EED95435.1|,gi|223996637|ref|XP_002287992.1|	Tha4/Hcf106 protein, partial [Thalassiosira pseudonana CCMP1335],Tha4/Hcf106 protein [Thalassiosira pseudonana CCMP1335]	0.190	1	4.01e-4	1	1	716
+gi|220977150|gb|EED95477.1|,gi|223996721|ref|XP_002288034.1|	hypothetical protein THAPSDRAFT_268364 [Thalassiosira pseudonana CCMP1335]	0.051	1	1.07e-4	1	1	717
+gi|220977196|gb|EED95523.1|,gi|223996813|ref|XP_002288080.1|	RS4, ribosomal protein 4 [Thalassiosira pseudonana CCMP1335]	0.073	1	1.21e-4	1	1	718
+gi|220977226|gb|EED95553.1|,gi|223996873|ref|XP_002288110.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.022	1	3.03e-5	1	1	719
+gi|220977514|gb|EED95840.1|,gi|223993031|ref|XP_002286199.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.030	1	8.56e-5	1	1	720
+gi|223992961|ref|XP_002286164.1|,gi|220977479|gb|EED95805.1|	Ftr1_plasma membrane iron permease [Thalassiosira pseudonana CCMP1335]	0.030	1	8.68e-5	1	1	720
+gi|220977608|gb|EED95934.1|,gi|223993219|ref|XP_002286293.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.044	1	5.82e-5	1	1	721
+gi|220977739|gb|EED96065.1|,gi|223993481|ref|XP_002286424.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.040	1	9.13e-5	1	1	722
+gi|220977745|gb|EED96071.1|,gi|223993493|ref|XP_002286430.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.068	1	1.03e-4	1	1	723
+gi|220977925|gb|EED96251.1|,gi|223993853|ref|XP_002286610.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.054	1	6.87e-5	1	1	724
+gi|220977962|gb|EED96288.1|,gi|223993927|ref|XP_002286647.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.040	1	9.74e-5	1	1	725
+gi|220978053|gb|EED96379.1|,gi|223994109|ref|XP_002286738.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.027	1	4.73e-5	1	1	726
+gi|220978105|gb|EED96431.1|,gi|223994213|ref|XP_002286790.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.094	1	1.66e-4	1	1	727
+gi|220978136|gb|EED96462.1|,gi|223994275|ref|XP_002286821.1|	HSP90 domain-containing protein [Thalassiosira pseudonana CCMP1335]	0.021	1	4.22e-5	1	1	728
+gi|220978212|gb|EED96538.1|,gi|223994427|ref|XP_002286897.1|	hypothetical protein THAPSDRAFT_268080, partial [Thalassiosira pseudonana CCMP1335]	0.173	1	1.71e-4	1	1	729
+gi|220978318|gb|EED96644.1|,gi|223994639|ref|XP_002287003.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.028	1	5.97e-5	1	1	730
+gi|223992519|ref|XP_002285943.1|,gi|220977258|gb|EED95584.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.091	1	9.31e-5	1	1	731
+gi|223992547|ref|XP_002285957.1|,gi|220977272|gb|EED95598.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.059	1	9.37e-5	1	1	732
+gi|223992565|ref|XP_002285966.1|,gi|220977281|gb|EED95607.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.068	1	6.17e-5	1	1	733
+gi|223992737|ref|XP_002286052.1|,gi|220977367|gb|EED95693.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.089	1	1.87e-4	1	1	734
+gi|223993015|ref|XP_002286191.1|,gi|220977506|gb|EED95832.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.080	1	1.49e-4	1	1	735
+gi|223993175|ref|XP_002286271.1|,gi|220977586|gb|EED95912.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.301	1	4.34e-4	1	1	736
+gi|223993301|ref|XP_002286334.1|,gi|220977649|gb|EED95975.1|	hypothetical protein THAPSDRAFT_261064, partial [Thalassiosira pseudonana CCMP1335]	0.179	1	3.33e-4	1	1	737
+gi|223993511|ref|XP_002286439.1|,gi|220977754|gb|EED96080.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.063	1	1.16e-4	1	1	738
+gi|223993677|ref|XP_002286522.1|,gi|220977837|gb|EED96163.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.088	1	1.74e-4	1	1	739
+gi|223993693|ref|XP_002286530.1|,gi|220977845|gb|EED96171.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.047	1	1.47e-4	1	1	740
+gi|223993695|ref|XP_002286531.1|,gi|220977846|gb|EED96172.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.021	1	8.14e-5	1	1	741
+gi|223993781|ref|XP_002286574.1|,gi|220977889|gb|EED96215.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.139	1	1.83e-4	1	1	742
+gi|223993785|ref|XP_002286576.1|,gi|220977891|gb|EED96217.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.034	1	7.28e-5	1	1	743
+gi|223993947|ref|XP_002286657.1|,gi|220977972|gb|EED96298.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.062	1	7.82e-5	1	1	744
+gi|223994413|ref|XP_002286890.1|,gi|220978205|gb|EED96531.1|	cation transport ATPase [Thalassiosira pseudonana CCMP1335]	0.020	1	3.12e-5	1	1	745
+gi|223994687|ref|XP_002287027.1|,gi|220978342|gb|EED96668.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.105	1	1.01e-4	1	1	746
+gi|223994827|ref|XP_002287097.1|,gi|220978412|gb|EED96738.1|	coproporphyrinogen III oxidase, chloroplast targeted [Thalassiosira pseudonana CCMP1335]	0.077	1	1.07e-4	1	1	747
+gi|223994917|ref|XP_002287142.1|,gi|220976258|gb|EED94585.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.009	1	1.81e-5	1	1	748
+gi|223994993|ref|XP_002287180.1|,gi|220976296|gb|EED94623.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.011	1	2.09e-5	1	1	749
+gi|223995117|ref|XP_002287242.1|,gi|220976358|gb|EED94685.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.047	1	9.99e-5	1	1	750
+gi|223995167|ref|XP_002287267.1|,gi|220976383|gb|EED94710.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.030	1	2.83e-5	1	1	751
+gi|223995529|ref|XP_002287438.1|,gi|220976554|gb|EED94881.1|	coatomer protein subunit delta [Thalassiosira pseudonana CCMP1335]	0.029	1	6.16e-5	1	1	752
+gi|223995797|ref|XP_002287572.1|,gi|220976688|gb|EED95015.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.203	1	2.57e-4	1	1	753
+gi|223995969|ref|XP_002287658.1|,gi|220976774|gb|EED95101.1|	thylakoid lumenal 17.4 kDa protein, chloroplast precursor [Thalassiosira pseudonana CCMP1335],thylakoid lumenal 17.4 kDa protein, chloroplast precursor, partial [Thalassiosira pseudonana CCMP1335]	0.065	1	1.29e-4	1	1	754
+gi|223996253|ref|XP_002287800.1|,gi|220976916|gb|EED95243.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.053	1	7.59e-5	1	1	755
+gi|223996519|ref|XP_002287933.1|,gi|220977049|gb|EED95376.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.066	1	9.96e-5	1	1	756
+gi|223996521|ref|XP_002287934.1|,gi|220977050|gb|EED95377.1|	Ca2+-dependent membrane-binding protein annexin [Thalassiosira pseudonana CCMP1335]	0.087	1	9.80e-5	1	1	757
+gi|223996531|ref|XP_002287939.1|,gi|220977055|gb|EED95382.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.042	1	5.36e-5	1	1	758
+gi|223996867|ref|XP_002288107.1|,gi|220977223|gb|EED95550.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.031	1	7.02e-5	1	1	759
+gi|223997094|ref|XP_002288220.1|,gi|220975328|gb|EED93656.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.264	1	2.45e-4	1	1	760
+gi|223997142|ref|XP_002288244.1|,gi|220975352|gb|EED93680.1|	succinoaminoimidazolecarboximide ribonucleotide synthetase [Thalassiosira pseudonana CCMP1335]	0.055	1	9.60e-5	1	1	761
+gi|220975351|gb|EED93679.1|,gi|223997140|ref|XP_002288243.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.048	1	8.40e-5	1	1	761
+gi|223997302|ref|XP_002288324.1|,gi|220975432|gb|EED93760.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.080	1	1.27e-4	1	1	762
+gi|223997386|ref|XP_002288366.1|,gi|220975474|gb|EED93802.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.033	1	8.60e-5	1	0	763
+gi|223997910|ref|XP_002288628.1|,gi|220975736|gb|EED94064.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.050	1	7.61e-5	1	1	764
+gi|223998967|ref|XP_002289156.1|,gi|220974364|gb|EED92693.1|	hypothetical protein THAPSDRAFT_262032 [Thalassiosira pseudonana CCMP1335],hypothetical protein THAPSDRAFT_262032, partial [Thalassiosira pseudonana CCMP1335]	0.051	1	7.67e-5	1	1	765
+gi|223999063|ref|XP_002289204.1|,gi|220974412|gb|EED92741.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.042	1	8.35e-5	1	1	766
+gi|223999087|ref|XP_002289216.1|,gi|220974424|gb|EED92753.1|	eukaryotic translation initiation factor 3, subunit 10, partial [Thalassiosira pseudonana CCMP1335]	0.032	1	3.50e-5	1	1	767
+gi|223999089|ref|XP_002289217.1|,gi|220974425|gb|EED92754.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.020	1	2.22e-5	1	1	768
+gi|223999375|ref|XP_002289360.1|,gi|220974568|gb|EED92897.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.018	1	3.48e-5	1	1	769
+gi|223999609|ref|XP_002289477.1|,gi|220974685|gb|EED93014.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.027	1	5.40e-5	1	1	770
+gi|223999627|ref|XP_002289486.1|,gi|220974694|gb|EED93023.1|	mago nashi-like protein [Thalassiosira pseudonana CCMP1335]	0.078	1	2.07e-4	1	1	771
+gi|223999675|ref|XP_002289510.1|,gi|220974718|gb|EED93047.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.044	1	6.99e-5	1	1	772
+gi|223999741|ref|XP_002289543.1|,gi|220974751|gb|EED93080.1|	RL13e, ribosomal protein 13e 60S large ribosomal subunit [Thalassiosira pseudonana CCMP1335]	0.087	1	1.54e-4	1	1	773
+gi|223999743|ref|XP_002289544.1|,gi|220974752|gb|EED93081.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.172	1	2.73e-4	1	1	774
+gi|223999921|ref|XP_002289633.1|,gi|220974841|gb|EED93170.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.015	1	3.33e-5	1	1	775
+gi|224000283|ref|XP_002289814.1|,gi|220975022|gb|EED93351.1|	RL18a, ribosomal protein 18a 60S large ribosomal subunit [Thalassiosira pseudonana CCMP1335]	0.077	1	1.73e-4	1	1	776
+gi|224000307|ref|XP_002289826.1|,gi|220975034|gb|EED93363.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.044	1	7.30e-5	1	1	777
+gi|224000549|ref|XP_002289947.1|,gi|220975155|gb|EED93484.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.080	1	1.58e-4	1	1	778
+gi|224000774|ref|XP_002290059.1|,gi|220973481|gb|EED91811.1|	phospoenolpyruvate carboxylase, partial [Thalassiosira pseudonana CCMP1335]	0.026	1	3.76e-5	1	0	779
+gi|224000936|ref|XP_002290140.1|,gi|220973562|gb|EED91892.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.031	1	3.95e-5	1	1	780
+gi|224000994|ref|XP_002290169.1|,gi|220973591|gb|EED91921.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.052	1	1.28e-4	1	1	781
+gi|224001138|ref|XP_002290241.1|,gi|220973663|gb|EED91993.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.031	1	6.04e-5	1	1	782
+gi|224001310|ref|XP_002290327.1|,gi|220973749|gb|EED92079.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.057	1	1.20e-4	1	1	783
+gi|224001516|ref|XP_002290430.1|,gi|220973852|gb|EED92182.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.020	1	4.01e-5	1	1	784
+gi|224001644|ref|XP_002290494.1|,gi|220973916|gb|EED92246.1|	ABC transporter [Thalassiosira pseudonana CCMP1335]	0.013	1	2.25e-5	1	1	785
+gi|224001778|ref|XP_002290561.1|,gi|220973983|gb|EED92313.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.016	1	3.00e-5	1	1	786
+gi|224002162|ref|XP_002290753.1|,gi|220974175|gb|EED92505.1|	v-type h-atpase subunit, partial [Thalassiosira pseudonana CCMP1335]	0.064	1	1.27e-4	1	1	787
+gi|224002414|ref|XP_002290879.1|,gi|220974301|gb|EED92631.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.114	1	1.09e-4	1	1	788
+gi|224002430|ref|XP_002290887.1|,gi|220974309|gb|EED92639.1|	eukaryotic translation initiation factor 3 subunit 8, partial [Thalassiosira pseudonana CCMP1335]	0.022	1	4.31e-5	1	1	789
+gi|224002454|ref|XP_002290899.1|,gi|220974321|gb|EED92651.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.011	1	2.23e-5	1	1	790
+gi|224002769|ref|XP_002291056.1|,gi|220972832|gb|EED91163.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.099	1	1.97e-4	1	1	791
+gi|224002999|ref|XP_002291171.1|,gi|220972947|gb|EED91278.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.096	1	2.78e-4	1	1	792
+gi|224003221|ref|XP_002291282.1|,gi|220973058|gb|EED91389.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.060	1	7.28e-5	1	1	793
+gi|224003229|ref|XP_002291286.1|,gi|220973062|gb|EED91393.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.010	1	2.79e-5	1	1	794
+gi|224003539|ref|XP_002291441.1|,gi|220973217|gb|EED91548.1|	aspartate carbamoyltransferase, partial [Thalassiosira pseudonana CCMP1335]	0.039	1	9.51e-5	1	1	795
+gi|224003905|ref|XP_002291624.1|,gi|220973400|gb|EED91731.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.027	1	2.55e-5	1	1	796
+gi|224004068|ref|XP_002295685.1|,gi|209585717|gb|ACI64402.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.057	1	1.29e-4	1	1	797
+gi|224004340|ref|XP_002295821.1|,gi|209585853|gb|ACI64538.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.169	1	2.14e-4	1	1	798
+gi|224004428|ref|XP_002295865.1|,gi|209585897|gb|ACI64582.1|	monogalactosyldiacylglycerol synthase-like protein, partial [Thalassiosira pseudonana CCMP1335]	0.044	1	7.80e-5	1	1	799
+gi|224004476|ref|XP_002295889.1|,gi|209585921|gb|ACI64606.1|	cytoplasmic dynein heavy chain-like protein [Thalassiosira pseudonana CCMP1335]	0.004	1	7.88e-6	1	1	800
+gi|224004622|ref|XP_002295962.1|,gi|209585994|gb|ACI64679.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.039	1	4.21e-5	1	1	801
+gi|224004872|ref|XP_002296087.1|,gi|209586119|gb|ACI64804.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.020	1	3.74e-5	1	1	802
+gi|224004984|ref|XP_002296143.1|,gi|209586175|gb|ACI64860.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.092	1	1.00e-4	1	1	803
+gi|224005162|ref|XP_002296232.1|,gi|209586264|gb|ACI64949.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.029	1	4.91e-5	1	1	804
+gi|224005202|ref|XP_002296252.1|,gi|209586284|gb|ACI64969.1|	rab-type small GTPase [Thalassiosira pseudonana CCMP1335]	0.047	1	1.47e-4	1	1	805
+gi|224005430|ref|XP_002296366.1|,gi|209586398|gb|ACI65083.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.005	1	7.05e-6	1	1	806
+gi|224005705|ref|XP_002291813.1|,gi|220972332|gb|EED90664.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.054	1	1.13e-4	1	1	807
+gi|224005751|ref|XP_002291836.1|,gi|220972355|gb|EED90687.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.101	1	1.53e-4	1	1	808
+gi|224005997|ref|XP_002291959.1|,gi|220972478|gb|EED90810.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.043	1	6.87e-5	1	1	809
+gi|224006540|ref|XP_002292230.1|,gi|220971872|gb|EED90205.1|	eukaryotic translation initiation factor 2 alpha subunit [Thalassiosira pseudonana CCMP1335]	0.056	1	9.37e-5	1	1	810
+gi|224006794|ref|XP_002292357.1|,gi|220971999|gb|EED90332.1|	t-complex protein 1 delta subunit [Thalassiosira pseudonana CCMP1335]	0.064	1	5.93e-5	1	1	811
+gi|224007034|ref|XP_002292477.1|,gi|220972119|gb|EED90452.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.071	1	9.31e-5	1	1	812
+gi|224007100|ref|XP_002292510.1|,gi|220972152|gb|EED90485.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.071	1	8.68e-5	1	1	813
+gi|224007461|ref|XP_002292690.1|,gi|220971552|gb|EED89886.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.012	1	1.14e-5	1	1	814
+gi|224007571|ref|XP_002292745.1|,gi|220971607|gb|EED89941.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.095	1	1.43e-4	1	1	815
+gi|224007901|ref|XP_002292910.1|,gi|220971772|gb|EED90106.1|	methylthioadenosine/S-adenosyl homocysteine nucleosidase [Thalassiosira pseudonana CCMP1335]	0.088	1	1.27e-4	1	1	816
+gi|224008254|ref|XP_002293086.1|,gi|220971212|gb|EED89547.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.022	1	5.93e-5	1	0	817
+gi|224008260|ref|XP_002293089.1|,gi|220971215|gb|EED89550.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.031	1	5.10e-5	1	1	818
+gi|224008492|ref|XP_002293205.1|,gi|220971331|gb|EED89666.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.071	1	8.60e-5	1	1	819
+gi|224008564|ref|XP_002293241.1|,gi|220971367|gb|EED89702.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.026	1	5.23e-5	1	1	820
+gi|224008753|ref|XP_002293335.1|,gi|220970735|gb|EED89071.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.034	1	4.73e-5	1	1	821
+gi|224008987|ref|XP_002293452.1|,gi|220970852|gb|EED89188.1|	synaptobrevin [Thalassiosira pseudonana CCMP1335]	0.093	1	1.73e-4	1	1	822
+gi|224009007|ref|XP_002293462.1|,gi|220970862|gb|EED89198.1|	receptor mediated endocytosis protein-like protein [Thalassiosira pseudonana CCMP1335]	0.032	1	5.72e-5	1	1	823
+gi|224009185|ref|XP_002293551.1|,gi|220970951|gb|EED89287.1|	alpha subunit of tetrameric clathrin adaptor complex AP1, partial [Thalassiosira pseudonana CCMP1335]	0.015	1	3.42e-5	1	1	824
+gi|224008795|ref|XP_002293356.1|,gi|220970756|gb|EED89092.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.015	1	3.42e-5	1	1	824
+gi|224009197|ref|XP_002293557.1|,gi|220970957|gb|EED89293.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.049	1	1.04e-4	1	1	825
+gi|224009265|ref|XP_002293591.1|,gi|220970991|gb|EED89327.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.109	1	1.11e-4	1	1	826
+gi|224009422|ref|XP_002293669.1|,gi|220970341|gb|EED88678.1|	hypothetical protein THAPSDRAFT_269723 [Thalassiosira pseudonana CCMP1335]	0.018	1	8.12e-5	1	1	827
+gi|224009588|ref|XP_002293752.1|,gi|220970424|gb|EED88761.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.040	1	5.30e-5	1	1	828
+gi|224009766|ref|XP_002293841.1|,gi|220970513|gb|EED88850.1|	hypothetical protein THAPSDRAFT_264262, partial [Thalassiosira pseudonana CCMP1335]	0.015	1	4.39e-5	1	1	829
+gi|224009980|ref|XP_002293948.1|,gi|220970620|gb|EED88957.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.038	1	3.72e-5	1	1	830
+gi|224010267|ref|XP_002294091.1|,gi|220970108|gb|EED88446.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.042	1	8.80e-5	1	1	831
+gi|224010297|ref|XP_002294106.1|,gi|220970123|gb|EED88461.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.054	1	1.14e-4	1	1	832
+gi|224010373|ref|XP_002294144.1|,gi|220970161|gb|EED88499.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.104	1	1.83e-4	1	1	833
+gi|224010457|ref|XP_002294186.1|,gi|220970203|gb|EED88541.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.045	1	1.19e-4	1	1	834
+gi|224010543|ref|XP_002294229.1|,gi|220970246|gb|EED88584.1|	chromatin assembly factor [Thalassiosira pseudonana CCMP1335]	0.036	1	6.80e-5	1	1	835
+gi|224010760|ref|XP_002294337.1|,gi|220969832|gb|EED88171.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.061	1	1.49e-4	1	1	836
+gi|224010874|ref|XP_002294394.1|,gi|220969889|gb|EED88228.1|	adp-ribosylation factor 1 [Thalassiosira pseudonana CCMP1335]	0.097	1	1.71e-4	1	1	837
+gi|224011782|ref|XP_002294544.1|,gi|220969564|gb|EED87904.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.039	1	7.33e-5	1	1	838
+gi|224011958|ref|XP_002294632.1|,gi|220969652|gb|EED87992.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.168	1	2.80e-4	1	1	839
+gi|224012104|ref|XP_002294705.1|,gi|220969725|gb|EED88065.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.127	1	1.61e-4	1	1	840
+gi|224012695|ref|XP_002295000.1|,gi|220969439|gb|EED87780.1|	member of the clp superfamily, regulatory beta subunit [Thalassiosira pseudonana CCMP1335]	0.019	1	3.46e-5	1	1	841
+gi|224012775|ref|XP_002295040.1|,gi|220969479|gb|EED87820.1|	WD40-repeat protein [Thalassiosira pseudonana CCMP1335]	0.046	1	9.68e-5	1	1	842
+gi|224012791|ref|XP_002295048.1|,gi|220969487|gb|EED87828.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.059	1	7.80e-5	1	1	843
+gi|224012998|ref|XP_002295151.1|,gi|220969113|gb|EED87455.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.089	1	1.48e-4	1	1	844
+gi|224013265|ref|XP_002295284.1|,gi|220969007|gb|EED87350.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.076	1	1.60e-4	1	1	845
+gi|224013303|ref|XP_002295303.1|,gi|220969026|gb|EED87369.1|	probable tryptophanyl tRNA synthetase [Thalassiosira pseudonana CCMP1335]	0.052	1	7.82e-5	1	1	846
+gi|224013704|ref|XP_002296516.1|,gi|220968868|gb|EED87212.1|	diaminopimelate epimerase [Thalassiosira pseudonana CCMP1335]	0.053	1	9.80e-5	1	1	847
+gi|224013762|ref|XP_002296545.1|,gi|220968897|gb|EED87241.1|	probable 20S proteasome beta type subunit [Thalassiosira pseudonana CCMP1335]	0.075	1	1.19e-4	1	1	848
+gi|224013944|ref|XP_002296636.1|,gi|220968988|gb|EED87332.1|,gi|224012637|ref|XP_002294971.1|,gi|220969410|gb|EED87751.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.025	1	2.51e-5	1	1	849
+gi|224013991|ref|XP_002296659.1|,gi|220968709|gb|EED87054.1|	hypothetical protein THAPSDRAFT_263844, partial [Thalassiosira pseudonana CCMP1335]	0.049	1	6.42e-5	1	1	850
+gi|224014042|ref|XP_002296684.1|,gi|220968539|gb|EED86885.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.013	1	3.75e-5	1	1	851
+gi|224014156|ref|XP_002296741.1|,gi|220968596|gb|EED86942.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.022	1	4.09e-5	1	1	852
+gi|224014282|ref|XP_002296804.1|,gi|220968659|gb|EED87005.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.008	1	1.24e-5	1	1	853
+gi|224014492|ref|XP_002296908.1|,gi|220968288|gb|EED86636.1|	predicted protein, partial [Thalassiosira pseudonana CCMP1335]	0.085	1	1.12e-4	1	1	854
+gi|224014546|ref|XP_002296935.1|,gi|220968315|gb|EED86663.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.008	1	1.72e-5	1	1	855
+gi|224014714|ref|XP_002297019.1|,gi|220968399|gb|EED86747.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.090	1	1.42e-4	1	1	856
+gi|224015429|ref|XP_002297369.1|,gi|220967969|gb|EED86332.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.093	1	1.09e-4	1	1	857
+gi|224015527|ref|XP_002297415.1|,gi|220967916|gb|EED86285.1|	predicted protein [Thalassiosira pseudonana CCMP1335]	0.035	1	6.99e-5	1	1	858
+gi|2873343186|pdb|8ZEH|G	Chain G, Fucoxanthin chl a/c light-harvesting protein, lhcr type	0.080	1	1.82e-4	1	1	859
+gi|220971995|gb|EED90328.1|,gi|224006786|ref|XP_002292353.1|	fucoxanthin chl a/c light-harvesting protein, lhcr type [Thalassiosira pseudonana CCMP1335]	0.069	1	1.55e-4	1	1	859
