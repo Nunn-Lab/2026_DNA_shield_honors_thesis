@@ -7,6 +7,7 @@ Word Shortcuts / Abbreviations Phytoplankton = Thalassiosira pseudonana (T. pseu
 
 --
 *See the GitHub Repository File Key for further descriptions of files present in this github folder*
+*See "Data from Limelight" for all files (proteins, peptides, modifications) for Cp34H and T. pseudonana*
 
 
 
