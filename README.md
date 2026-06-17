@@ -6,7 +6,9 @@ The following files will allow you to recreate the figures from this project.
 Word Shortcuts / Abbreviations Phytoplankton = Thalassiosira pseudonana (T. pseudonana) Bacteria: Colwellia psychrerythraea (Cp34H) 
 
 --
-*See the GitHub Repository File Key for further descriptions of files present in this github folder*
+*See the GitHub Repository File Key for further descriptions of files present in this github folder*.
+
+
 *See "Data from Limelight" for all files (proteins, peptides, modifications) for Cp34H and T. pseudonana*
 
 
