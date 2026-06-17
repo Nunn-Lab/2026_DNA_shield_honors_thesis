@@ -1,0 +1,373 @@
+Mod Mass	Modified Residues	PSM count (g2 mag)
+10	A, D, F, G, K, L, M, N, P, Q, S, T, V, Y	2
+11	A, D, E, F, G, H, K, L, M, P, Q, R, S, V, W, Y	10
+12	A, D, E, F, G, H, I, L, M, N, P, Q, R, S, T, V, Y	11
+13	A, D, E, F, G, I, K, L, M, N, P, Q, R, S, T, V, W, Y	36
+14	A, C, D, E, G, I, K, L, M, N, P, Q, R, S, T, V, Y	80
+15	A, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V, W, Y	68
+16	A, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V, W, Y	2267
+17	A, D, E, F, G, I, K, L, M, N, P, Q, R, S, T, V, W, Y	125
+18	A, D, E, F, G, I, K, L, M, N, P, Q, R, S, T, V, W, Y	36
+19	A, D, E, F, G, H, I, L, M, N, P, Q, R, S, T, V, W, Y	24
+20	A, D, E, I, K, L, M, P, Q, S, T, V, Y	9
+21	A, D, E, I, K, L, N, P, R, T, V, W	7
+22	A, D, E, G, I, L, M, N, P, Q, S, T, V, Y	140
+23	C, D, G, I, N, P, S, T, V	13
+24	D, G, I, M, T	6
+25	A, C, D, E, M, S	38
+26	A, D, E, I, K, L, M, N, Q, R, T, V	4
+27	A, D, G, I, L, M, N, P, Q, R, S, T, V	2
+28	A, D, E, G, I, K, L, M, N, P, Q, R, S, T, V, W, Y	32
+29	A, E, I, K, L	5
+30	G, I, M, P, Q	7
+31	L, V	3
+32	A, D, E, F, G, I, K, L, M, N, P, Q, R, S, T, V, W, Y	95
+33	A, I, K, M, Q, S, T, V, Y	13
+34	D, M, T, Y	6
+35	I, S	2
+37	A, D, E, I, K, L, M, Q, R, S, T, V	1
+38	D, E, F, I, L, M, N, P, V	24
+39	A, C, I, N	4
+40	C, G, K, P, V	10
+41	A, C, E, G, H, I, M, N, P, R, S, T, V	5
+42	A, D, E, G, I, K, L, Q, R, S, V, Y	4
+43	A, D, V	6
+44	I, K, L, M, N, S	13
+45	A, D, E, F, G, I, K, L, P, Q, R, S, V, W, Y	6
+46	A, E, F, G, K, Q, S, T, V	3
+47	P	2
+48	C, D, E, M, S, V	8
+49	D, E, L, N, Q, S, V	16
+51	C, E, K, M, N	6
+52	A, C, G, L	5
+53	A, C, D, E, F, G, I, K, L, P, Q, R, S, T, V, Y	18
+54	A, C, D, E, F, G, I, K, L, P, Q, S, T, V, Y	11
+55	A, C, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V, Y	40
+56	A, C, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V, Y	42
+57	A, C, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V, W, Y	1710
+58	A, C, D, E, F, G, H, I, K, L, N, P, R, S, T, V, Y	59
+59	A, C, D, G, I, T, Y	15
+60	A, C, D, E, F, G, H, I, K, L, P, Q, S, T, V, W, Y	12
+61	C, E, G, I, K, L, T, V	10
+62	A, C, P	4
+63	N, P, S, V	6
+64	I	1
+70	C, S	2
+71	A, C, G, I, K, Q, V	28
+72	D, M, N	4
+73	A, C, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V, Y	185
+74	A, C, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V, Y	14
+75	C, D, Q	3
+76	A, C, D, K, M, P, S, T, V, Y	15
+77	A, C, D, E, G, I, K, M, P, R, T, V	2
+79	D, E, G, M, P, Q, V, W	10
+80	A, D, E, F, G, H, I, K, L, M, P, Q, R, T, V, Y	5
+81	A, E, F, G, H, I, K, L, P, Q, R, T, V	2
+82	A, C	2
+83	D, V	2
+84	C, Q, V	4
+87	D, S, W	4
+89	C, E, G, H, M, T, V	23
+90	C, P	2
+94	A	1
+96	A, Y	3
+97	D, E	2
+98	N	1
+99	A, C, F, K, M, N	21
+103	A, D, E, F, I, M, N, P, Q, R	2
+105	G, S	2
+106	E, I, K, W	4
+107	A, D, E, F, I, N, P, Q, R	2
+108	D	1
+109	A, D, E, G, H, I, K, L, M, N, P, Q, S, T, V, W	5
+111	L	1
+113	E, I, K, L, R, V	10
+114	A, C, D, E, F, G, I, K, L, N, P, Q, R, S, T, W, Y	119
+115	A, C, E, F, K, L, M, S	14
+116	C, E, F, K, S	5
+117	D	1
+119	A, C, G	9
+121	C	1
+122	R	1
+124	A, D, E, G, I, K, L, N, P, Q, R, S, T, V	2
+125	A, D, E, G, H, I, K, L, N, P, Q, R, S, V	5
+126	Q	1
+127	A, D, E, F, G, K, L, N, Q, S, T, V	4
+128	A, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V, Y	308
+129	A, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V, W, Y	18
+130	A, C, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V, Y	16
+131	A, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V	25
+132	A, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V	4
+133	A, D, E, G, I, K, L, M, N, P, Q, S, T, V	3
+134	A, C, D, E, F, G, H, I, L, M, N, P, R, S, T, V, Y	2
+135	A, C, E, G, H, I, K, M, N, P, R, S, T, V	8
+136	A, C, E, G, H, I, M, N, P, R, S, T, V	1
+137	I	1
+138	A, C, E, G, H, I, M, N, P, Q, R, S, T, V	9
+140	A, C, E, G, H, I, M, N, P, R, S, T, V	1
+141	A, C, E, G, H, I, M, N, P, R, S, T, V	1
+144	N, P	2
+145	A, D, F, I, M, P, R, T	1
+147	C, D, E, F, H, L, M, R, T	16
+149	K	2
+154	G, K, M, S	14
+155	E, I	2
+156	A, D, E, G, H, I, K, L, M, N, P, R, S, T, V	173
+157	L, N	2
+159	D, N, W	4
+160	A, D, E, F, G, H, I, K, N, P, Q, V, W	2
+161	F, V	2
+163	I, M	6
+165	D, V	2
+167	A, D, E, G, I, K, L, M, N, Q, S, T, V	9
+169	A, C, E, G, I, K, L, N, P, Q, S, T, V	4
+171	C, G, Q, T	14
+172	E	1
+175	C	1
+176	I	1
+178	E, K, R	4
+183	A, C, D, E, F, G, I, K, L, Q, R, S, T, V	1
+185	A, E, I, K, T, V	10
+186	A, K, N	4
+187	A, E, F, G, I, L, M, N, Q, R, T, V, Y	1
+189	V	1
+190	A, D, F, G, H, I, L, P, R, S	2
+191	E	1
+192	N	1
+194	D, K	2
+195	D, E, K, L, N, P, Q, S, V, Y	2
+197	L, Q	2
+198	A, D, E, H, K, L, Q, T, V, Y	3
+199	A, D, E, G, H, K, L, N, Q, R, T, V, Y	20
+200	D, E, G, H, I, K, L, N, P, Q, S, T, V, Y	4
+201	E	2
+202	D, E, K, L, N, P, Q, S, V, Y	5
+203	L	1
+205	V	1
+206	G	1
+207	D	1
+209	A, D, E, G, I, K, L, R, S, T, V	3
+211	A, D, E, G, I, K, L, N, Q, R, S, T, Y	4
+212	A, E, G, I, K, L, M, Q, R, S, T, V, Y	6
+213	G	1
+214	A, D, E, F, G, I, K, L, M, P, Q, R, S, T, V, Y	2
+215	A, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V, Y	22
+216	M	1
+217	A, D, E, I, K, L, M, N, P, Q, S, T, V, W	4
+218	D, E, K, L, M, N, P, Q, S, V, Y	4
+221	A, D, E, G, L, N, P, R, S, T, V	2
+222	I	2
+226	A, D, E, K, M, P, R, S, T, V	2
+227	A, D, E, F, G, K, N, T, Y	19
+229	A, D, E, K, M, P, R, S, T, V	4
+230	D, F	2
+231	A, D, E, F, G, I, K, L, N, R, S, T, V	5
+232	G, R	3
+233	D	1
+234	E, K, V	3
+235	K, T	2
+236	Q, S	2
+237	A, D, E, F, G, K, L, Q, S, T	1
+238	A, D, E, F, G, I, K, L, M, P, Q, R, S, T, V, Y	3
+239	A, D, E, G, K, L, N, Q, R	6
+240	A, D, E, F, G, I, K, L, M, N, P, Q, R, S, T, V, Y	8
+241	A, D, E, F, G, K, L, N, Q, R, S, T	4
+242	A, D, E, F, K, L, N, Q, V	9
+243	A, D, E, K, L, N, Q, R, S	8
+244	K	2
+245	D, V	2
+246	S	1
+247	F, N, P, S	6
+252	E, R	2
+254	A, I, K, S, Y	6
+255	A, D, E, F, I, K, T, Y	5
+256	D, E, G, H, K, L, M, N, P, Q, R, S, T, V, Y	10
+257	A, D, K, N, S, T	16
+258	A, D, E, F, I, K, T, Y	1
+259	S	1
+260	A, D, E, G, H, I, N, R, S, T, Y	1
+261	D, G, I, L, S	5
+262	A, D, E, F, I, K, Q, V	2
+263	A, E, F, G, H, L, M, N, Q, R, S, T, Y	4
+266	A, D, E, F, H, I, K, L, N, P, V	1
+267	D, V, W, Y	5
+268	N	1
+269	A, D, E, F, G, I, K, L, P, Q, S, V, W, Y	13
+270	A, D, E, F, G, I, K, L, P, Q, S, V, W, Y	7
+271	A, D, E, F, G, H, I, K, L, M, N, R, S, T, V	22
+272	A, D, E, F, G, H, I, K, L, N, Q, R, S, T, V, Y	10
+273	A, D, E, G, H, I, K, L, M, N, R, S, T, V, W, Y	4
+275	A, R, V	4
+277	I, Y	2
+278	A	1
+281	A	1
+283	A, D, E, F, G, H, I, K, L, N, R, S, T, Y	2
+284	D, I, M, T	4
+285	E, G, K, P, R, T, V, Y	15
+286	A, E, G, I, M, P	12
+287	E, L, Q	6
+288	A, D, E, G, H, I, L, M, N, P, R, S, T, V	5
+289	C, D, E, F, G, N, Q, R, S, T	3
+291	V	2
+293	A, C, D, E, G, I, K, L, R, S, T	2
+295	G, Q, V	3
+297	D, N	2
+298	A, D, E, F, G, H, I, K, L, N, P, Q, V	3
+300	V, Y	5
+301	E, S	2
+302	D, E, F, I, L, N, Q, R	2
+303	A, D, E, F, G, I, K, L, P, Q, R, S, T, V	7
+305	D, K	3
+309	D, E, G, I, K, L, R, S, T, V	2
+310	D, E, F, G, H, I, K, L, M, R, S, V, Y	2
+311	S	2
+312	D	1
+313	A, D, E, F, G, I, K, L, P, R, S, V	4
+314	F, H, K, N	6
+315	D	1
+316	A, D, E, G, I, K, L, N, Q, R, S, T, V, Y	6
+317	C, D, E, F	7
+318	A, D, E, G, H, I, K, L, N, Q, R, S, V	3
+319	N	3
+320	N	2
+321	E	2
+323	N, V, W	3
+324	G, Q	2
+325	R	1
+327	A, D, E, F, H, I, K, L, N, Q, S, T, V	6
+328	A, D, E, F, I, K, L, Q, S, T, V	3
+329	A, C, E, G, H, I, K, L, P, Q, S, T, V	1
+330	A, D, E, K, N, P, Q, V, Y	4
+331	A, D, E, K, M, N, P, R, S, T, V, W	4
+332	A, D, E, G, I, K, P, Q, S, T, V	3
+335	A, D, E, G, H, I, N, R, S, T, V, Y	2
+336	I	1
+339	L, S	2
+341	A, D, E, F, I, L, M, P, Q, R, T, V, Y	5
+342	A, D, E, F, G, I, K, L, M, P, Q, R, S, T, V, Y	6
+343	C	1
+344	D, F	3
+345	A, D, E, F, G, H, I, L, N, R, S	3
+346	G, L	2
+347	A, D, E, G, H, I, N, Q, R, S, V	3
+348	A, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V, Y	3
+349	A, D, E, F, G, H, I, K, L, N, R, S, T, V, Y	4
+352	F	1
+353	R, V	2
+355	A, D, E, F, I, K, L, P, Q, R, T, V	4
+356	D, K	4
+357	A, E, G, I, K, L, M, Q, T, V	5
+358	I, K, L, V	13
+359	E, G, L, M, N	7
+360	E, R, V	3
+361	A	1
+364	L, W	2
+365	A, D, E, F, I, L, M, P, Q, R, S, T, V, Y	3
+366	L	1
+367	D, E, G, K, L, S, V	2
+368	E, F, K, M, V	7
+369	C	1
+370	K	1
+371	E, I, L, V	5
+372	K, R	3
+373	L	1
+374	A, D, E, F, K, L, N, P, Q, S	1
+375	A, D, E, F, G, I, M, P, R, S, V	1
+376	A, D, G, I, K, L, Q, R, S, V	1
+381	A, D, E, F, G, H, I, K, L, N, P, Q, R, T, V, Y	5
+382	A, K, R, W	5
+383	A, D, E, F, G, I, K, L, N, Q, R, T, V	5
+385	K, V	2
+389	A, E, F, G, I, K, L, M, N, R, S, T, V	6
+390	K	1
+393	K, S	3
+395	A, E, G, I, K, L, M, P, Q, T, V, W	1
+396	D, E	2
+398	L, V	3
+399	D, E, F, K, Q, R, T	1
+400	E	1
+401	A, D, E, G, I, K, L, R, S, V, Y	3
+402	A, D, E, F, G, I, K, L, Q, R, S, T, V, Y	6
+403	A, D, E, G, I, L, M, N, R, S, V	5
+404	A, D, E, G, I, K, L, N, R, S, T, V, Y	5
+405	C, D, S	3
+406	D, E, G, I, K, N, Q, R, T, V	2
+407	L	1
+409	A, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V	6
+410	A, D, E, F, G, I, K, L, N, P, Q, R, S, T, V, Y	4
+411	A, D, E, I, K, L, N, P, S, T, V	5
+412	A, D, E, G, H, I, K, L, M, N, P, R, S, T, V	7
+413	I, V	3
+414	A, D, E, G, I, K, L, M, Q, R, T, V	6
+415	A, D, E, G, H, I, K, L, M, N, Q, R, T, V	6
+416	A, E, I, K, L, N, P, Q, R, S, T, V, Y	3
+418	A, D, E, G, I, K, L, M, N, S, T, V, Y	9
+419	A, D, E, H, K, L, N, R, S	2
+420	D, E, F, G, I, K, P, Q, R, S, T, V, Y	4
+421	A, D, E, F, G, I, K, L, N, P, R, S, T, V	3
+424	A, D, E, G, I, K, L, N, S, T, V	1
+425	A, D, F, I, K, L, P, S, T, V	5
+427	A, D, E, G, K, R, V	8
+428	A, D, E, H, K, L, N, Q, R, S, V, W	2
+429	H, S	2
+430	A, D, E, G, H, I, K, L, M, Q, R, S, V, W	2
+431	A, C, T, V	5
+433	G, V	2
+434	L, R, V	3
+435	D, E, H, K, L, M, N, R	2
+437	I	1
+439	M	1
+440	A, E, K, V	2
+441	A, F, G, H, I, M, N, P, R, T, V	1
+442	K	2
+444	A, C, D, E, I, K, L, M, N, S, T, V	3
+445	G, L	3
+446	A, D, E, F, H, I, K, L, M, N, R, S, T, V	3
+447	A, C, E, F, G, I, K, L, M, P, R, S, T	7
+448	A, G, I, K, N, R, T	1
+449	A, C, G, H, K, N, R, V, Y	4
+451	A, D, F, G, H, I, K, L, N, P, R, S, V, Y	6
+452	D, E, G, I, K, Q, V, Y	2
+453	A, D, E, F, G, I, K, L, N, P, Q, R, S, V, W, Y	3
+454	A, D, E, G, H, I, K, L, N, R, T, V	1
+455	A, D, E, F, G, H, I, K, L, N, P, Q, R, T, V	3
+456	A, D, F, G, H, I, L, P, R, S	1
+457	D, F, G, I, K, L, M, P, R, T	2
+458	D, E, F, G, H, I, K, L, N, P, Q, R, T, V, Y	4
+459	G, M	8
+460	A, D, E, G, H, I, K, L, M, N, P, S	4
+461	A, D, E, I, K, L, N, P, Q, R, S, T, V	9
+463	A, D, E, F, G, I, K, N, R, S, T, V, Y	4
+464	A, E, F, I, K, N, T, V	1
+465	A, D, E, G, H, K, L, N, P, Q, R, T, V, W	3
+466	A, D, E, G, H, I, K, L, M, N, P, Q, R, S, T, V, Y	5
+468	A, F, G, H, K, L, M, N, Q, R, S, T, V, Y	6
+469	A, D, E, F, G, I, K, L, N, R, V	5
+470	A, D, E, G, H, I, K, L, N, P, Q, R, S, V, Y	3
+471	H	1
+472	A, E, F, I, K, P, Q, R, S, T, V	11
+473	H, I, L, Q, R, S, V	1
+474	A, D, E, G, I, K, L, M, N, P, R, S, V, Y	7
+475	A, D, E, K, L, M, N, P, S, V, Y	5
+476	A, E, K, L, N, P, R	3
+477	A, E, K, L, Q, T, V	3
+478	D, E, L, Q, R, S, T, V, W	2
+479	A, D, G, I, K, N, P, Q, R, V, Y	4
+480	K, S	2
+481	A, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V	5
+482	A, D, E, F, H, I, K, L, M, N, P, R, V, Y	5
+483	A, E, F, G, K, L, N, V	2
+484	A, D, E, G, I, N, P, Q, R, T, V	12
+486	D, E, F, H, I, K, L, M, N, P, Q, R, S, T, V, W, Y	4
+487	D, E, H, K, L, P, Q, R, S, V	3
+488	A, D, E, H, I, K, L, N, P, Q, R, S, T, V, Y	6
+489	A, D, E, G, I, K, L, M, N, P, R, S, T, V	5
+490	D, E, G, H, K, P, T, V	1
+491	A, D, E, F, G, H, K, L, M, N, P, Q, R, S, T, V, W, Y	6
+492	A, E, F, G, K, N, Q, T, V	1
+493	A, D, E, G, I, K, L, N, P, Q, R, S, T, V, Y	5
+494	A, D, F, G, I, K, L, N, R, S, T, V	4
+495	A, D, E, F, G, H, I, K, L, N, P, Q, R, S, T, V, W, Y	14
+496	A, E, F, G, H, I, K, L, N, Q, R, S, T, V, Y	5
+498	A, E, F, G, I, K, L, M, N, Q, R, S, T, V, Y	5
+499	A, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V, Y	11
