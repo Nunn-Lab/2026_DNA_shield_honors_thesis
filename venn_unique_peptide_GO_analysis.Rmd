@@ -1,0 +1,468 @@
+---
+title: "DNA Shield Proteomics — Unique Peptide Comparison & GO Analysis"
+subtitle: "BC vs E (Colwellia 34H) | C vs D1:2 (T. pseudonana)"
+author: "Evelyn Bartlett — Brook Lab"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    highlight: tango
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE,
+                      fig.width = 8, fig.height = 5)
+library(tidyverse)
+library(ggvenn)       # install.packages("ggvenn")
+library(ggridges)
+library(patchwork)
+
+# ── Optional: GO / annotation packages ─────────────────────────────────────
+# For T. pseudonana GO enrichment (install once):
+#   BiocManager::install(c("clusterProfiler", "AnnotationHub", "GO.db"))
+# For Colwellia 34H (no Bioconductor OrgDb exists yet):
+#   Use the custom FASTA + DIAMOND/BLAST → UniProt mapping workflow described
+#   in Section 4 below.  The peptide lists are written to disk for offline use.
+# ───────────────────────────────────────────────────────────────────────────
+```
+
+---
+
+# 1  Data loading & contaminant filtering
+
+```{r load-data}
+bact  <- read_csv("bacteria_venn_peptides.csv",  show_col_types = FALSE)
+phyto <- read_csv("phytoplankton_venn_peptides.csv", show_col_types = FALSE)
+
+# ── Contaminant filter ──────────────────────────────────────────────────────
+# cRAP / common contaminant sequences (keratins, trypsin, albumin, etc.)
+# Adjust the regex to match however contaminants are flagged in your FASTA.
+# If peptides were already filtered upstream (Limelight q ≤ 0.01), this is
+# a belt-and-suspenders check on motifs that survive FDR filtering.
+contam_motifs <- c(
+  "GSGFGSSGFGSSSGYGGGSSR",      # keratin K1/K2 signature
+  "SQISNLELDSTFR",               # serum albumin
+  "VATVSLPR",                    # trypsin autolysis
+  "LSQSKVLSAYR"                  # IgG kappa chain
+)
+contam_re <- paste(contam_motifs, collapse = "|")
+
+strip_mod <- function(x) str_remove_all(x, "\\[.*?\\]")
+
+filter_contam <- function(df) {
+  df %>%
+    mutate(across(everything(),
+                  ~ if_else(str_detect(strip_mod(.), contam_re), NA_character_, .)))
+}
+
+bact  <- filter_contam(bact)
+phyto <- filter_contam(phyto)
+
+cat("Bacteria columns :", paste(names(bact),  collapse = ", "), "\n")
+cat("Phyto    columns :", paste(names(phyto), collapse = ", "), "\n")
+```
+
+---
+
+# 2  Venn comparisons: unique vs shared peptides
+
+```{r venn-sets}
+# ── Bacteria: BC vs E ──────────────────────────────────────────────────────
+bc_peps <- na.omit(bact$BC)
+e_peps  <- na.omit(bact$E)
+
+bc_only      <- setdiff(bc_peps, e_peps)
+e_only       <- setdiff(e_peps, bc_peps)
+shared_bce   <- intersect(bc_peps, e_peps)
+
+# ── Phyto: C vs D1:2 ───────────────────────────────────────────────────────
+c_peps   <- na.omit(phyto$C)
+d12_peps <- na.omit(phyto$`D1:2`)
+
+c_only       <- setdiff(c_peps, d12_peps)
+d12_only     <- setdiff(d12_peps, c_peps)
+shared_cd12  <- intersect(c_peps, d12_peps)
+
+# ── Summary table ─────────────────────────────────────────────────────────
+tribble(
+  ~Comparison, ~A_only, ~B_only, ~Shared, ~Total_A, ~Total_B,
+  "BC vs E (bacteria)",  length(bc_only), length(e_only),  length(shared_bce),  length(bc_peps), length(e_peps),
+  "C vs D1:2 (phyto)",   length(c_only),  length(d12_only),length(shared_cd12), length(c_peps),  length(d12_peps)
+) %>%
+  mutate(
+    pct_A_only = round(100 * A_only / Total_A, 1),
+    pct_B_only = round(100 * B_only / Total_B, 1),
+    pct_shared = round(100 * Shared / (Total_A + Total_B - Shared), 1)
+  ) %>%
+  knitr::kable(caption = "Peptide overlap summary (after contaminant removal)")
+```
+
+```{r venn-plots, fig.width=10, fig.height=4}
+p1 <- ggvenn(
+  list(BC = bc_peps, E = e_peps),
+  fill_color = c("#2166AC", "#92C5DE"),
+  stroke_size = 0.5, set_name_size = 5, text_size = 4
+) + ggtitle("CP34H: BC vs E")
+
+p2 <- ggvenn(
+  list(C = c_peps, `D1:2` = d12_peps),
+  fill_color = c("#1B7837", "#A6DBA0"),
+  stroke_size = 0.5, set_name_size = 5, text_size = 4
+) + ggtitle("Phyto: C vs D1:2")
+
+p1 + p2
+```
+
+---
+
+# 3  Peptide-level feature analysis
+
+```{r feature-df}
+make_features <- function(pep_vec, group_label) {
+  tibble(
+    peptide   = pep_vec,
+    group     = group_label,
+    seq_clean = strip_mod(pep_vec),
+    length    = nchar(seq_clean),
+    has_oxM   = str_detect(pep_vec, "M\\[15\\.99\\]"),
+    n_oxM     = str_count(pep_vec, "M\\[15\\.99\\]"),
+    missed_cleavage = str_count(seq_clean, "[KR](?!$)"),   # internal K/R
+    c_term_aa = str_sub(seq_clean, -1)
+  )
+}
+
+feat <- bind_rows(
+  make_features(bc_only,   "BC_only"),
+  make_features(e_only,    "E_only"),
+  make_features(c_only,    "C_only"),
+  make_features(d12_only,  "D1:2_only")
+) %>%
+  mutate(
+    organism   = if_else(str_detect(group, "^BC|^E"), "Colwellia 34H", "T. pseudonana"),
+    comparison = if_else(str_detect(group, "^BC|^E"), "BC vs E", "C vs D1:2")
+  )
+```
+
+## 3.1  Peptide length distributions
+
+```{r length-plot}
+ggplot(feat, aes(x = length, y = group, fill = group)) +
+  geom_density_ridges(alpha = 0.75, scale = 1.2, rel_min_height = 0.01,
+                      quantile_lines = TRUE, quantiles = 2) +
+  scale_fill_manual(values = c(
+    BC_only   = "#2166AC", E_only    = "#92C5DE",
+    C_only    = "#1B7837", `D1:2_only` = "#A6DBA0"
+  )) +
+  scale_x_continuous(limits = c(5, 50)) +
+  labs(title = "Peptide length — unique peptides only",
+       x = "Amino acid length", y = NULL) +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "none")
+```
+
+**Key observation:** E-only peptides (Colwellia) are on average ~2 aa longer than BC-only
+(mean 17.5 vs 15.5 aa) and carry substantially more missed cleavages (see §3.2).
+
+## 3.2  Missed cleavage profiles
+
+```{r mc-plot}
+feat %>%
+  mutate(mc_cat = factor(pmin(missed_cleavage, 2),
+                         labels = c("0 (fully cleaved)", "1 MC", "≥2 MC"))) %>%
+  count(group, mc_cat) %>%
+  group_by(group) %>%
+  mutate(pct = 100 * n / sum(n)) %>%
+  ggplot(aes(group, pct, fill = mc_cat)) +
+  geom_col(position = "stack", width = 0.6) +
+  scale_fill_brewer(palette = "Set2", name = "Missed cleavages") +
+  labs(title = "Missed cleavage distribution — unique peptide sets",
+       x = NULL, y = "% of peptides") +
+  theme_minimal(base_size = 13) +
+  coord_flip()
+```
+
+**Key observation:** E-only has 45 % one-missed-cleavage vs only 23 % for BC-only,
+and 15 % ≥2 MC vs 4 % for BC-only. This suggests E-unique proteins may have
+more trypsin-resistant regions (e.g. proline-adjacent cleavage sites, compact domains)
+or were present at lower abundance in E, reducing sequence coverage per protein.
+
+## 3.3  Methionine oxidation frequency
+
+```{r oxM-plot}
+feat %>%
+  group_by(group, organism) %>%
+  summarise(
+    pct_oxM = 100 * mean(has_oxM),
+    .groups = "drop"
+  ) %>%
+  ggplot(aes(group, pct_oxM, fill = organism)) +
+  geom_col(width = 0.5) +
+  scale_fill_manual(values = c("Colwellia 34H" = "#2166AC",
+                                "T. pseudonana"  = "#1B7837")) +
+  geom_text(aes(label = paste0(round(pct_oxM, 1), "%")),
+            hjust = -0.1, size = 4) +
+  labs(title = "% of unique peptides containing at least one oxidized Met",
+       x = NULL, y = "% with Met-ox") +
+  coord_flip() +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "bottom")
+```
+
+**Key observation:** E-only peptides show the highest oxMet rate (28 %) compared to
+BC-only (16 %) — consistent with greater oxidative stress or sample handling differences
+in the E condition. D1:2-only is slightly elevated vs C-only (18 % vs 14 %).
+
+## 3.4  Amino acid composition biases
+
+```{r aa-comp, fig.height=6}
+aa_freq <- feat %>%
+  group_by(group) %>%
+  summarise(
+    total_aa = sum(nchar(seq_clean)),
+    across(all_of(strsplit("ACDEFGHIKLMNPQRSTVWY", "")[[1]]),
+           ~ 100 * sum(str_count(seq_clean, .x)) / sum(nchar(seq_clean))),
+    .groups = "drop"
+  ) %>%
+  pivot_longer(cols = A:Y, names_to = "aa", values_to = "pct")
+
+# Pairwise log2-ratio: unique vs its counterpart
+aa_diff_bact <- aa_freq %>%
+  filter(group %in% c("BC_only", "E_only")) %>%
+  select(group, aa, pct) %>%
+  pivot_wider(names_from = group, values_from = pct) %>%
+  mutate(log2fc = log2((BC_only + 0.01) / (E_only + 0.01)),
+         label  = aa,
+         comparison = "CP34H: log2(BC_only / E_only)")
+
+aa_diff_phyto <- aa_freq %>%
+  filter(group %in% c("C_only", "D1:2_only")) %>%
+  select(group, aa, pct) %>%
+  pivot_wider(names_from = group, values_from = pct) %>%
+  mutate(log2fc = log2((C_only + 0.01) / (`D1:2_only` + 0.01)),
+         label  = aa,
+         comparison = "Phyto: log2(C_only / D1:2_only)")
+
+bind_rows(aa_diff_bact, aa_diff_phyto) %>%
+  ggplot(aes(reorder(aa, log2fc), log2fc,
+             fill = if_else(log2fc > 0, "A-enriched", "B-enriched"))) +
+  geom_col(width = 0.7) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  scale_fill_manual(values = c("A-enriched" = "#4D9AC5", "B-enriched" = "#E08B45"),
+                    name = NULL) +
+  facet_wrap(~comparison, scales = "free_x") +
+  labs(title = "Amino acid composition bias in unique peptide sets",
+       x = "Amino acid", y = "log2 fold-change in AA frequency") +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "bottom")
+```
+
+**Key observations:**
+
+- **Bacteria:** BC-only peptides are enriched in **His (H)**, **Leu (L)**, **Phe (F)**, and **Tyr (Y)** relative to E-only. E-only peptides are enriched in **Arg (R)**, **Ala (A)**, and **Gly (G)** — the Arg/Ala/Gly bias is consistent with abundant ribosomal, translation-associated, and stress-response proteins.
+
+- **Phyto:** D1:2-only peptides show a striking enrichment in **Cys (C)** (~3× higher than C-only: 2.4 % vs 0.8 %) alongside **Pro (P)**, **Ala (A)**, and **Gly (G)**. Elevated Cys content is a hallmark of redox-regulated proteins (thioredoxins, ferredoxins, Rubisco activase co-factors) and metal-binding/signal peptides. C-only peptides are enriched in **Leu (L)** and **Lys (K)**, characteristic of structural/metabolic proteins.
+
+---
+
+# 4  Gene Ontology enrichment
+
+> **Prerequisite:** GO enrichment requires mapping peptides → protein accessions.
+> Two workflows are provided below depending on what annotation resources you have.
+
+## 4a  T. pseudonana — AnnotationHub OrgDb approach
+
+*T. pseudonana* (NCBI taxon 35128) has a community-maintained annotation in AnnotationHub.
+
+```{r phyto-go, eval=FALSE}
+library(clusterProfiler)
+library(AnnotationHub)
+library(GO.db)
+
+# ── Step 1: Load OrgDb ─────────────────────────────────────────────────────
+ah   <- AnnotationHub()
+orgs <- query(ah, c("Thalassiosira pseudonana", "OrgDb"))
+# Pick the most recent entry, e.g.:
+# orgdb <- ah[["AH119563"]]  # adjust ID as needed
+
+# ── Step 2: Map peptides to UniProt accessions ─────────────────────────────
+# You need a FASTA → peptide mapping table generated during your database
+# search (e.g., from Comet/Limelight PSM export with protein column).
+# Expected format: tibble with columns [peptide, uniprot_accession]
+
+# pep2prot <- read_csv("pep_to_protein_phyto.csv")  # your mapping file
+
+# ── Step 3: Get gene/accession keys ───────────────────────────────────────
+# keys_universe <- keys(orgdb, keytype = "UNIPROT")
+# pep2go <- AnnotationDbi::select(orgdb,
+#              keys    = pep2prot$uniprot_accession,
+#              keytype = "UNIPROT",
+#              columns = c("GID", "GO", "ONTOLOGY"))
+
+# ── Step 4: Enrichment (C-only) ───────────────────────────────────────────
+# c_accessions   <- pep2prot %>% filter(peptide %in% c_only)  %>% pull(uniprot_accession) %>% unique()
+# bg_accessions  <- pep2prot %>% pull(uniprot_accession) %>% unique()
+
+# ego_c <- enrichGO(
+#   gene          = c_accessions,
+#   universe      = bg_accessions,
+#   OrgDb         = orgdb,
+#   keyType       = "UNIPROT",
+#   ont           = "BP",        # "MF", "CC" also useful
+#   pAdjustMethod = "BH",
+#   pvalueCutoff  = 0.05,
+#   qvalueCutoff  = 0.10
+# )
+# dotplot(ego_c, title = "GO-BP enriched in C-only (vs D1:2)")
+
+# ── Step 5: Enrichment (D1:2-only) ───────────────────────────────────────
+# ego_d12 <- enrichGO(
+#   gene          = d12_accessions,
+#   universe      = bg_accessions,
+#   OrgDb         = orgdb,
+#   keyType       = "UNIPROT",
+#   ont           = "BP",
+#   pAdjustMethod = "BH",
+#   pvalueCutoff  = 0.05,
+#   qvalueCutoff  = 0.10
+# )
+# dotplot(ego_d12, title = "GO-BP enriched in D1:2-only (vs C)")
+```
+
+## 4b  Colwellia 34H — custom DIAMOND/BLAST mapping approach
+
+No Bioconductor OrgDb exists for *Colwellia* 34H. Use the DIAMOND → UniProt workflow:
+
+```bash
+# 1. Download UniProt/SwissProt FASTA + GO associations
+wget https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+wget https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz
+
+# 2. Build DIAMOND database from your Colwellia 34H FASTA
+diamond makedb --in Colwellia_34H.fasta -d colwellia_34H
+
+# 3. BLAST unique protein sequences against SwissProt
+# (first export unique protein FASTAs from Limelight for BC-only and E-only proteins)
+diamond blastp -q BC_only_proteins.fasta -d colwellia_34H \
+               --db uniprot_sprot.dmnd \
+               -f 6 qseqid sseqid pident evalue bitscore \
+               -o bc_only_vs_swissprot.tsv --very-sensitive
+
+# 4. Filter top hits (e.g. pident >= 40, evalue <= 1e-5)
+# 5. Pull GO terms via UniProt accession → GO annotation file
+```
+
+```{r bact-go, eval=FALSE}
+# ── After DIAMOND mapping, continue in R ──────────────────────────────────
+library(clusterProfiler)
+
+# Load your DIAMOND mapping result
+# diamond_hits <- read_tsv("bc_only_vs_swissprot.tsv",
+#                          col_names = c("query","subject","pident","evalue","bitscore"))
+# best_hits <- diamond_hits %>%
+#   group_by(query) %>% slice_min(evalue, n = 1) %>% ungroup() %>%
+#   filter(pident >= 40, evalue <= 1e-5) %>%
+#   mutate(uniprot_acc = str_extract(subject, "(?<=\\|)[A-Z0-9]+(?=\\|)"))
+
+# Load GO annotations from UniProt flat file (parsed separately, e.g. via UniProtR)
+# go_map <- read_tsv("uniprot_go_annotations.tsv")  # columns: accession, go_id, ontology, go_term
+
+# bc_genes  <- best_hits %>% filter(query %in% bc_only_proteins) %>% pull(uniprot_acc)
+# universe  <- best_hits %>% pull(uniprot_acc) %>% unique()
+
+# ego_bc <- enricher(
+#   gene          = bc_genes,
+#   universe      = universe,
+#   TERM2GENE     = go_map %>% select(go_id, accession),
+#   TERM2NAME     = go_map %>% select(go_id, go_term) %>% distinct(),
+#   pAdjustMethod = "BH",
+#   pvalueCutoff  = 0.05
+# )
+# dotplot(ego_bc, title = "GO-BP enriched in BC-only proteins")
+```
+
+## 4c  Export peptide lists for web-based GO tools
+
+As an alternative to local enrichment, export to **g:Profiler** or **STRING**:
+
+```{r export-peptide-lists}
+# Write clean peptide sequences (no modification brackets) for each unique set
+export_dir <- "."   # change to your preferred output path
+
+write_lines(strip_mod(bc_only),   file.path(export_dir, "BC_only_peptides_clean.txt"))
+write_lines(strip_mod(e_only),    file.path(export_dir, "E_only_peptides_clean.txt"))
+write_lines(strip_mod(c_only),    file.path(export_dir, "C_only_peptides_clean.txt"))
+write_lines(strip_mod(d12_only),  file.path(export_dir, "D1_2_only_peptides_clean.txt"))
+
+cat("Peptide lists written. Upload to:\n",
+    "  g:Profiler  → https://biit.cs.ut.ee/gprofiler/gost\n",
+    "  STRING      → https://string-db.org/cgi/input?sessionId=&input_page_show_search=on\n",
+    "  UniProt     → https://www.uniprot.org/id-mapping\n")
+```
+
+---
+
+# 5  Summary of patterns & biological interpretation
+
+```{r summary-table}
+tribble(
+  ~Feature,                ~BC_only,                        ~E_only,
+  "Count",                 "6,088",                         "3,872",
+  "Mean length (aa)",      "15.5",                          "17.5",
+  "Missed cleavages ≥1",   "27%",                           "61%",
+  "Oxidized Met",          "16%",                           "24%",
+  "C-term K/R ratio",      "54% K / 45% R",                 "43% K / 54% R",
+  "AA enrichment",         "His, Leu, Phe, Tyr",            "Arg, Ala, Gly",
+  "Likely protein classes","Metal-binding, aromatic-rich",  "Ribosomal, stress-response"
+) %>%
+  knitr::kable(caption = "CP34H: BC-only vs E-only unique peptide features")
+
+tribble(
+  ~Feature,                ~C_only,                         ~D12_only,
+  "Count",                 "8,233",                         "2,587",
+  "Mean length (aa)",      "14.9",                          "15.2",
+  "Missed cleavages ≥1",   "41%",                           "31%",
+  "Oxidized Met",          "14%",                           "16%",
+  "Cys content",           "0.8%",                          "2.4% (3× enriched)",
+  "AA enrichment",         "Leu, Lys, Phe",                 "Cys, Pro, Ala, Gly",
+  "Likely protein classes","Structural, metabolic enzymes",
+  "Redox proteins, thioredoxins, metal-binding, signal peptides"
+) %>%
+  knitr::kable(caption = "Phyto: C-only vs D1:2-only unique peptide features")
+```
+
+### Key biological take-aways
+
+**Bacteria (BC vs E):**
+- BC-unique peptides (His/Leu/Phe/Tyr enrichment, clean tryptic termini) are consistent
+  with **metabolic enzymes and metal-binding proteins** abundant under the BC condition.
+- E-unique peptides' high missed cleavage rate (61 %) and Arg/Gly/Ala enrichment point
+  to **ribosomal proteins, translation factors, and stress-response proteins** that may
+  be up-regulated or more accessible in condition E. The elevated oxidized-Met (28 %)
+  in E-unique peptides may reflect greater **oxidative stress** in that condition or
+  longer sample handling times.
+
+**Phyto (C vs D1:2):**
+- The 3× Cys enrichment in D1:2-unique peptides is the most striking signal. High-Cys
+  proteins include **thioredoxins, glutaredoxins, ferredoxin-thioredoxin reductase,
+  and RuBisCO activase** — all central to the **Calvin cycle redox regulation**
+  and **photosynthetic electron transport** in diatoms. DNA Shield at 1:2 concentration
+  may preferentially preserve or expose these redox-sensitive proteins, or the
+  preservation chemistry may stabilize disulfide-containing peptides that are lost in
+  the C (control) sample due to oxidation/aggregation artefacts.
+- C-unique peptides (Leu/Lys-enriched, cleaner digestion) are more consistent with
+  **abundant structural and carbohydrate-metabolism proteins**.
+- The larger C-only set (8,233 vs 2,587) suggests the control condition recovers a
+  broader proteome, but D1:2 selectively captures a distinct **redox/stress-response
+  sub-proteome**.
+
+> **Recommended next step:** Map peptides to proteins using your Comet/Limelight PSM
+> table (protein accession column), then run `clusterProfiler::enrichGO()` on the
+> resulting accession lists against the T. pseudonana OrgDb (AnnotationHub) and a
+> DIAMOND-mapped Colwellia 34H annotation for full GO enrichment with adjusted p-values.
+
+---
+
+*Generated with R `r R.version$major`.`r R.version$minor` | Analysis: Brook Lab, `r Sys.Date()`*

@@ -1,0 +1,468 @@
+---
+title: "DNA Shield Proteomics — Identification Counts QC"
+subtitle: "Total proteins, peptides, and PSMs per sample type | CP34H & *T. pseudonana*"
+author: "Evelyn Bartlett — Brook Lab"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: show
+    df_print: paged
+  pdf_document:
+    toc: true
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo       = TRUE,
+  warning    = FALSE,
+  message    = FALSE,
+  fig.path   = "figures/",
+  dev        = "png",
+  dpi        = 600,
+  fig.width  = 9,
+  fig.height = 4.0
+)
+```
+
+# Overview
+
+This notebook summarises identification counts (unique proteins, peptides,
+and total PSMs) across DNA Shield dilution conditions for both organisms:
+
+| Organism           | Groups                              |
+|--------------------|-------------------------------------|
+| *Colwellia* CP34H  | B-CTL, B-1.5, B-1.75, B-2.0        |
+| *T. pseudonana*    | P-CTL, P-1.5, P-2.0                 |
+
+**n = 3 replicates per group.** Bars show group mean; error bars are ± SEM.
+Individual replicate values are overlaid as jittered points. Welch's t-tests
+(unequal variance, two-sided) compare each dilution to the within-organism
+control; significance is shown as brackets (ns / * / ** / ***).
+
+Contaminants (human keratins, trypsin, bovine albumin, and related common
+MS contaminants) are removed before any counting. Peptides present in only
+one sample across all replicates (< 2 samples with PSM > 0) are also excluded.
+
+---
+
+# Setup
+
+```{r packages}
+library(tidyverse)
+library(stringr)
+library(ggplot2)
+library(patchwork)
+library(ggsignif)
+library(scales)
+```
+
+```{r theme}
+# Nature-quality theme — 8 pt sans, no chart-junk
+theme_nature <- function(base_size = 8) {
+  theme_classic(base_size = base_size, base_family = "sans") +
+  theme(
+    axis.line        = element_line(linewidth = 0.4),
+    axis.ticks       = element_line(linewidth = 0.4),
+    axis.text        = element_text(color = "black"),
+    axis.text.x      = element_text(angle = 20, hjust = 1),
+    plot.title       = element_text(face = "bold", hjust = 0,
+                                    size = base_size + 1),
+    legend.position  = "none",
+    strip.background = element_blank(),
+    strip.text       = element_text(face = "bold")
+  )
+}
+
+save_png <- function(plot, name, w = 9, h = 4.0, dpi = 600,
+                     fig_dir = "figures") {
+  dir.create(fig_dir, showWarnings = FALSE)
+  ggsave(file.path(fig_dir, paste0(name, ".png")),
+         plot = plot, width = w, height = h, units = "in",
+         dpi = dpi, bg = "white", type = "cairo")
+  invisible(plot)
+}
+```
+
+---
+
+# Contaminant filtering
+
+Common MS contaminants are flagged by regex on the `Protein(s)` accession
+string. Any peptide whose *only* proteins are contaminants is dropped.
+Peptides that map to both a contaminant and a target protein are kept
+(the contaminant accession is removed from the `Protein(s)` string first).
+
+```{r contam_setup}
+# Regex patterns applied to the Protein(s) field
+contam_re <- paste(
+  "K1H1_HUMAN|K1H2_HUMAN|K2C1_HUMAN|K1C9_HUMAN|K1C10_HUMAN",  # keratins
+  "K[12][A-Z][0-9]+_HUMAN",   # broad keratin family
+  "ALBU_HUMAN|ALBU_BOVIN|serum.albumin|BSA",
+  "TRYP_PIG|P00761",           # porcine trypsin
+  "cRAP|CON__",
+  "KRT[0-9]|KRT[0-9][0-9]",   # keratin gene names sometimes in accessions
+  "sp\\|[A-Z0-9]+\\|[A-Z0-9]+_HUMAN",   # any human SwissProt entry
+  sep = "|"
+)
+
+# Returns TRUE if ALL proteins for a peptide are contaminants
+is_contam <- function(prot_str) {
+  ids <- str_split(prot_str, ",")[[1]] %>% trimws()
+  all(str_detect(ids, contam_re))
+}
+
+filter_contaminants <- function(df) {
+  n_before <- nrow(df)
+  df_clean <- df %>%
+    rowwise() %>%
+    filter(!is_contam(`Protein(s)`)) %>%
+    ungroup()
+  n_after <- nrow(df_clean)
+  cat(sprintf("  Contaminant filter: removed %d / %d peptides (%.1f%%)\n",
+              n_before - n_after, n_before,
+              100 * (n_before - n_after) / n_before))
+  df_clean
+}
+```
+
+---
+
+# Helper: compute per-sample identification counts
+
+```{r helpers}
+# Count unique protein accessions in rows where PSM count > 0
+count_proteins <- function(df, psm_col) {
+  df %>%
+    filter(.data[[psm_col]] > 0) %>%
+    pull(`Protein(s)`) %>%
+    str_split(",") %>%
+    unlist() %>%
+    trimws() %>%
+    unique() %>%
+    length()
+}
+
+# Build a tidy per-sample summary table
+#   df        : filtered peptide data frame
+#   psm_cols  : named character vector  (name = sample ID, value = column in df)
+#   groups    : named list: group label → character vector of sample IDs
+build_counts <- function(df, psm_cols, groups) {
+  rows <- imap_dfr(groups, function(samples, grp_label) {
+    map_dfr(samples, function(s) {
+      col <- psm_cols[[s]]
+      tibble(
+        group      = grp_label,
+        sample     = s,
+        n_proteins = count_proteins(df, col),
+        n_peptides = sum(df[[col]] > 0, na.rm = TRUE),
+        total_PSMs = sum(df[[col]],     na.rm = TRUE)
+      )
+    })
+  })
+  rows
+}
+
+# Build a bar + jitter + signif figure for one metric
+#   counts_df    : output of build_counts()
+#   metric       : column name (string)
+#   y_label      : y-axis label
+#   fill_palette : named colour vector (group label → hex)
+#   group_order  : factor order for x-axis
+#   ctrl_label   : name of the control group (reference for t-tests)
+make_panel <- function(counts_df, metric, y_label,
+                       fill_palette, group_order, ctrl_label) {
+
+  grp_sum <- counts_df %>%
+    group_by(group) %>%
+    summarise(
+      mean_val = mean(.data[[metric]]),
+      sem_val  = sd(.data[[metric]]) / sqrt(n()),
+      .groups  = "drop"
+    ) %>%
+    mutate(group = factor(group, levels = group_order))
+
+  counts_df <- counts_df %>%
+    mutate(group = factor(group, levels = group_order))
+
+  # Comparisons: control vs each dilution
+  treat_groups <- setdiff(group_order, ctrl_label)
+  comparisons  <- lapply(treat_groups, function(g) c(ctrl_label, g))
+
+  ggplot(grp_sum, aes(x = group, y = mean_val, fill = group)) +
+    geom_col(color = "black", linewidth = 0.4, width = 0.7) +
+    geom_errorbar(aes(ymin = mean_val - sem_val,
+                      ymax = mean_val + sem_val),
+                  width = 0.18, linewidth = 0.5) +
+    geom_jitter(data = counts_df,
+                aes(x = group, y = .data[[metric]]),
+                width = 0.10, shape = 21, fill = "white",
+                color = "black", stroke = 0.4, size = 1.8,
+                inherit.aes = FALSE) +
+    geom_signif(data        = counts_df,
+                aes(x = group, y = .data[[metric]]),
+                comparisons = comparisons,
+                test        = "t.test",
+                test.args   = list(var.equal = FALSE),
+                map_signif_level = TRUE,
+                step_increase    = 0.10,
+                tip_length       = 0.01,
+                vjust            = 0.3,
+                textsize         = 2.6,
+                inherit.aes      = FALSE) +
+    scale_fill_manual(values = fill_palette) +
+    scale_y_continuous(labels = label_comma(), expand = expansion(mult = c(0, 0.25))) +
+    labs(x = NULL, y = y_label) +
+    theme_nature()
+}
+```
+
+---
+
+# CP34H (*Colwellia psychrerythraea* 34H)
+
+## Load & filter
+
+```{r bact_load}
+# bacteria_peptides_filtered_2rep.csv = original filtered file with ≥2-sample filter applied
+# Adjust path if running from a different working directory
+bact_file <- file.path("..", "..", "..", "..", "bacteria_peptides_filtered_2rep.csv")
+if (!file.exists(bact_file))
+  bact_file <- "bacteria_peptides_filtered_2rep.csv"
+
+bact_raw <- read_csv(bact_file, show_col_types = FALSE)
+cat("Loaded", nrow(bact_raw), "peptides (bacteria)\n")
+
+bact_raw[is.na(bact_raw)] <- 0
+cat("Filtering contaminants...\n")
+bact <- filter_contaminants(bact_raw)
+```
+
+## Configuration
+
+```{r bact_config}
+# Map short sample IDs → exact column names in the CSV
+bact_psm_cols <- c(
+  "BC1" = "PSM Count (HR_BC1)",
+  "BC2" = "PSM Count (HR_BC2)",
+  "BC3" = "PSM Count (HR_BC3)",
+  "E1"  = "PSM Count (HR-E1)",
+  "E2"  = "PSM Count (HR_E2)",
+  "E3"  = "PSM Count (HR_E3)",
+  "F1"  = "PSM Count (HR_F1)",
+  "F2"  = "PSM Count (HR-F2)",
+  "F3"  = "PSM Count (HR_F3)",
+  "G1"  = "PSM Count (HR_G1)",
+  "G2"  = "PSM Count (HR_G2)",
+  "G3"  = "PSM Count (HR_G3)"
+)
+
+# Group membership: display label → sample IDs
+bact_groups <- list(
+  "B-CTL"  = c("BC1", "BC2", "BC3"),
+  "B-1.5"  = c("E1",  "E2",  "E3"),
+  "B-1.75" = c("F1",  "F2",  "F3"),
+  "B-2.0"  = c("G1",  "G2",  "G3")
+)
+bact_order <- c("B-CTL", "B-1.5", "B-1.75", "B-2.0")
+
+# Blue family — control is neutral anchor, treatments darken with dilution
+bact_palette <- c(
+  "B-CTL"  = "#4D4D4D",   # neutral dark grey
+  "B-1.5"  = "#AED6F1",   # light blue
+  "B-1.75" = "#3498DB",   # medium blue
+  "B-2.0"  = "#1B4F72"    # deep blue
+)
+```
+
+## Compute counts
+
+```{r bact_counts}
+bact_counts <- build_counts(bact, bact_psm_cols, bact_groups)
+print(bact_counts)
+```
+
+## Welch t-test summary table
+
+```{r bact_ttest}
+run_welch <- function(counts_df, metric, ctrl_label, group_order) {
+  ctrl_vals <- counts_df %>% filter(group == ctrl_label) %>% pull(!!sym(metric))
+  treat_groups <- setdiff(group_order, ctrl_label)
+
+  map_dfr(treat_groups, function(g) {
+    treat_vals <- counts_df %>% filter(group == g) %>% pull(!!sym(metric))
+    res <- t.test(treat_vals, ctrl_vals, var.equal = FALSE)
+    tibble(
+      comparison = paste0(g, " vs ", ctrl_label),
+      metric     = metric,
+      mean_ctrl  = mean(ctrl_vals),
+      mean_treat = mean(treat_vals),
+      delta      = mean(treat_vals) - mean(ctrl_vals),
+      pct_change = 100 * (mean(treat_vals) - mean(ctrl_vals)) / mean(ctrl_vals),
+      t_stat     = unname(res$statistic),
+      df         = unname(res$parameter),
+      p_value    = res$p.value,
+      sig        = case_when(
+        res$p.value < 0.001 ~ "***",
+        res$p.value < 0.01  ~ "**",
+        res$p.value < 0.05  ~ "*",
+        TRUE                ~ "ns"
+      )
+    )
+  })
+}
+
+bact_tests <- bind_rows(
+  run_welch(bact_counts, "n_proteins", "B-CTL", bact_order),
+  run_welch(bact_counts, "n_peptides", "B-CTL", bact_order),
+  run_welch(bact_counts, "total_PSMs", "B-CTL", bact_order)
+)
+print(bact_tests)
+write_csv(bact_tests, "bact_identification_welch_tests.csv")
+```
+
+## Figure 1 — CP34H identification counts
+
+```{r fig_bact, fig.width=9, fig.height=4.0}
+p_bact_prot <- make_panel(bact_counts, "n_proteins",
+                           "Proteins identified\n(mean ± SEM)",
+                           bact_palette, bact_order, "B-CTL") +
+  labs(title = "a  Unique proteins")
+
+p_bact_pep  <- make_panel(bact_counts, "n_peptides",
+                           "Peptides identified\n(mean ± SEM)",
+                           bact_palette, bact_order, "B-CTL") +
+  labs(title = "b  Unique peptides")
+
+p_bact_psm  <- make_panel(bact_counts, "total_PSMs",
+                           "Total PSMs\n(mean ± SEM)",
+                           bact_palette, bact_order, "B-CTL") +
+  labs(title = "c  Total PSMs")
+
+fig_bact <- p_bact_prot + p_bact_pep + p_bact_psm +
+  plot_annotation(
+    title    = expression(italic("Colwellia psychrerythraea") ~ "34H — Identification counts by condition"),
+    subtitle = "n = 3 replicates per group | bars = mean ± SEM | Welch's t-test vs B-CTL",
+    theme    = theme(
+      plot.title    = element_text(face = "bold", size = 9),
+      plot.subtitle = element_text(size = 7, color = "grey40")
+    )
+  )
+
+fig_bact
+save_png(fig_bact, "fig_CP34H_identification_counts", w = 9, h = 4.0)
+```
+
+---
+
+# *Thalassiosira pseudonana*
+
+## Load & filter
+
+```{r phyto_load}
+# phytoplankton_peptides_filtered_PED6_2rep.csv = re-filtered from raw Limelight export,
+# including PED6 (1:2 replicate 3), contaminants removed, Colwellia cross-contams removed,
+# and ≥2-sample filter applied.
+phyto_file <- file.path("..", "..", "..", "..", "phytoplankton_peptides_filtered_PED6_2rep.csv")
+if (!file.exists(phyto_file))
+  phyto_file <- "phytoplankton_peptides_filtered_PED6_2rep.csv"
+
+phyto_raw <- read_csv(phyto_file, show_col_types = FALSE)
+cat("Loaded", nrow(phyto_raw), "peptides (phytoplankton)\n")
+
+phyto_raw[is.na(phyto_raw)] <- 0
+cat("Filtering contaminants...\n")
+phyto <- filter_contaminants(phyto_raw)
+```
+
+## Configuration
+
+```{r phyto_config}
+phyto_psm_cols <- c(
+  "PEC1"  = "PSM Count (PEC1)",
+  "PEC2"  = "PSM Count (PEC2)",
+  "PEC3"  = "PSM Count (PEC3)",
+  "PED1"  = "PSM Count (PED1 1.5)",
+  "PED2"  = "PSM Count (PED2 1.5)",
+  "PED3"  = "PSM Count (PED3 1.5)",
+  "PED4"  = "PSM Count (PED4 1:2)",
+  "PED5"  = "PSM Count (PED5 1:2)",
+  "PED6"  = "PSM Count (PED6 1:2)"
+)
+
+phyto_groups <- list(
+  "P-CTL" = c("PEC1", "PEC2", "PEC3"),
+  "P-1.5" = c("PED1", "PED2", "PED3"),
+  "P-2.0" = c("PED4", "PED5", "PED6")   # n = 3
+)
+phyto_order <- c("P-CTL", "P-1.5", "P-2.0")
+
+# Green family — control is neutral anchor, treatments darken with dilution
+phyto_palette <- c(
+  "P-CTL" = "#4D4D4D",   # neutral dark grey
+  "P-1.5" = "#A9DFBF",   # light green
+  "P-2.0" = "#1E8449"    # deep green
+)
+```
+
+## Compute counts
+
+```{r phyto_counts}
+phyto_counts <- build_counts(phyto, phyto_psm_cols, phyto_groups)
+print(phyto_counts)
+```
+
+## Welch t-test summary table
+
+```{r phyto_ttest}
+phyto_tests <- bind_rows(
+  run_welch(phyto_counts, "n_proteins", "P-CTL", phyto_order),
+  run_welch(phyto_counts, "n_peptides", "P-CTL", phyto_order),
+  run_welch(phyto_counts, "total_PSMs", "P-CTL", phyto_order)
+)
+print(phyto_tests)
+write_csv(phyto_tests, "phyto_identification_welch_tests.csv")
+```
+
+## Figure 2 — *T. pseudonana* identification counts
+
+```{r fig_phyto, fig.width=7.5, fig.height=4.0}
+p_phyto_prot <- make_panel(phyto_counts, "n_proteins",
+                            "Proteins identified\n(mean ± SEM)",
+                            phyto_palette, phyto_order, "P-CTL") +
+  labs(title = "a  Unique proteins")
+
+p_phyto_pep  <- make_panel(phyto_counts, "n_peptides",
+                            "Peptides identified\n(mean ± SEM)",
+                            phyto_palette, phyto_order, "P-CTL") +
+  labs(title = "b  Unique peptides")
+
+p_phyto_psm  <- make_panel(phyto_counts, "total_PSMs",
+                            "Total PSMs\n(mean ± SEM)",
+                            phyto_palette, phyto_order, "P-CTL") +
+  labs(title = "c  Total PSMs")
+
+fig_phyto <- p_phyto_prot + p_phyto_pep + p_phyto_psm +
+  plot_annotation(
+    title    = expression(italic("Thalassiosira pseudonana") ~ "— Identification counts by condition"),
+    subtitle = "n = 3 replicates per group | bars = mean ± SEM | Welch's t-test vs P-CTL",
+    theme    = theme(
+      plot.title    = element_text(face = "bold", size = 9),
+      plot.subtitle = element_text(size = 7, color = "grey40")
+    )
+  )
+
+fig_phyto
+save_png(fig_phyto, "fig_TPs_identification_counts", w = 7.5, h = 4.0)
+```
+
+---
+
+# Session info
+
+```{r session_info}
+sessionInfo()
+```

@@ -1,0 +1,307 @@
+---
+title: "Condition-Unique Peptide Landscape — Nature Figure"
+subtitle: "Colwellia 34H (BC vs E) | T. pseudonana (C vs D1:2)"
+author: "Evelyn Bartlett — Brook Lab"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: false
+    theme: minimal
+    self_contained: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  dpi     = 300,
+  fig.width  = 7.2,   # Nature double-column = 183 mm ≈ 7.2 in
+  fig.height = 8.5
+)
+
+# ── Packages ────────────────────────────────────────────────────────────────
+pkgs <- c("tidyverse", "ggridges", "patchwork", "ggbeeswarm")
+invisible(lapply(pkgs, library, character.only = TRUE))
+
+# ── Nature-style theme ──────────────────────────────────────────────────────
+theme_nature <- function(base_size = 7) {
+  theme_classic(base_size = base_size) +
+    theme(
+      text             = element_text(family = "Helvetica", colour = "black"),
+      axis.line        = element_line(colour = "black", linewidth = 0.4),
+      axis.ticks       = element_line(colour = "black", linewidth = 0.4),
+      axis.ticks.length = unit(2, "pt"),
+      axis.text        = element_text(colour = "black", size = base_size),
+      axis.title       = element_text(colour = "black", size = base_size + 0.5,
+                                      face = "plain"),
+      strip.background = element_blank(),
+      strip.text       = element_text(face = "bold", size = base_size + 0.5),
+      panel.spacing    = unit(4, "pt"),
+      legend.key.size  = unit(7, "pt"),
+      legend.text      = element_text(size = base_size),
+      legend.title     = element_text(size = base_size, face = "bold"),
+      plot.title       = element_text(size = base_size + 1, face = "bold",
+                                      margin = margin(b = 3)),
+      plot.tag         = element_text(size = base_size + 2, face = "bold")
+    )
+}
+
+# ── Colour palette (poster scheme: bacteria = blue, phyto = green) ─────────
+pal <- c(
+  BC_only    = "#2166AC",   # dark blue  — bacteria control-unique
+  E_only     = "#92C5DE",   # light blue — bacteria experimental-unique
+  C_only     = "#1B7837",   # dark green — phyto control-unique
+  `D1:2_only` = "#74C476"   # light green — phyto D1:2-unique
+)
+
+label_map <- c(
+  BC_only     = "BC only\n(bacteria ctrl)",
+  E_only      = "E only\n(bacteria exp)",
+  C_only      = "C only\n(phyto ctrl)",
+  `D1:2_only` = "D1:2 only\n(phyto exp)"
+)
+```
+
+```{r load-data}
+strip_mod <- function(x) str_remove_all(x, "\\[.*?\\]")
+
+missed_cleavage <- function(seq) {
+  str_count(seq, "[KR](?!$)")
+}
+
+gravy_score <- function(seq) {
+  kd <- c(A=1.8,R=-4.5,N=-3.5,D=-3.5,C=2.5,Q=-3.5,E=-3.5,G=-0.4,H=-3.2,
+          I=4.5,L=3.8,K=-3.9,M=1.9,F=2.8,P=-1.6,S=-0.8,T=-0.7,W=-0.9,
+          Y=-1.3,V=4.2)
+  aas <- str_split(seq, "")[[1]]
+  mean(kd[aas], na.rm = TRUE)
+}
+
+bact  <- read_csv("bacteria_venn_peptides.csv",  show_col_types = FALSE)
+phyto <- read_csv("phytoplankton_venn_peptides.csv", show_col_types = FALSE)
+
+bc_raw  <- na.omit(bact$BC)
+e_raw   <- na.omit(bact$E)
+c_raw   <- na.omit(phyto$C)
+d12_raw <- na.omit(phyto$`D1:2`)
+
+make_feat <- function(peps, grp) {
+  tibble(peptide = peps, group = grp) %>%
+    mutate(
+      seq    = strip_mod(peptide),
+      length = nchar(seq),
+      has_oxM = str_detect(peptide, "M\\[15\\.99\\]"),
+      mc     = missed_cleavage(seq),
+      gravy  = map_dbl(seq, gravy_score),
+      cterm  = str_sub(seq, -1)
+    )
+}
+
+feat <- bind_rows(
+  make_feat(setdiff(bc_raw,  e_raw),   "BC_only"),
+  make_feat(setdiff(e_raw,   bc_raw),  "E_only"),
+  make_feat(setdiff(c_raw,  d12_raw),  "C_only"),
+  make_feat(setdiff(d12_raw, c_raw),   "D1:2_only")
+) %>%
+  mutate(
+    group      = factor(group, levels = names(pal)),
+    organism   = if_else(str_detect(group, "^BC|^E"),
+                         "Colwellia 34H", "T. pseudonana"),
+    condition  = if_else(str_detect(group, "BC|C_"),
+                         "Control-unique", "Experimental-unique"),
+    mc_cat     = factor(pmin(mc, 2), labels = c("0","1","≥2"))
+  )
+```
+
+```{r panel-A-aa-composition, fig.height=3}
+# ── AA composition log2(control/experimental) lollipop ────────────────────
+aa_freq <- feat %>%
+  group_by(organism, condition) %>%
+  summarise(
+    total = sum(nchar(seq)),
+    across(all_of(strsplit("ACDEFGHIKLMNPQRSTVWY","")[[1]]),
+           ~ 100 * sum(str_count(seq, .x)) / total),
+    .groups = "drop"
+  ) %>%
+  pivot_longer(A:Y, names_to = "aa", values_to = "pct")
+
+aa_diff <- aa_freq %>%
+  pivot_wider(names_from = condition, values_from = pct) %>%
+  mutate(
+    log2fc    = log2((`Control-unique` + 0.01) / (`Experimental-unique` + 0.01)),
+    highlight = case_when(
+      aa == "C" & organism == "T. pseudonana" ~ "Cys (redox)",
+      aa == "H" & organism == "Colwellia 34H" ~ "His (metal-binding)",
+      aa %in% c("R","G") & organism == "Colwellia 34H" ~ "Arg/Gly (ribosomal)",
+      TRUE ~ "other"
+    ),
+    aa = fct_reorder(aa, log2fc)
+  )
+
+cols_hi <- c(
+  "Cys (redox)"         = "#E31A1C",
+  "His (metal-binding)" = "#FF7F00",
+  "Arg/Gly (ribosomal)" = "#6A3D9A",
+  "other"               = "grey70"
+)
+
+pA <- ggplot(aa_diff, aes(log2fc, aa)) +
+  geom_vline(xintercept = 0, linetype = "dashed", linewidth = 0.3,
+             colour = "grey50") +
+  geom_segment(aes(x = 0, xend = log2fc, y = aa, yend = aa,
+                   colour = highlight), linewidth = 0.55) +
+  geom_point(aes(colour = highlight, size = highlight == "other"),
+             show.legend = TRUE) +
+  scale_size_manual(values = c(`TRUE` = 1.2, `FALSE` = 2.0), guide = "none") +
+  scale_colour_manual(values = cols_hi, name = NULL,
+                      breaks = c("Cys (redox)","His (metal-binding)","Arg/Gly (ribosomal)")) +
+  facet_wrap(~organism, scales = "free_x") +
+  labs(
+    x     = expression(log[2]~(control-unique / experimental-unique)),
+    y     = "Amino acid",
+    title = "a  Amino acid composition bias in condition-unique peptides"
+  ) +
+  theme_nature() +
+  theme(legend.position = "right")
+
+pA
+```
+
+```{r panel-B-length-ridge, fig.height=2.8}
+# ── Peptide length ridge plot ──────────────────────────────────────────────
+pB <- ggplot(feat, aes(x = length, y = group, fill = group)) +
+  geom_density_ridges(
+    aes(height = after_stat(density)),
+    stat = "density", trim = TRUE,
+    alpha = 0.82, scale = 1.1,
+    linewidth = 0.3, colour = "white",
+    rel_min_height = 0.005
+  ) +
+  geom_vline(
+    data = feat %>% group_by(group) %>% summarise(med = median(length)),
+    aes(xintercept = med, colour = group),
+    linetype = "dashed", linewidth = 0.45, show.legend = FALSE
+  ) +
+  scale_fill_manual(values = pal, guide = "none") +
+  scale_colour_manual(values = pal, guide = "none") +
+  scale_x_continuous(limits = c(5, 45), breaks = seq(10,40,10)) +
+  scale_y_discrete(labels = label_map) +
+  labs(
+    x     = "Peptide length (amino acids)",
+    y     = NULL,
+    title = "b  Peptide length distributions"
+  ) +
+  theme_nature() +
+  theme(axis.text.y = element_text(size = 6))
+
+pB
+```
+
+```{r panel-C-properties, fig.height=3}
+# ── Dumbbell: key peptide properties ──────────────────────────────────────
+prop_sum <- feat %>%
+  group_by(organism, condition, group) %>%
+  summarise(
+    mean_length  = mean(length),
+    pct_mc       = 100 * mean(mc >= 1),
+    pct_oxM      = 100 * mean(has_oxM),
+    mean_gravy   = mean(gravy),
+    .groups = "drop"
+  ) %>%
+  pivot_longer(mean_length:mean_gravy, names_to = "metric", values_to = "value") %>%
+  mutate(
+    metric = recode(metric,
+      mean_length = "Mean peptide\nlength (aa)",
+      pct_mc      = "Peptides with\n≥1 missed cleavage (%)",
+      pct_oxM     = "Met-oxidised\npeptides (%)",
+      mean_gravy  = "Mean GRAVY\nscore"
+    ),
+    metric = factor(metric, levels = c(
+      "Mean peptide\nlength (aa)",
+      "Peptides with\n≥1 missed cleavage (%)",
+      "Met-oxidised\npeptides (%)",
+      "Mean GRAVY\nscore"
+    ))
+  )
+
+# Dumbbell: one line per organism per metric, points = ctrl vs exp
+dumbbell_df <- prop_sum %>%
+  select(organism, condition, metric, value) %>%
+  pivot_wider(names_from = condition, values_from = value)
+
+pC <- ggplot(prop_sum, aes(x = value, y = metric)) +
+  # connector line
+  geom_line(data = dumbbell_df,
+            aes(x = `Control-unique`, xend = `Experimental-unique`,
+                y = metric, group = metric),
+            inherit.aes = FALSE,
+            colour = "grey60", linewidth = 0.5) +
+  geom_line(data = dumbbell_df,
+            aes(x = `Experimental-unique`, y = metric, group = metric),
+            inherit.aes = FALSE,
+            colour = "grey60", linewidth = 0.5) +
+  # use a segment geom for the dumbbell connector
+  geom_segment(
+    data = dumbbell_df,
+    aes(x = `Control-unique`, xend = `Experimental-unique`,
+        y = metric, yend = metric),
+    inherit.aes = FALSE,
+    colour = "grey70", linewidth = 0.6
+  ) +
+  geom_point(aes(colour = group), size = 2.5) +
+  scale_colour_manual(values = pal, labels = label_map, name = NULL) +
+  facet_wrap(~organism, scales = "free_x") +
+  labs(
+    x     = "Value",
+    y     = NULL,
+    title = "c  Biochemical properties of condition-unique peptides"
+  ) +
+  theme_nature() +
+  theme(
+    legend.position = "bottom",
+    legend.key.size = unit(8, "pt"),
+    axis.text.y     = element_text(size = 6)
+  ) +
+  guides(colour = guide_legend(nrow = 2))
+
+pC
+```
+
+```{r assemble-figure, fig.width=7.2, fig.height=9}
+# ── Final assembled figure ─────────────────────────────────────────────────
+final_fig <- pA / pB / pC +
+  plot_layout(heights = c(3, 2.5, 3)) &
+  theme(plot.margin = margin(4, 6, 4, 6))
+
+final_fig
+```
+
+```{r save-figure}
+# Save as 300 dpi TIFF (Nature submission standard) and PDF
+ggsave(
+  "figure_unique_peptides_nature.tiff",
+  plot   = final_fig,
+  width  = 7.2, height = 9,
+  units  = "in", dpi = 300,
+  compression = "lzw"
+)
+
+ggsave(
+  "figure_unique_peptides_nature.pdf",
+  plot   = final_fig,
+  width  = 7.2, height = 9,
+  units  = "in", device = cairo_pdf
+)
+
+cat("Saved: figure_unique_peptides_nature.tiff (.pdf)\n")
+```
+
+---
+
+### Figure legend
+
+**Biochemical landscape of condition-unique peptides in *Colwellia* 34H and *T. pseudonana* proteomes.**
+**(a)** Log₂ fold-change in per-residue amino acid frequency between control-unique and experimental-unique peptide sets for each organism. Positive values indicate enrichment in control-unique peptides; negative values indicate enrichment in experimental-unique peptides. Highlighted residues denote amino acids with known functional significance: Cys (redox-active proteins; thioredoxins, glutaredoxins), His (metal co-ordination), and Arg/Gly (ribosomal and translation-associated proteins).
+**(b)** Kernel density distributions of peptide length for each condition-unique set; dashed lines indicate group medians.
+**(c)** Dumbbell plot comparing four biochemical properties — mean peptide length, proportion of peptides with ≥1 trypsin missed cleavage, proportion of Met-oxidised peptides, and mean GRAVY hydrophobicity score — between control-unique (filled circles) and experimental-unique (open circles) sets for each organism. Connecting segments highlight the direction and magnitude of the shift between conditions. All peptides passed a q-value threshold of ≤0.01 at the PSM and peptide level; common laboratory contaminants were excluded prior to analysis.

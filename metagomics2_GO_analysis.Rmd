@@ -1,0 +1,715 @@
+---
+title: "Metagomics2 GO Term & NSAF Analysis"
+subtitle: "BC1-3 vs E1-3 (Bacteria) | PEC1-3 vs PED1-3 (D1.5) vs PED4-6 (D1:2) (Phytoplankton)"
+author: "Brook Lab"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    code_folding: hide
+    fig_width: 10
+    fig_height: 6
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+library(tidyverse)
+library(ggplot2)
+library(scales)
+library(patchwork)
+library(ggrepel)
+
+# Color palette consistent with project scheme
+# Bacteria = blue family, Phytoplankton = green family
+col_BC      <- "#1f77b4"   # medium blue
+col_E       <- "#aec7e8"   # light blue
+col_PEC     <- "#2ca02c"   # dark green
+col_PED_D15 <- "#74c476"   # medium green  (D1.5, PED1-3)
+col_PED_D12 <- "#c7e9c0"   # light green   (D1:2, PED4-6)
+
+# List → condition mapping
+#   list_000 = Bacteria_BC (BC1-3)
+#   list_001 = Bacteria_E  (E1-3)
+#   list_004 = Phytoplankton_C (PEC1-3)
+#   list_005 = Phytoplankton_D1.5 (PED1-3)
+#   list_006 = Phytoplankton_D1to2 (PED4-6)
+list_map <- c(
+  BC      = "list_000",
+  E       = "list_001",
+  PEC     = "list_004",
+  PED_D15 = "list_005",
+  PED_D12 = "list_006"
+)
+```
+
+---
+
+# Overview
+
+This report analyzes metagomics2 output (v0.1.2) for four conditions derived from the DNA Shield experiment:
+
+| Condition | List    | Organism       | Description              |
+|-----------|---------|----------------|--------------------------|
+| BC        | list_000 | Bacteria      | Control (BC1-3)          |
+| E         | list_001 | Bacteria      | Treatment E (E1-3)       |
+| PEC       | list_004 | Phytoplankton | Control (PEC1-3)         |
+| PED_D15   | list_005 | Phytoplankton | Treatment D1.5 (PED1-3) |
+| PED_D12   | list_006 | Phytoplankton | Treatment D1:2 (PED4-6) |
+
+Peptide annotation used UniProt/Swiss-Prot via DIAMOND (≥80% pident, e-value ≤1e-10).
+GO terms were propagated using `is_a` and `part_of` edges.
+
+---
+
+# 1. Data Loading
+
+```{r load-data}
+BASE <- here::here()  # adjust if running from a different working directory
+# Provide the path to the extracted metagomics2_results folder:
+DATA_DIR <- file.path(BASE, "metagomics2_results")
+
+# --- Helper functions ---
+load_go_terms <- function(lst_dir) {
+  read_csv(file.path(lst_dir, "go_terms.csv"), show_col_types = FALSE) %>%
+    mutate(across(where(is.numeric), as.numeric))
+}
+
+load_coverage <- function(lst_dir) {
+  read_csv(file.path(lst_dir, "coverage.csv"), show_col_types = FALSE)
+}
+
+load_taxonomy <- function(lst_dir) {
+  read_csv(file.path(lst_dir, "taxonomy_nodes.csv"), show_col_types = FALSE)
+}
+
+# Load all conditions
+go_data <- map(list_map, ~ load_go_terms(file.path(DATA_DIR, .x))) %>%
+  imap(~ mutate(.x, condition = .y)) %>%
+  bind_rows()
+
+coverage_data <- map(list_map, ~ load_coverage(file.path(DATA_DIR, .x))) %>%
+  imap(~ mutate(.x, condition = .y)) %>%
+  bind_rows()
+
+taxonomy_data <- map(list_map, ~ load_taxonomy(file.path(DATA_DIR, .x))) %>%
+  imap(~ mutate(.x, condition = .y)) %>%
+  bind_rows()
+
+# Contaminant filtering: remove any GO terms derived from non-target taxa
+# (contaminant annotation coverage is already handled upstream by metagomics2 mapping
+# to background FASTA — confirmed by taxonomy nodes showing >98% Colwellia / T. pseudonana)
+# Additional filter: retain only GO terms with n_peptides >= 5 for statistical relevance
+go_filtered <- go_data %>%
+  filter(n_peptides >= 5)
+
+cat("GO terms loaded (after n>=5 filter):\n")
+go_filtered %>% count(condition) %>% print()
+```
+
+---
+
+# 2. Annotation Coverage
+
+```{r coverage-summary}
+coverage_summary <- coverage_data %>%
+  select(condition, total_peptide_quantity, annotated_peptide_quantity,
+         annotation_coverage_ratio, n_peptides_total, n_peptides_annotated) %>%
+  mutate(
+    organism = if_else(condition %in% c("BC", "E"), "Bacteria", "Phytoplankton"),
+    condition = factor(condition, levels = c("BC", "E", "PEC", "PED_D15"))
+  )
+
+knitr::kable(
+  coverage_summary %>%
+    select(condition, organism, n_peptides_total, n_peptides_annotated,
+           annotation_coverage_ratio, total_peptide_quantity, annotated_peptide_quantity) %>%
+    mutate(annotation_coverage_ratio = round(annotation_coverage_ratio, 3)),
+  caption = "Peptide annotation coverage by condition"
+)
+```
+
+```{r coverage-plot, fig.cap="Annotation coverage: annotated vs unannotated peptide quantities"}
+coverage_long <- coverage_data %>%
+  select(condition, annotated_peptide_quantity, unannotated_peptide_quantity) %>%
+  pivot_longer(cols = c(annotated_peptide_quantity, unannotated_peptide_quantity),
+               names_to = "type", values_to = "quantity") %>%
+  mutate(
+    type = recode(type,
+      annotated_peptide_quantity   = "Annotated",
+      unannotated_peptide_quantity = "Unannotated"
+    ),
+    condition = factor(condition, levels = c("BC", "E", "PEC", "PED_D15"))
+  )
+
+ggplot(coverage_long, aes(x = condition, y = quantity, fill = type)) +
+  geom_col(position = "stack", color = "white", linewidth = 0.3) +
+  scale_fill_manual(values = c("Annotated" = "#2166ac", "Unannotated" = "#d1e5f0")) +
+  scale_y_continuous(labels = comma) +
+  labs(
+    title = "Total Peptide Quantity: Annotated vs Unannotated",
+    x = "Condition", y = "Peptide Quantity (spectral counts)",
+    fill = NULL
+  ) +
+  theme_classic(base_size = 12) +
+  theme(legend.position = "top")
+```
+
+> **Note:** Bacteria conditions (BC, E) have ~45–47% annotation coverage; phytoplankton conditions (PEC, PED) have much lower coverage (~6–8%), consistent with the metagenome-assembled *T. pseudonana* FASTA being partial.
+
+---
+
+# 3. NSAF-Like Density Profiles
+
+The `ratio_total` field is analogous to a normalized spectral abundance fraction (NSAF) at the GO term level: the fraction of total peptide quantity assigned to each GO term. Plotting its distribution reveals the functional "mass" landscape per condition.
+
+```{r nsaf-density-bacteria, fig.cap="NSAF density (ratio_total): Bacteria BC vs E — all GO terms with n≥5 peptides"}
+bact_go <- go_filtered %>%
+  filter(condition %in% c("BC", "E")) %>%
+  mutate(condition = factor(condition, levels = c("BC", "E")))
+
+p_bact_density <- ggplot(bact_go, aes(x = ratio_total, color = condition, fill = condition)) +
+  geom_density(alpha = 0.25, linewidth = 0.8) +
+  scale_color_manual(values = c(BC = col_BC, E = col_E)) +
+  scale_fill_manual(values  = c(BC = col_BC, E = col_E)) +
+  scale_x_log10(labels = label_number(accuracy = 0.001)) +
+  labs(
+    title = "NSAF Density — Bacteria",
+    subtitle = "BC1-3 vs E1-3 | GO terms with ≥5 peptides",
+    x = "Ratio Total (log10 scale)", y = "Density",
+    color = NULL, fill = NULL
+  ) +
+  theme_classic(base_size = 12) +
+  theme(legend.position = "top")
+
+# Identify tail proteins: ratio_total >= 95th percentile
+bact_tail_thresh <- quantile(bact_go$ratio_total, 0.95)
+bact_tail <- bact_go %>%
+  filter(ratio_total >= bact_tail_thresh) %>%
+  arrange(desc(ratio_total))
+
+p_bact_density +
+  geom_vline(xintercept = bact_tail_thresh, linetype = "dashed",
+             color = "grey40", linewidth = 0.5) +
+  annotate("text", x = bact_tail_thresh * 1.1, y = Inf, vjust = 1.5,
+           hjust = 0, size = 3, color = "grey30",
+           label = paste0("95th pct = ", round(bact_tail_thresh, 3)))
+```
+
+```{r nsaf-density-phyto, fig.cap="NSAF density: Phytoplankton PEC vs PED_D15 vs PED_D12"}
+phyto_go <- go_filtered %>%
+  filter(condition %in% c("PEC", "PED_D15", "PED_D12")) %>%
+  mutate(condition = factor(condition, levels = c("PEC", "PED_D15", "PED_D12")))
+
+phyto_tail_thresh <- quantile(phyto_go$ratio_total, 0.95)
+
+ggplot(phyto_go, aes(x = ratio_total, color = condition, fill = condition)) +
+  geom_density(alpha = 0.25, linewidth = 0.8) +
+  scale_color_manual(values = c(PEC = col_PEC, PED_D15 = col_PED_D15, PED_D12 = col_PED_D12)) +
+  scale_fill_manual(values  = c(PEC = col_PEC, PED_D15 = col_PED_D15, PED_D12 = col_PED_D12)) +
+  scale_x_log10(labels = label_number(accuracy = 0.001)) +
+  geom_vline(xintercept = phyto_tail_thresh, linetype = "dashed",
+             color = "grey40", linewidth = 0.5) +
+  annotate("text", x = phyto_tail_thresh * 1.1, y = Inf, vjust = 1.5,
+           hjust = 0, size = 3, color = "grey30",
+           label = paste0("95th pct = ", round(phyto_tail_thresh, 3))) +
+  labs(
+    title = "NSAF Density — Phytoplankton",
+    subtitle = "PEC1-3 vs PED1-3 (D1.5) vs PED4-6 (D1:2) | GO terms with ≥5 peptides",
+    x = "Ratio Total (log10 scale)", y = "Density",
+    color = NULL, fill = NULL
+  ) +
+  theme_classic(base_size = 12) +
+  theme(legend.position = "top")
+```
+
+### Tail GO Terms (Dominant Functions, ≥95th percentile)
+
+```{r tail-go-bacteria}
+bact_tail_tbl <- bact_go %>%
+  filter(ratio_total >= bact_tail_thresh) %>%
+  arrange(desc(ratio_total)) %>%
+  select(condition, go_id, name, namespace, ratio_total, n_peptides) %>%
+  mutate(ratio_total = round(ratio_total, 4))
+
+knitr::kable(bact_tail_tbl, caption = "High-NSAF GO terms (≥95th pct) — Bacteria BC & E")
+```
+
+```{r tail-go-phyto}
+phyto_tail_tbl <- phyto_go %>%
+  filter(ratio_total >= phyto_tail_thresh) %>%
+  arrange(desc(ratio_total)) %>%
+  select(condition, go_id, name, namespace, ratio_total, n_peptides) %>%
+  mutate(ratio_total = round(ratio_total, 4))
+
+knitr::kable(phyto_tail_tbl, caption = "High-NSAF GO terms (≥95th pct) — Phytoplankton PEC & PED")
+```
+
+---
+
+# 4. GO Term Comparison: BC vs E (Bacteria)
+
+## 4a. Differential Abundance (ratio_total difference)
+
+```{r bact-diff}
+bact_wide <- go_filtered %>%
+  filter(condition %in% c("BC", "E")) %>%
+  select(go_id, name, namespace, condition, ratio_total, n_peptides) %>%
+  pivot_wider(names_from = condition,
+              values_from = c(ratio_total, n_peptides),
+              names_glue = "{condition}_{.value}") %>%
+  filter(!is.na(BC_ratio_total), !is.na(E_ratio_total)) %>%
+  mutate(
+    diff_BC_minus_E = BC_ratio_total - E_ratio_total,
+    fold_change_BC_over_E = BC_ratio_total / E_ratio_total,
+    log2FC = log2(fold_change_BC_over_E),
+    direction = case_when(
+      diff_BC_minus_E > 0  ~ "BC > E",
+      diff_BC_minus_E < 0  ~ "E > BC",
+      TRUE                 ~ "equal"
+    )
+  )
+
+# Top 20 enriched each direction
+top_bact <- bind_rows(
+  bact_wide %>% arrange(desc(diff_BC_minus_E)) %>% slice_head(n = 20),
+  bact_wide %>% arrange(diff_BC_minus_E)        %>% slice_head(n = 20)
+) %>% distinct()
+
+knitr::kable(
+  top_bact %>%
+    select(go_id, name, namespace, BC_ratio_total, E_ratio_total,
+           diff_BC_minus_E, log2FC) %>%
+    mutate(across(where(is.numeric), ~ round(.x, 4))) %>%
+    arrange(desc(diff_BC_minus_E)),
+  caption = "Top differentially represented GO terms: BC vs E"
+)
+```
+
+## 4b. Lollipop Plot — BC vs E
+
+```{r bact-lollipop, fig.height=8, fig.cap="Top 20 GO terms enriched in BC (blue) and E (light blue)"}
+top_plot <- bind_rows(
+  bact_wide %>%
+    filter(!namespace %in% c("molecular_function", "biological_process", "cellular_component") |
+             !go_id %in% c("GO:0003674","GO:0008150","GO:0005575")) %>%
+    arrange(desc(diff_BC_minus_E)) %>% slice_head(n = 15) %>% mutate(panel = "BC > E"),
+  bact_wide %>%
+    filter(!go_id %in% c("GO:0003674","GO:0008150","GO:0005575")) %>%
+    arrange(diff_BC_minus_E)  %>% slice_head(n = 15) %>% mutate(panel = "E > BC")
+) %>%
+  mutate(
+    label = str_trunc(name, 45),
+    label = factor(label, levels = rev(unique(label)))
+  )
+
+ggplot(top_plot, aes(y = label, x = diff_BC_minus_E,
+                     color = panel)) +
+  geom_vline(xintercept = 0, linewidth = 0.4, color = "grey60") +
+  geom_segment(aes(yend = label, xend = 0), linewidth = 0.7) +
+  geom_point(size = 3) +
+  scale_color_manual(values = c("BC > E" = col_BC, "E > BC" = col_E)) +
+  facet_wrap(~panel, scales = "free") +
+  labs(
+    title = "BC vs E — GO Term Differential Representation",
+    subtitle = "Difference in ratio_total (BC − E); root GO terms excluded",
+    x = "Δ ratio_total (BC − E)", y = NULL, color = NULL
+  ) +
+  theme_classic(base_size = 11) +
+  theme(legend.position = "none",
+        strip.background = element_blank(),
+        strip.text = element_text(face = "bold"))
+```
+
+## 4c. Volcano-Style Scatter — BC vs E
+
+```{r bact-scatter, fig.cap="Scatter: ratio_total in BC vs E. Points above diagonal = higher in BC."}
+# Exclude root GO terms for cleaner plot
+bact_scatter <- bact_wide %>%
+  filter(!go_id %in% c("GO:0003674","GO:0008150","GO:0005575")) %>%
+  mutate(
+    label = if_else(abs(log2FC) > 0.25 & pmax(BC_ratio_total, E_ratio_total) > 0.01,
+                    str_trunc(name, 35), NA_character_)
+  )
+
+ggplot(bact_scatter, aes(x = E_ratio_total, y = BC_ratio_total,
+                          color = direction)) +
+  geom_abline(slope = 1, intercept = 0, color = "grey60", linetype = "dashed") +
+  geom_point(alpha = 0.6, size = 1.5) +
+  geom_text_repel(aes(label = label), size = 2.8,
+                  max.overlaps = 20, segment.color = "grey50") +
+  scale_color_manual(values = c("BC > E" = col_BC, "E > BC" = col_E,
+                                 "equal" = "grey70")) +
+  scale_x_log10() + scale_y_log10() +
+  labs(
+    title = "BC vs E — GO Term Abundance",
+    subtitle = "log10 scale; dashed line = 1:1; labels = |log2FC| > 0.25 & ratio > 0.01",
+    x = "ratio_total (E)", y = "ratio_total (BC)",
+    color = NULL
+  ) +
+  theme_classic(base_size = 11) +
+  theme(legend.position = "top")
+```
+
+## 4d. Key Observations: BC vs E
+
+```{r bact-key-go}
+# Highlight biologically interesting specific terms
+key_terms_bact <- tribble(
+  ~go_id,       ~category,
+  "GO:0008168",  "Methylation",
+  "GO:0008757",  "Methylation",
+  "GO:0008173",  "Methylation",
+  "GO:0006364",  "Ribosome biogenesis",
+  "GO:0016072",  "Ribosome biogenesis",
+  "GO:0042254",  "Ribosome biogenesis",
+  "GO:0045333",  "Cellular respiration",
+  "GO:0006099",  "TCA cycle",
+  "GO:0015980",  "Cellular respiration",
+  "GO:0006108",  "TCA cycle",
+  "GO:0016615",  "TCA cycle",
+  "GO:0140662",  "Protein folding",
+  "GO:0042026",  "Protein folding",
+  "GO:0006458",  "Protein folding"
+)
+
+bact_wide %>%
+  inner_join(key_terms_bact, by = "go_id") %>%
+  select(category, go_id, name, BC_ratio_total, E_ratio_total, log2FC) %>%
+  mutate(across(where(is.numeric), ~ round(.x, 4)),
+         enriched_in = if_else(log2FC > 0, "BC", "E")) %>%
+  arrange(category, desc(abs(log2FC))) %>%
+  knitr::kable(caption = "Key functional GO terms: BC vs E")
+```
+
+```{r bact-category-bar, fig.height=5, fig.cap="Mean log2FC by functional category — Bacteria BC vs E"}
+bact_wide %>%
+  inner_join(key_terms_bact, by = "go_id") %>%
+  group_by(category) %>%
+  summarise(mean_log2FC = mean(log2FC), .groups = "drop") %>%
+  mutate(direction = if_else(mean_log2FC > 0, "BC > E", "E > BC"),
+         category = fct_reorder(category, mean_log2FC)) %>%
+  ggplot(aes(y = category, x = mean_log2FC, fill = direction)) +
+  geom_col() +
+  geom_vline(xintercept = 0, linewidth = 0.4) +
+  scale_fill_manual(values = c("BC > E" = col_BC, "E > BC" = col_E)) +
+  labs(
+    title = "Functional Category Summary — Bacteria BC vs E",
+    x = "Mean log2FC (BC / E)", y = NULL, fill = NULL
+  ) +
+  theme_classic(base_size = 12) +
+  theme(legend.position = "top")
+```
+
+---
+
+# 5. GO Term Comparison: PEC vs PED (Phytoplankton)
+
+## 5a. Differential Abundance
+
+```{r phyto-diff}
+phyto_wide <- go_filtered %>%
+  filter(condition %in% c("PEC", "PED_D15")) %>%
+  select(go_id, name, namespace, condition, ratio_total, n_peptides) %>%
+  pivot_wider(names_from = condition,
+              values_from = c(ratio_total, n_peptides),
+              names_glue = "{condition}_{.value}") %>%
+  filter(!is.na(PEC_ratio_total), !is.na(PED_D15_ratio_total)) %>%
+  mutate(
+    diff_PEC_minus_PED = PEC_ratio_total - PED_D15_ratio_total,
+    log2FC_PEC_over_PED = log2(PEC_ratio_total / PED_D15_ratio_total),
+    direction = case_when(
+      diff_PEC_minus_PED > 0  ~ "PEC > PED",
+      diff_PEC_minus_PED < 0  ~ "PED > PEC",
+      TRUE                    ~ "equal"
+    )
+  )
+
+top_phyto <- bind_rows(
+  phyto_wide %>% arrange(desc(diff_PEC_minus_PED)) %>% slice_head(n = 20),
+  phyto_wide %>% arrange(diff_PEC_minus_PED)        %>% slice_head(n = 20)
+) %>% distinct()
+
+knitr::kable(
+  top_phyto %>%
+    select(go_id, name, namespace, PEC_ratio_total, PED_D15_ratio_total,
+           diff_PEC_minus_PED, log2FC_PEC_over_PED) %>%
+    mutate(across(where(is.numeric), ~ round(.x, 4))) %>%
+    arrange(desc(diff_PEC_minus_PED)),
+  caption = "Top differentially represented GO terms: PEC vs PED"
+)
+```
+
+## 5b. Lollipop Plot — PEC vs PED
+
+```{r phyto-lollipop, fig.height=8, fig.cap="Top GO terms enriched in PEC (green) and PED (light green)"}
+phyto_plot <- bind_rows(
+  phyto_wide %>%
+    filter(!go_id %in% c("GO:0003674","GO:0008150","GO:0005575")) %>%
+    arrange(desc(diff_PEC_minus_PED)) %>% slice_head(n = 15) %>% mutate(panel = "PEC > PED"),
+  phyto_wide %>%
+    filter(!go_id %in% c("GO:0003674","GO:0008150","GO:0005575")) %>%
+    arrange(diff_PEC_minus_PED) %>% slice_head(n = 15) %>% mutate(panel = "PED > PEC")
+) %>%
+  mutate(
+    label = str_trunc(name, 45),
+    label = factor(label, levels = rev(unique(label)))
+  )
+
+ggplot(phyto_plot, aes(y = label, x = diff_PEC_minus_PED, color = panel)) +
+  geom_vline(xintercept = 0, linewidth = 0.4, color = "grey60") +
+  geom_segment(aes(yend = label, xend = 0), linewidth = 0.7) +
+  geom_point(size = 3) +
+  scale_color_manual(values = c("PEC > PED" = col_PEC, "PED > PEC" = col_PED)) +
+  facet_wrap(~panel, scales = "free") +
+  labs(
+    title = "PEC vs PED — GO Term Differential Representation",
+    subtitle = "Difference in ratio_total (PEC − PED); root GO terms excluded",
+    x = "Δ ratio_total (PEC − PED)", y = NULL, color = NULL
+  ) +
+  theme_classic(base_size = 11) +
+  theme(legend.position = "none",
+        strip.background = element_blank(),
+        strip.text = element_text(face = "bold"))
+```
+
+## 5c. Scatter — PEC vs PED
+
+```{r phyto-scatter, fig.cap="Scatter: ratio_total in PEC vs PED. Labels show >2x fold-change terms."}
+phyto_scatter <- phyto_wide %>%
+  filter(!go_id %in% c("GO:0003674","GO:0008150","GO:0005575")) %>%
+  mutate(
+    label = if_else(abs(log2FC_PEC_over_PED) > 1 &
+                      pmax(PEC_ratio_total, PED_D15_ratio_total) > 0.002,
+                    str_trunc(name, 35), NA_character_)
+  )
+
+ggplot(phyto_scatter, aes(x = PED_D15_ratio_total, y = PEC_ratio_total,
+                           color = direction)) +
+  geom_abline(slope = 1, intercept = 0, color = "grey60", linetype = "dashed") +
+  geom_point(alpha = 0.6, size = 1.5) +
+  geom_text_repel(aes(label = label), size = 2.8,
+                  max.overlaps = 20, segment.color = "grey50") +
+  scale_color_manual(values = c("PEC > PED" = col_PEC, "PED > PEC" = col_PED,
+                                 "equal" = "grey70")) +
+  scale_x_log10() + scale_y_log10() +
+  labs(
+    title = "PEC vs PED — GO Term Abundance",
+    subtitle = "log10 scale; dashed = 1:1; labels = |log2FC| > 1 & ratio > 0.002",
+    x = "ratio_total (PED_D15)", y = "ratio_total (PEC)",
+    color = NULL
+  ) +
+  theme_classic(base_size = 11) +
+  theme(legend.position = "top")
+```
+
+## 5d. Key Observations: PEC vs PED
+
+```{r phyto-key-go}
+key_terms_phyto <- tribble(
+  ~go_id,        ~category,
+  "GO:0015979",  "Photosynthesis",
+  "GO:0019684",  "Photosynthesis",
+  "GO:0009521",  "Photosystems",
+  "GO:0009522",  "Photosystems",
+  "GO:0009523",  "Photosystems",
+  "GO:0009507",  "Chloroplast",
+  "GO:0009535",  "Chloroplast",
+  "GO:0009534",  "Chloroplast",
+  "GO:0006334",  "Chromatin/Nucleosome",
+  "GO:0006338",  "Chromatin/Nucleosome",
+  "GO:0034728",  "Chromatin/Nucleosome",
+  "GO:0005198",  "Structural/Ribosome",
+  "GO:0003735",  "Structural/Ribosome",
+  "GO:0005840",  "Structural/Ribosome",
+  "GO:0022625",  "Cytosolic ribosome",
+  "GO:0043531",  "Iron-sulfur/Redox",
+  "GO:0051536",  "Iron-sulfur/Redox",
+  "GO:0051537",  "Iron-sulfur/Redox",
+  "GO:0008652",  "Amino acid biosynthesis",
+  "GO:0170034",  "Amino acid biosynthesis"
+)
+
+phyto_wide %>%
+  inner_join(key_terms_phyto, by = "go_id") %>%
+  select(category, go_id, name, PEC_ratio_total, PED_D15_ratio_total,
+         log2FC_PEC_over_PED) %>%
+  mutate(across(where(is.numeric), ~ round(.x, 4)),
+         enriched_in = if_else(log2FC_PEC_over_PED > 0, "PEC", "PED")) %>%
+  arrange(category, desc(abs(log2FC_PEC_over_PED))) %>%
+  knitr::kable(caption = "Key functional GO terms: PEC vs PED")
+```
+
+```{r phyto-category-bar, fig.height=6, fig.cap="Mean log2FC by functional category — Phytoplankton PEC vs PED"}
+phyto_wide %>%
+  inner_join(key_terms_phyto, by = "go_id") %>%
+  group_by(category) %>%
+  summarise(mean_log2FC = mean(log2FC_PEC_over_PED), .groups = "drop") %>%
+  mutate(direction = if_else(mean_log2FC > 0, "PEC > PED", "PED > PEC"),
+         category = fct_reorder(category, mean_log2FC)) %>%
+  ggplot(aes(y = category, x = mean_log2FC, fill = direction)) +
+  geom_col() +
+  geom_vline(xintercept = 0, linewidth = 0.4) +
+  scale_fill_manual(values = c("PEC > PED" = col_PEC, "PED > PEC" = col_PED)) +
+  labs(
+    title = "Functional Category Summary — Phytoplankton PEC vs PED",
+    x = "Mean log2FC (PEC / PED)", y = NULL, fill = NULL
+  ) +
+  theme_classic(base_size = 12) +
+  theme(legend.position = "top")
+```
+
+---
+
+# 6. Photosynthesis Deep Dive (Phytoplankton)
+
+```{r photosynthesis-detail}
+photo_ids <- c(
+  "GO:0015979", "GO:0019684", "GO:0009765",
+  "GO:0009521", "GO:0009522", "GO:0009523",
+  "GO:0009507", "GO:0009535", "GO:0009534",
+  "GO:0009526", "GO:0009416", "GO:0055035",
+  "GO:0042651", "GO:0034357"
+)
+
+photo_data <- go_filtered %>%
+  filter(go_id %in% photo_ids, condition %in% c("PEC", "PED_D15")) %>%
+  mutate(
+    condition = factor(condition, levels = c("PEC", "PED_D15")),
+    name_short = str_trunc(name, 40)
+  )
+
+ggplot(photo_data, aes(x = ratio_total, y = fct_reorder(name_short, ratio_total),
+                        fill = condition)) +
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = c(PEC = col_PEC, PED_D15 = col_PED)) +
+  labs(
+    title = "Photosynthesis-Related GO Terms",
+    subtitle = "PEC1-3 vs PED4-6 (D1.5)",
+    x = "ratio_total", y = NULL, fill = NULL
+  ) +
+  theme_classic(base_size = 11) +
+  theme(legend.position = "top")
+```
+
+---
+
+# 7. Ribosome & Translation (Both Organisms)
+
+```{r ribosome-comparison}
+ribo_ids <- c(
+  "GO:0022625", "GO:0022626", "GO:0015934", "GO:0015935",
+  "GO:0005840", "GO:0003735", "GO:0019843", "GO:0006412",
+  "GO:0003746", "GO:0006414", "GO:0180051"
+)
+
+ribo_data <- go_filtered %>%
+  filter(go_id %in% ribo_ids) %>%
+  mutate(
+    organism = if_else(condition %in% c("BC","E"), "Bacteria", "Phytoplankton"),
+    name_short = str_trunc(name, 40)
+  )
+
+ggplot(ribo_data, aes(x = ratio_total, y = fct_reorder(name_short, ratio_total),
+                       fill = condition)) +
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = c(BC = col_BC, E = col_E,
+                                PEC = col_PEC, PED_D15 = col_PED)) +
+  facet_wrap(~organism, scales = "free") +
+  labs(
+    title = "Ribosome & Translation GO Terms",
+    subtitle = "All four conditions",
+    x = "ratio_total", y = NULL, fill = NULL
+  ) +
+  theme_classic(base_size = 10) +
+  theme(legend.position = "top",
+        strip.background = element_blank(),
+        strip.text = element_text(face = "bold"))
+```
+
+---
+
+# 8. Taxonomy Summary
+
+```{r taxonomy-plot, fig.height=5, fig.cap="Top taxonomy assignments by ratio_total (species/strain level only)"}
+tax_species <- taxonomy_data %>%
+  filter(rank %in% c("species", "strain"),
+         condition %in% c("BC", "E", "PEC", "PED_D15")) %>%
+  mutate(condition = factor(condition, levels = c("BC", "E", "PEC", "PED_D15"))) %>%
+  group_by(condition) %>%
+  slice_max(order_by = ratio_total, n = 5) %>%
+  ungroup()
+
+ggplot(tax_species, aes(x = ratio_total, y = fct_reorder(name, ratio_total),
+                         fill = condition)) +
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = c(BC = col_BC, E = col_E,
+                                PEC = col_PEC, PED_D15 = col_PED)) +
+  labs(
+    title = "Top Taxonomy Assignments (species/strain level)",
+    x = "ratio_total", y = NULL, fill = NULL
+  ) +
+  theme_classic(base_size = 11) +
+  theme(legend.position = "top")
+```
+
+---
+
+# 9. Discussion
+
+## 9.1 Bacteria: BC vs E
+
+Both BC (control) and E (treatment) are dominated by CP34H (*Colwellia psychrerythraea* 34H), confirming organism identity.
+The overall GO landscape is remarkably similar (~45% annotation coverage each), suggesting broad metabolic parity.
+Key differences:
+
+**BC is elevated in:**
+
+- **Methyltransferase activity** (`GO:0008168`, `GO:0008757`, `GO:0008173`; ~1.37–1.39× FC). SAM-dependent RNA methylation (rRNA modification, `GO:0031167`) is specifically enriched in BC. This suggests heightened post-transcriptional RNA modification, possibly linked to ribosome quality control or stress-independent translational regulation.
+- **rRNA processing & ribosome biogenesis** (`GO:0006364`, `GO:0042254`; ~1.25–1.28× FC). BC cells appear to be investing more in *de novo* ribosome assembly relative to E.
+- **Transcriptional regulation** (`GO:0006355`, `GO:2001141`; ~1.19× FC). Broader regulatory investment in BC.
+
+**E is elevated in:**
+
+- **Cellular respiration & TCA cycle** (`GO:0045333`, `GO:0006099`, `GO:0015980`; ~1.13–1.17× FC). The E condition shows consistently higher aerobic respiratory flux — malate dehydrogenase (`GO:0016615`) and the TCA cycle are particularly prominent.
+- **Protein folding & refolding** (`GO:0140662`, `GO:0042026`; ~1.19–1.31× FC). The E treatment elicits a stronger chaperone response, suggesting proteotoxic stress or elevated unfolded protein burden.
+- **ATP-binding & nucleotide metabolism** (`GO:0000166`, `GO:0005524`; ~1.10× FC). Broadly elevated energy utilization in E.
+
+**Interpretation:** E-condition bacteria show a metabolic shift toward higher energy expenditure and stress-induced protein refolding, while BC bacteria invest more in ribosome biogenesis and RNA methylation. This is consistent with E representing a treatment that imposes metabolic stress, driving respiration and chaperone expression up while BC cells maintain more homeostatic ribosome turnover.
+
+---
+
+## 9.2 Phytoplankton: PEC vs PED
+
+Annotation coverage is low in both phytoplankton conditions (~6–8%), reflecting a partially assembled *T. pseudonana* reference. Differences must be interpreted cautiously, but fold changes are large.
+
+**PEC is strongly elevated in:**
+
+- **Chloroplast & photosynthetic membranes** (thylakoid terms; ~1.35–1.40× ratio). PEC has markedly higher representation of photosystem II (`GO:0009523`), photosystem I (`GO:0009522`), and photosynthesis itself (`GO:0015979` ratio 0.0146 vs 0.0109).
+- **Chromatin/nucleosome assembly** (`GO:0006334`, `GO:0034728`; **~20× FC**). This is the most striking difference — PEC has substantially higher nucleosome organization terms. This may indicate greater chromatin packaging activity, possibly linked to cell cycle regulation or epigenetic adjustments in response to conditions.
+- **rRNA processing & ribosome maturation** (`GO:0006364`, `GO:0030490`; ~15× FC for SSU maturation). PEC has more active pre-ribosome processing machinery.
+- **Structural molecule activity** (`GO:0005198`, `GO:0003735`; ~1.7–2× FC). Ribosome structural proteins are proportionally higher in PEC.
+
+**PED is elevated in:**
+
+- **Iron-sulfur cluster binding** (`GO:0051537`, `GO:0051536`; **3–5× FC**). The 2Fe-2S and Fe-S cluster-binding terms are markedly enriched in PED. These are signatures of iron-requiring electron transfer proteins (ferredoxins, ISC assembly proteins), suggesting iron acquisition or Fe-S protein biogenesis is upregulated.
+- **Cytosolic large ribosomal subunit** (`GO:0022625`; ~3× FC) and **ADP binding** (`GO:0043531`; ~3× FC). PED's cytosolic ribosomes are proportionally more abundant than in PEC.
+- **Amino acid biosynthesis** (`GO:0008652`, `GO:0006526`; ~1.87× FC). Specifically arginine and ornithine pathway enzymes (`GO:0006525`, `GO:0006591`) are higher in PED, suggesting de novo amino acid synthesis is upregulated.
+
+**Interpretation:** PEC cells are more photosynthetically active and invest heavily in chromatin remodeling and ribosome maturation — signatures of actively dividing or transcriptionally reorganizing cells. PED cells (higher dilution / D1.5 condition) show signs of iron-sulfur protein upregulation (potentially indicating iron limitation response via ferredoxin-type electron transfer), more cytosolic translation, and amino acid biosynthesis. The large FC for chromatin assembly in PEC is notable and warrants closer inspection of the underlying peptide list.
+
+---
+
+## 9.3 Cross-Organism Patterns
+
+The ribosome is heavily represented in both organisms and both conditions, consistent with NSAF proteomics broadly capturing translational machinery. The divergence between organisms is stark: bacteria show tight metabolic similarity with subtle regulation-level shifts; phytoplankton show large-magnitude differences likely reflecting their fundamentally more complex (organelle-rich, photosynthetic) biology and lower annotation coverage amplifying noise in fold-change estimates.
+
+---
+
+# 10. Session Info
+
+```{r session-info}
+sessionInfo()
+```

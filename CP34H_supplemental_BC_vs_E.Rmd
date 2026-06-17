@@ -1,0 +1,599 @@
+---
+title: "CP34H (*Colwellia psychrerythraea* 34H) — Supplemental BC vs. E Analyses"
+subtitle: "Control vs. DNA Shield 1:1.5 | NSAF density scatter · NSAF proportions test · PSM proportions test"
+author: "Evelyn Bartlett (Brook Lab)"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    theme: flatly
+    code_folding: show
+  pdf_document:
+    toc: true
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo    = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width  = 7.6,
+  fig.height = 7,
+  dpi = 300
+)
+```
+
+# Overview
+
+Three supplemental analyses comparing the **bacterial control (BC, n = 3)** against
+the **DNA Shield 1:1.5 treatment (E, n = 3)** for *Colwellia psychrerythraea* 34H:
+
+1. **Section 1 — NSAF Density Scatter:** Per-protein log₁₀ NSAF scatter with 2D
+   density colouring and ± SD error bars.
+2. **Section 2 — NSAF Proportions Test:** Per-protein two-sample test of proportions
+   on NSAF values. p-values are Benjamini–Hochberg adjusted.
+3. **Section 3 — PSM Proportions Test:** Per-protein two-sample test of proportions
+   on raw PSM counts. p-values are Benjamini–Hochberg adjusted.
+
+Sections 2 and 3 each analyse two input files separately:
+
+- `Bactera_Comet_all_samples_proteins.txt` — full-elution table
+- `Bacteria_Comet_elution_3_to_24min_prot.txt` — restricted to the 3–24 min window
+
+Upstream pipeline: Comet 2023.02 via Limelight, PSM- and peptide-level q ≤ 0.01,
+no protein-level FDR applied. **HR-E1 is a known PCA outlier** — included for
+completeness; consider re-running with HR-E1 dropped if it drives false positives.
+
+---
+
+```{r packages}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(scales)
+library(viridis)  # density scatter colour scale
+library(MASS)     # kde2d for 2D density
+```
+
+---
+
+# Section 1 — NSAF Density Scatter (BC vs. E)
+
+## Overview
+
+Per-protein scatter of mean NSAF (control BC vs. Shield 1:1.5 E). Both axes
+are log₁₀. Point colour = local 2D density (viridis: purple = sparse, yellow =
+dense). Whiskers = ± SD across biological triplicates, clipped to the axis floor.
+Dashed grey line = 1:1 (no change).
+
+## Load data
+
+```{r ds_load}
+data_file <- "Bacteria/Bactera_Comet_all_samples_proteins.txt"
+
+raw_ds <- read_tsv(
+  data_file,
+  show_col_types = FALSE,
+  na = c("", "NA")
+)
+
+# Column names mix '_' and '-' (e.g. "NSAF (HR-E1)" vs "NSAF (HR_E2)")
+nsaf_bc <- c("NSAF (HR_BC1)", "NSAF (HR_BC2)", "NSAF (HR_BC3)")
+nsaf_e  <- c("NSAF (HR-E1)",  "NSAF (HR_E2)",  "NSAF (HR_E3)")
+
+stopifnot(all(c(nsaf_bc, nsaf_e) %in% colnames(raw_ds)))
+```
+
+## Compute per-protein mean and SD
+
+```{r ds_summarise}
+prot <- raw_ds %>%
+  mutate(across(all_of(c(nsaf_bc, nsaf_e)), as.numeric)) %>%
+  rowwise() %>%
+  mutate(
+    BC_mean = mean(c_across(all_of(nsaf_bc)), na.rm = TRUE),
+    BC_sd   = sd(  c_across(all_of(nsaf_bc)), na.rm = TRUE),
+    E_mean  = mean(c_across(all_of(nsaf_e)),  na.rm = TRUE),
+    E_sd    = sd(  c_across(all_of(nsaf_e)),  na.rm = TRUE)
+  ) %>%
+  ungroup() %>%
+  dplyr::select(`Protein(s)`, `Protein Description(s)`,
+                BC_mean, BC_sd, E_mean, E_sd) %>%
+  mutate(BC_sd = tidyr::replace_na(BC_sd, 0),
+         E_sd  = tidyr::replace_na(E_sd,  0))
+
+# Keep proteins detected in at least one condition
+plot_df <- prot %>% filter(BC_mean > 0 | E_mean > 0)
+cat("Proteins plotted:", nrow(plot_df), "\n")
+```
+
+## Set up log axes and clip error bars
+
+```{r ds_limits}
+pos_vals <- c(plot_df$BC_mean, plot_df$E_mean)
+pos_vals <- pos_vals[pos_vals > 0]
+ax_lo <- max(min(pos_vals) * 0.5, 1e-7)
+ax_hi <- max(pos_vals) * 2
+
+plot_df <- plot_df %>%
+  mutate(
+    BC_plot = pmax(BC_mean, ax_lo),
+    E_plot  = pmax(E_mean,  ax_lo),
+    BC_lo   = pmax(BC_mean - BC_sd, ax_lo),
+    BC_hi   = pmax(BC_mean + BC_sd, BC_plot),
+    E_lo    = pmax(E_mean  - E_sd,  ax_lo),
+    E_hi    = pmax(E_mean  + E_sd,  E_plot)
+  )
+```
+
+## Compute 2D density in log space
+
+```{r ds_density}
+get_log_point_density <- function(x, y, n = 120) {
+  lx <- log10(x); ly <- log10(y)
+  dens <- MASS::kde2d(lx, ly, n = n)
+  ix <- findInterval(lx, dens$x); iy <- findInterval(ly, dens$y)
+  ix <- pmin(pmax(ix, 1), n); iy <- pmin(pmax(iy, 1), n)
+  dens$z[cbind(ix, iy)]
+}
+
+plot_df <- plot_df %>%
+  mutate(
+    dens     = get_log_point_density(BC_plot, E_plot, n = 120),
+    dens_log = log10(dens + 1)
+  ) %>%
+  arrange(dens_log)
+```
+
+## Density scatter plot
+
+```{r ds_plot, fig.width=7.6, fig.height=7}
+p_density <- ggplot(plot_df, aes(x = BC_plot, y = E_plot)) +
+  geom_abline(slope = 1, intercept = 0,
+              linetype = "dashed", colour = "grey40") +
+  geom_errorbarh(aes(xmin = BC_lo, xmax = BC_hi),
+                 height = 0, colour = "grey55",
+                 linewidth = 0.25, alpha = 0.30) +
+  geom_errorbar(aes(ymin = E_lo, ymax = E_hi),
+                width = 0, colour = "grey55",
+                linewidth = 0.25, alpha = 0.30) +
+  geom_point(aes(colour = dens_log),
+             size = 1.2, alpha = 0.9) +
+  scale_colour_viridis_c(option = "viridis",
+                         name = expression(log[10](density + 1))) +
+  scale_x_log10(limits = c(ax_lo, ax_hi),
+                labels = trans_format("log10", math_format(10^.x))) +
+  scale_y_log10(limits = c(ax_lo, ax_hi),
+                labels = trans_format("log10", math_format(10^.x))) +
+  coord_equal() +
+  labs(
+    x = "Mean NSAF — BC (control)",
+    y = "Mean NSAF — E (DNA Shield 1:1.5)",
+    title = "Protein abundance: Control (BC) vs. DNA Shield 1:1.5 (E)",
+    subtitle = sprintf(
+      "CP34H (Colwellia psychrerythraea 34H) — n = %d proteins (log–log, purple = sparse, yellow = dense)",
+      nrow(plot_df)
+    )
+  ) +
+  theme_bw(base_size = 12) +
+  theme(
+    panel.grid.minor = element_blank(),
+    plot.title    = element_text(face = "bold"),
+    plot.subtitle = element_text(colour = "grey30"),
+    legend.position = "right"
+  )
+
+p_density
+```
+
+## Save — Section 1
+
+```{r ds_save}
+out_ds <- "figures/NSAF_BC_vs_E_density_scatter"
+dir.create(out_ds, recursive = TRUE, showWarnings = FALSE)
+
+ggsave(file.path(out_ds, "bacteria_BC_vs_E_NSAF_density_log.png"),
+       p_density, width = 7.6, height = 7, dpi = 300)
+ggsave(file.path(out_ds, "bacteria_BC_vs_E_NSAF_density_log.pdf"),
+       p_density, width = 7.6, height = 7)
+
+readr::write_tsv(
+  plot_df %>% dplyr::select(`Protein(s)`, `Protein Description(s)`,
+                            BC_mean, BC_sd, E_mean, E_sd),
+  file.path(out_ds, "bacteria_BC_vs_E_NSAF_summary.tsv")
+)
+
+message("Section 1 outputs written to: ", out_ds)
+```
+
+---
+
+# Section 2 — NSAF Proportions Test (BC vs. E)
+
+## Overview
+
+Per-protein two-sample test of proportions on NSAF values. NSAF is already a
+within-sample proportion, so replicate NSAFs are summed per group and scaled by
+`SCALE = 1e6` to produce count-like integers for `prop.test()`. Fisher's exact
+test is used as a fallback when any expected cell < 5. p-values are
+Benjamini–Hochberg adjusted. Two files are analysed separately.
+
+## Helper function
+
+```{r nsaf_helper}
+nsaf_bc_cols <- c("NSAF (HR_BC1)", "NSAF (HR_BC2)", "NSAF (HR_BC3)")
+nsaf_e_cols  <- c("NSAF (HR-E1)",  "NSAF (HR_E2)",  "NSAF (HR_E3)")
+
+parse_nsaf <- function(x) {
+  as.numeric(gsub(",", "", as.character(x), fixed = TRUE))
+}
+
+SCALE <- 1e6
+
+run_nsaf_prop_test <- function(file_path, label) {
+  raw <- read_tsv(file_path, show_col_types = FALSE, na = c("", "NA"))
+  stopifnot(all(c(nsaf_bc_cols, nsaf_e_cols) %in% colnames(raw)))
+
+  dat <- raw %>%
+    mutate(across(all_of(c(nsaf_bc_cols, nsaf_e_cols)), parse_nsaf)) %>%
+    rowwise() %>%
+    mutate(
+      sum_BC  = sum(c_across(all_of(nsaf_bc_cols)), na.rm = TRUE),
+      sum_E   = sum(c_across(all_of(nsaf_e_cols)),  na.rm = TRUE),
+      mean_BC = mean(c_across(all_of(nsaf_bc_cols)), na.rm = TRUE),
+      mean_E  = mean(c_across(all_of(nsaf_e_cols)),  na.rm = TRUE)
+    ) %>%
+    ungroup() %>%
+    dplyr::select(`Protein(s)`, `Protein Description(s)`,
+                  sum_BC, sum_E, mean_BC, mean_E) %>%
+    mutate(
+      k_BC = as.integer(round(sum_BC * SCALE)),
+      k_E  = as.integer(round(sum_E  * SCALE))
+    )
+
+  N_BC <- sum(dat$k_BC, na.rm = TRUE)
+  N_E  <- sum(dat$k_E,  na.rm = TRUE)
+  cat(sprintf("[%s] proteins: %d   N_BC=%d   N_E=%d   (SCALE=%.0e)\n",
+              label, nrow(dat), N_BC, N_E, SCALE))
+
+  dat <- dat %>% filter(!(k_BC == 0 & k_E == 0))
+
+  one_test <- function(k_BC, k_E, N_BC, N_E) {
+    tab <- matrix(c(k_BC, N_BC - k_BC, k_E, N_E - k_E), nrow = 2, byrow = TRUE)
+    expected <- outer(rowSums(tab), colSums(tab)) / sum(tab)
+    if (any(expected < 5)) {
+      ft <- suppressWarnings(fisher.test(tab))
+      list(p = ft$p.value, method = "Fisher")
+    } else {
+      pt <- suppressWarnings(prop.test(x = c(k_BC, k_E), n = c(N_BC, N_E), correct = TRUE))
+      list(p = pt$p.value, method = "prop.test")
+    }
+  }
+
+  eps <- 0.5 / SCALE
+  results <- dat %>%
+    rowwise() %>%
+    mutate(
+      .res    = list(one_test(k_BC, k_E, N_BC, N_E)),
+      p_value = .res$p,
+      method  = .res$method
+    ) %>%
+    ungroup() %>%
+    dplyr::select(-.res) %>%
+    mutate(
+      prop_BC   = sum_BC / (N_BC / SCALE),
+      prop_E    = sum_E  / (N_E  / SCALE),
+      log2FC    = log2(mean_E + eps) - log2(mean_BC + eps),
+      q_value   = p.adjust(p_value, method = "BH"),
+      direction = case_when(
+        q_value >= 0.05 ~ "ns",
+        log2FC  >  0    ~ "up in E (1:1.5)",
+        log2FC  <  0    ~ "down in E (1:1.5)",
+        TRUE            ~ "ns"
+      ),
+      source_file = label
+    ) %>%
+    arrange(q_value, p_value)
+
+  results
+}
+```
+
+## Run — all-samples file
+
+```{r nsaf_file1}
+nsaf_res_all <- run_nsaf_prop_test(
+  "Bacteria/Bactera_Comet_all_samples_proteins.txt",
+  label = "all_samples"
+)
+
+nsaf_res_all %>%
+  summarise(n_proteins = n(), n_sig_q05 = sum(q_value < 0.05),
+            n_up_q05 = sum(q_value < 0.05 & log2FC > 0),
+            n_down_q05 = sum(q_value < 0.05 & log2FC < 0))
+```
+
+### Top 20 — all-samples
+
+```{r nsaf_file1_top}
+nsaf_res_all %>%
+  dplyr::select(`Protein(s)`, `Protein Description(s)`,
+                mean_BC, mean_E, log2FC, method, p_value, q_value, direction) %>%
+  head(20) %>%
+  knitr::kable(digits = c(NA, NA, 5, 5, 3, NA, 4, 4, NA))
+```
+
+## Run — elution 3–24 min file
+
+```{r nsaf_file2}
+nsaf_res_elution <- run_nsaf_prop_test(
+  "Bacteria/Bacteria_Comet_elution_3_to_24min_prot.txt",
+  label = "elution_3_to_24min"
+)
+
+nsaf_res_elution %>%
+  summarise(n_proteins = n(), n_sig_q05 = sum(q_value < 0.05),
+            n_up_q05 = sum(q_value < 0.05 & log2FC > 0),
+            n_down_q05 = sum(q_value < 0.05 & log2FC < 0))
+```
+
+### Top 20 — elution 3–24 min
+
+```{r nsaf_file2_top}
+nsaf_res_elution %>%
+  dplyr::select(`Protein(s)`, `Protein Description(s)`,
+                mean_BC, mean_E, log2FC, method, p_value, q_value, direction) %>%
+  head(20) %>%
+  knitr::kable(digits = c(NA, NA, 5, 5, 3, NA, 4, 4, NA))
+```
+
+## Volcano plots — NSAF proportions
+
+```{r nsaf_volcano}
+make_volcano_nsaf <- function(df, title_tag) {
+  ggplot(df, aes(x = log2FC, y = -log10(p_value), colour = direction)) +
+    geom_vline(xintercept = 0, linetype = "dashed", colour = "grey50", linewidth = 0.4) +
+    geom_hline(yintercept = -log10(0.05), linetype = "dotted", colour = "grey50", linewidth = 0.4) +
+    geom_point(alpha = 0.7, size = 1.4) +
+    scale_colour_manual(
+      values = c("ns" = "grey70", "up in E (1:1.5)" = "#1f78b4", "down in E (1:1.5)" = "#08306b"),
+      name = "BH q < 0.05"
+    ) +
+    labs(
+      x = expression(log[2]~"(mean NSAF, E / BC)"),
+      y = expression(-log[10]~"(p)"),
+      title    = paste0("NSAF proportions test — ", title_tag),
+      subtitle = sprintf("CP34H · n = %d proteins · %d significant at q<0.05",
+                         nrow(df), sum(df$q_value < 0.05))
+    ) +
+    theme_bw(base_size = 12) +
+    theme(panel.grid.minor = element_blank(),
+          plot.title = element_text(face = "bold"),
+          plot.subtitle = element_text(colour = "grey30", size = 9))
+}
+
+nsaf_v_all     <- make_volcano_nsaf(nsaf_res_all,     "all-samples")
+nsaf_v_elution <- make_volcano_nsaf(nsaf_res_elution, "elution 3–24 min")
+
+nsaf_v_all
+nsaf_v_elution
+```
+
+## Save — Section 2
+
+```{r nsaf_save}
+out_nsaf <- "figures/NSAF_proportions_test_BC_vs_E"
+dir.create(out_nsaf, recursive = TRUE, showWarnings = FALSE)
+
+readr::write_tsv(nsaf_res_all,
+  file.path(out_nsaf, "bacteria_BC_vs_E_NSAF_proptest_all_samples.tsv"))
+readr::write_tsv(nsaf_res_elution,
+  file.path(out_nsaf, "bacteria_BC_vs_E_NSAF_proptest_elution_3_to_24min.tsv"))
+
+ggsave(file.path(out_nsaf, "volcano_NSAF_BC_vs_E_all_samples.png"),
+       nsaf_v_all, width = 7.5, height = 6, dpi = 600, bg = "white")
+ggsave(file.path(out_nsaf, "volcano_NSAF_BC_vs_E_all_samples.pdf"),
+       nsaf_v_all, width = 7.5, height = 6)
+ggsave(file.path(out_nsaf, "volcano_NSAF_BC_vs_E_elution_3_to_24min.png"),
+       nsaf_v_elution, width = 7.5, height = 6, dpi = 600, bg = "white")
+ggsave(file.path(out_nsaf, "volcano_NSAF_BC_vs_E_elution_3_to_24min.pdf"),
+       nsaf_v_elution, width = 7.5, height = 6)
+
+message("Section 2 outputs written to: ", out_nsaf)
+```
+
+---
+
+# Section 3 — PSM Proportions Test (BC vs. E)
+
+## Overview
+
+Per-protein two-sample test of proportions on raw PSM counts. For each protein,
+replicate PSMs are summed within group to form a 2×2 contingency table (protein
+PSMs vs. all other PSMs). Chi-squared via `prop.test()` when expected counts ≥ 5,
+Fisher's exact test otherwise. p-values are Benjamini–Hochberg adjusted.
+
+## Helper function
+
+```{r psm_helper}
+psm_bc_cols <- c("PSMs (HR_BC1)", "PSMs (HR_BC2)", "PSMs (HR_BC3)")
+psm_e_cols  <- c("PSMs (HR-E1)",  "PSMs (HR_E2)",  "PSMs (HR_E3)")
+
+parse_psm <- function(x) {
+  as.integer(gsub(",", "", as.character(x), fixed = TRUE))
+}
+
+run_psm_prop_test <- function(file_path, label) {
+  raw <- read_tsv(file_path, show_col_types = FALSE, na = c("", "NA"))
+  stopifnot(all(c(psm_bc_cols, psm_e_cols) %in% colnames(raw)))
+
+  dat <- raw %>%
+    mutate(across(all_of(c(psm_bc_cols, psm_e_cols)), parse_psm)) %>%
+    rowwise() %>%
+    mutate(
+      k_BC = sum(c_across(all_of(psm_bc_cols)), na.rm = TRUE),
+      k_E  = sum(c_across(all_of(psm_e_cols)),  na.rm = TRUE)
+    ) %>%
+    ungroup() %>%
+    dplyr::select(`Protein(s)`, `Protein Description(s)`, k_BC, k_E)
+
+  N_BC <- sum(dat$k_BC, na.rm = TRUE)
+  N_E  <- sum(dat$k_E,  na.rm = TRUE)
+  cat(sprintf("[%s] proteins: %d   N_BC=%d   N_E=%d\n", label, nrow(dat), N_BC, N_E))
+
+  dat <- dat %>% filter(!(k_BC == 0 & k_E == 0))
+
+  one_test <- function(k_BC, k_E, N_BC, N_E) {
+    tab <- matrix(c(k_BC, N_BC - k_BC, k_E, N_E - k_E), nrow = 2, byrow = TRUE)
+    expected <- outer(rowSums(tab), colSums(tab)) / sum(tab)
+    if (any(expected < 5)) {
+      ft <- suppressWarnings(fisher.test(tab))
+      list(p = ft$p.value, method = "Fisher")
+    } else {
+      pt <- suppressWarnings(prop.test(x = c(k_BC, k_E), n = c(N_BC, N_E), correct = TRUE))
+      list(p = pt$p.value, method = "prop.test")
+    }
+  }
+
+  results <- dat %>%
+    rowwise() %>%
+    mutate(
+      .res    = list(one_test(k_BC, k_E, N_BC, N_E)),
+      p_value = .res$p,
+      method  = .res$method
+    ) %>%
+    ungroup() %>%
+    dplyr::select(-.res) %>%
+    mutate(
+      prop_BC   = k_BC / N_BC,
+      prop_E    = k_E  / N_E,
+      log2FC    = log2((k_E + 1) / (N_E + 1)) - log2((k_BC + 1) / (N_BC + 1)),
+      q_value   = p.adjust(p_value, method = "BH"),
+      direction = case_when(
+        q_value >= 0.05 ~ "ns",
+        log2FC  >  0    ~ "up in E (1:1.5)",
+        log2FC  <  0    ~ "down in E (1:1.5)",
+        TRUE            ~ "ns"
+      ),
+      source_file = label
+    ) %>%
+    arrange(q_value, p_value)
+
+  results
+}
+```
+
+## Run — all-samples file
+
+```{r psm_file1}
+psm_res_all <- run_psm_prop_test(
+  "Bacteria/Bactera_Comet_all_samples_proteins.txt",
+  label = "all_samples"
+)
+
+psm_res_all %>%
+  summarise(n_proteins = n(), n_sig_q05 = sum(q_value < 0.05),
+            n_up_q05 = sum(q_value < 0.05 & log2FC > 0),
+            n_down_q05 = sum(q_value < 0.05 & log2FC < 0))
+```
+
+### Top 20 — all-samples
+
+```{r psm_file1_top}
+psm_res_all %>%
+  dplyr::select(`Protein(s)`, `Protein Description(s)`,
+                k_BC, k_E, prop_BC, prop_E, log2FC, method, p_value, q_value, direction) %>%
+  head(20) %>%
+  knitr::kable(digits = c(NA, NA, 0, 0, 5, 5, 3, NA, 4, 4, NA))
+```
+
+## Run — elution 3–24 min file
+
+```{r psm_file2}
+psm_res_elution <- run_psm_prop_test(
+  "Bacteria/Bacteria_Comet_elution_3_to_24min_prot.txt",
+  label = "elution_3_to_24min"
+)
+
+psm_res_elution %>%
+  summarise(n_proteins = n(), n_sig_q05 = sum(q_value < 0.05),
+            n_up_q05 = sum(q_value < 0.05 & log2FC > 0),
+            n_down_q05 = sum(q_value < 0.05 & log2FC < 0))
+```
+
+### Top 20 — elution 3–24 min
+
+```{r psm_file2_top}
+psm_res_elution %>%
+  dplyr::select(`Protein(s)`, `Protein Description(s)`,
+                k_BC, k_E, prop_BC, prop_E, log2FC, method, p_value, q_value, direction) %>%
+  head(20) %>%
+  knitr::kable(digits = c(NA, NA, 0, 0, 5, 5, 3, NA, 4, 4, NA))
+```
+
+## Volcano plots — PSM proportions
+
+```{r psm_volcano}
+make_volcano_psm <- function(df, title_tag) {
+  ggplot(df, aes(x = log2FC, y = -log10(p_value), colour = direction)) +
+    geom_vline(xintercept = 0, linetype = "dashed", colour = "grey50", linewidth = 0.4) +
+    geom_hline(yintercept = -log10(0.05), linetype = "dotted", colour = "grey50", linewidth = 0.4) +
+    geom_point(alpha = 0.7, size = 1.4) +
+    scale_colour_manual(
+      values = c("ns" = "grey70", "up in E (1:1.5)" = "#1f78b4", "down in E (1:1.5)" = "#08306b"),
+      name = "BH q < 0.05"
+    ) +
+    labs(
+      x = expression(log[2]~"(E / BC)"),
+      y = expression(-log[10]~"(p)"),
+      title    = paste0("PSM proportions test — ", title_tag),
+      subtitle = sprintf("CP34H · n = %d proteins · %d significant at q<0.05",
+                         nrow(df), sum(df$q_value < 0.05))
+    ) +
+    theme_bw(base_size = 12) +
+    theme(panel.grid.minor = element_blank(),
+          plot.title = element_text(face = "bold"),
+          plot.subtitle = element_text(colour = "grey30", size = 9))
+}
+
+psm_v_all     <- make_volcano_psm(psm_res_all,     "all-samples")
+psm_v_elution <- make_volcano_psm(psm_res_elution, "elution 3–24 min")
+
+psm_v_all
+psm_v_elution
+```
+
+## Save — Section 3
+
+```{r psm_save}
+out_psm <- "figures/PSM_proportions_test_BC_vs_E"
+dir.create(out_psm, recursive = TRUE, showWarnings = FALSE)
+
+readr::write_tsv(psm_res_all,
+  file.path(out_psm, "bacteria_BC_vs_E_PSM_proptest_all_samples.tsv"))
+readr::write_tsv(psm_res_elution,
+  file.path(out_psm, "bacteria_BC_vs_E_PSM_proptest_elution_3_to_24min.tsv"))
+
+ggsave(file.path(out_psm, "volcano_PSM_BC_vs_E_all_samples.png"),
+       psm_v_all, width = 7.5, height = 6, dpi = 600, bg = "white")
+ggsave(file.path(out_psm, "volcano_PSM_BC_vs_E_all_samples.pdf"),
+       psm_v_all, width = 7.5, height = 6)
+ggsave(file.path(out_psm, "volcano_PSM_BC_vs_E_elution_3_to_24min.png"),
+       psm_v_elution, width = 7.5, height = 6, dpi = 600, bg = "white")
+ggsave(file.path(out_psm, "volcano_PSM_BC_vs_E_elution_3_to_24min.pdf"),
+       psm_v_elution, width = 7.5, height = 6)
+
+message("Section 3 outputs written to: ", out_psm)
+```
+
+---
+
+# Session Info
+
+```{r session}
+sessionInfo()
+```
